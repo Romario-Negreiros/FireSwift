@@ -1,0 +1,101 @@
+import styled from 'styled-components';
+
+export const Container = styled.main`
+  position: relative;
+  z-index: 5;
+  margin: auto;
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 5px;
+  border: 1px solid ${({ theme: { border } }) => border.primary};
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const Manage = styled.button`
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.3rem;
+  color: ${({ theme: { fonts } }) => fonts.secondary};
+  background: unset;
+  border: 0 none;
+  cursor: pointer;
+  @media screen and (min-width: 400px) {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  :hover {
+    opacity: 0.5;
+  }
+`;
+
+export const Picture = styled.div`
+  margin: -2rem 0 0;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  img {
+    border-radius: 50%;
+    border: 1px solid ${({ theme: { border } }) => border.primary};
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+  }
+  h1 {
+    font-size: 2.2rem;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+  }
+`;
+
+export const UserBio = styled.div`
+  width: 100%;
+  color: ${({ theme: { fonts } }) => fonts.secondary};
+  font-size: 1.4rem;
+  text-align: center;
+  margin: 2rem auto;
+`;
+
+export const UserInfo = styled.ul`
+  padding: 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  li {
+    padding: 1rem;
+    border-radius: 5px;
+    width: 100%;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    background: ${({ theme: { bgs } }) => bgs.tertiary};
+    @media screen and (min-width: 500px) {
+      width: 48%;
+    }
+    @media screen and (min-width: 900px) {
+      width: 30%;
+    }
+  }
+  h2 {
+    font-size: 1.6rem;
+  }
+  span {
+    font-size: 1.2rem;
+  }
+`;
+
+export const Friends = styled.div`
+  width: 100%;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 1rem;
+  h2 {
+    margin-bottom: 1rem;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    font-size: 1.8rem;
+  }
+`;
