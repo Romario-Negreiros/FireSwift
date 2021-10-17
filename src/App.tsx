@@ -1,5 +1,9 @@
 import React from 'react';
+
 import usePersistedState from './utils/usePersistedState';
+
+import { Provider } from 'react-redux';
+import store from './app/store';
 
 import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from 'styled-components';
@@ -22,16 +26,18 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Reset />
-      <Layout toggleTheme={toggleTheme}>
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          newestOnTop={true}
-          closeButton={<FontAwesomeIcon color="#fff" icon={faTimes} />}
-        />
-        <Pages />
-      </Layout>
+      <Provider store={store}>
+        <Reset />
+        <Layout toggleTheme={toggleTheme}>
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            newestOnTop={true}
+            closeButton={<FontAwesomeIcon color="#fff" icon={faTimes} />}
+          />
+          <Pages />
+        </Layout>
+      </Provider>
     </ThemeProvider>
   );
 };
