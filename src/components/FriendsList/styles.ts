@@ -23,13 +23,13 @@ export const Profile = styled.li`
   border: 1px solid ${({ theme: { border } }) => border.primary};
   overflow: hidden;
   transition: opacity 0.5s ease-in-out;
+  background: ${({ theme: { bgs } }) => bgs.tertiary};
   :hover {
     cursor: pointer;
     opacity: 0.5;
   }
   div {
     width: 100%;
-    background: ${({ theme: { bgs } }) => bgs.tertiary};
     img {
       width: 100%;
       object-fit: cover;
