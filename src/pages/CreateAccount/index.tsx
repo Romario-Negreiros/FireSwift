@@ -1,8 +1,11 @@
 import React from 'react';
-import { toast } from 'react-toastify';
 
+import { useAppDispatch } from '../../app/hooks';
+import { userLogged } from '../../features/user/userSlice';
+
+import { toast } from 'react-toastify';
 import handleFirebaseError from '../../utils/handleFirebaseError';
-import { authentication } from '../../lib';
+import { authentication, firestoredb } from '../../lib';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
 
@@ -13,6 +16,7 @@ import { Container } from './styles';
 import { FormBorder, Form, ErrorBorder, ErrorMessage } from '../Login/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { User } from '@firebase/auth';
 
 interface Inputs {
   email: string;
@@ -26,6 +30,7 @@ const CreateAccount: React.FC = () => {
   const [isConfirmPwdVisible, setIsConfirmPwdVisible] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
   const [isLoaded, setIsLoaded] = React.useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -46,6 +51,15 @@ const CreateAccount: React.FC = () => {
         if (deliverability === 'DELIVERABLE' && is_valid_format.value) {
           await authentication.createUserWithEmailAndPassword(authentication.auth, email, password);
           await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
+          const{ uid } = authentication.auth.currentUser as User;
+          const user = {
+            email,
+            name, 
+            password, 
+            friends: [],
+          }
+          await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
+          dispatch(userLogged(user));
           toast('User succesfully created!');
           history.push('/home');
         } else throw new Error('This email doesn\'t exist!');

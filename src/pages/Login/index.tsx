@@ -1,7 +1,10 @@
 import React from 'react';
 
+import { useAppDispatch } from '../../app/hooks';
+import { userLogged } from '../../features/user/userSlice';
+
 import handleFirebaseError from '../../utils/handleFirebaseError';
-import { authentication } from '../../lib';
+import { authentication, firestoredb } from '../../lib';
 import { useHistory } from 'react-router';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -12,6 +15,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Loader } from '../../components';
 
+import { User } from '@firebase/auth';
+import { User as UserStateType } from '../../features/user/userSlice';
+
 interface Inputs {
   email: string;
   password: string;
@@ -21,6 +27,7 @@ const Login: React.FC = () => {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
   const [isLoaded, setIsLoaded] = React.useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -30,10 +37,18 @@ const Login: React.FC = () => {
   const history = useHistory();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
-  console.log(email, password)
     try {
       setIsLoaded(false);
       await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
+      const { uid } = authentication.auth.currentUser as User;
+      const userRef = firestoredb.doc(firestoredb.db, 'users', uid);
+      const userSnap = await firestoredb.getDoc(userRef);
+
+      if(userSnap.exists()) {
+        const user = userSnap.data() as UserStateType;
+        dispatch(userLogged(user));
+      }
+
       history.push('/home');
     } catch (err) {
       handleFirebaseError(err, setError);
