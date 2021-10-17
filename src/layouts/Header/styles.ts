@@ -165,3 +165,9 @@ export const Redirect = styled(Link)`
   padding: 1rem;
   cursor: pointer;
 `;
+
+export const User = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;

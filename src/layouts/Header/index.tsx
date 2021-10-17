@@ -1,19 +1,36 @@
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { userUnLogged } from '../../features/user/userSlice';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMoon, faSun, faHome, faCoffee, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMoon,
+  faSun,
+  faHome,
+  faCoffee,
+  faSignInAlt,
+  faSignOutAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { ThemeContext } from 'styled-components';
-import { Container, Nav, List, Burguer, Line, Alert, Redirect } from './styles';
+import { Container, Nav, List, Burguer, Line, Alert, Redirect, User } from './styles';
 import Switch from 'react-switch';
 
 import handleMobileMenu from '../../utils/handleMobileMenu';
 
 import { Props } from '../../global/types';
+import { authentication } from '../../lib';
 
 const Header: React.FC<Props> = ({ toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
+  const user = useAppSelector(state => state.user.user);
   const theme = React.useContext(ThemeContext);
+  const dispatch = useAppDispatch();
+  const signOut = () => {
+    authentication.auth.signOut();
+    dispatch(userUnLogged(null));
+  };
 
   return (
     <Container>
@@ -22,6 +39,11 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
         <h2>FireSwift</h2>
       </div>
       <Nav>
+        {user && (
+          <User>
+            <h2>{user.name}</h2>
+          </User>
+        )}
         <Switch
           className="switch"
           onChange={toggleTheme}
@@ -65,14 +87,21 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
           <li
             onClick={() => {
               handleMobileMenu(setIsMenuOpen);
+              user && signOut();
             }}
           >
             <Redirect to="/login">
-              <FontAwesomeIcon icon={faSignInAlt} />
+              <FontAwesomeIcon icon={user ? faSignOutAlt : faSignInAlt} />
             </Redirect>
-            <div className="ballon">
-              <span>Login</span>
-            </div>
+            {user ? (
+              <div className="ballon">
+                <span>Logout</span>
+              </div>
+            ) : (
+              <div className="ballon">
+                <span>Login</span>
+              </div>
+            )}
           </li>
         </List>
         <Burguer
