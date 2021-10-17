@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, getDocs, addDoc, getFirestore } from "firebase/firestore";
+import { collection, getDocs, addDoc, getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -27,6 +27,9 @@ export const firestoredb = {
   collection,
   getDocs,
   addDoc,
+  doc,
+  getDoc,
+  setDoc,
 }
 
 export const realtimedb = {
