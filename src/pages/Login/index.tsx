@@ -13,6 +13,7 @@ import Logo from '../../assets/logo.png';
 import { Container, FormBorder, Form, CreateAccount, ErrorBorder, ErrorMessage } from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { CenteredContainer } from '../../global/styles';
 import { Loader } from '../../components';
 
 import { User } from '@firebase/auth';
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
       const { uid } = authentication.auth.currentUser as User;
       const userRef = firestoredb.doc(firestoredb.db, 'users', uid);
       const userSnap = await firestoredb.getDoc(userRef);
-      if(userSnap.exists()) {
+      if (userSnap.exists()) {
         const user = userSnap.data() as UserStateType;
         dispatch(userLogged(user));
       }
@@ -57,7 +58,11 @@ const Login: React.FC = () => {
   };
 
   if (!isLoaded) {
-    return <Loader />;
+    return (
+      <CenteredContainer>
+        <Loader />
+      </CenteredContainer>
+    );
   }
   return (
     <Container>

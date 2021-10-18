@@ -13,6 +13,7 @@ import Logo from '../../assets/logo.png';
 
 import { Loader } from '../../components';
 import { Container } from './styles';
+import { CenteredContainer } from '../../global/styles';
 import { FormBorder, Form, ErrorBorder, ErrorMessage } from '../Login/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -72,7 +73,11 @@ const CreateAccount: React.FC = () => {
   };
 
   if (!isLoaded) {
-    return <Loader />;
+    return (
+      <CenteredContainer>
+        <Loader />
+      </CenteredContainer>
+    );
   }
   return (
     <Container>
