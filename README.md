@@ -51,7 +51,8 @@ Non-connected users will only be able to see the posts, no person's profile or c
 - [x] Integrate with firebase
 - [x] Login
 - [x] Account creation
-- [ ] Add redux 
+- [x] Add redux 
+- [ ] Add/remove friends mechanism
 
 ---
 
