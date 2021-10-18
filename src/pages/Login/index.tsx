@@ -16,7 +16,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Loader } from '../../components';
 
 import { User } from '@firebase/auth';
-import { User as UserStateType } from '../../features/user/userSlice';
+import { User as UserStateType } from '../../global/types';
 
 interface Inputs {
   email: string;
@@ -43,7 +43,6 @@ const Login: React.FC = () => {
       const { uid } = authentication.auth.currentUser as User;
       const userRef = firestoredb.doc(firestoredb.db, 'users', uid);
       const userSnap = await firestoredb.getDoc(userRef);
-
       if(userSnap.exists()) {
         const user = userSnap.data() as UserStateType;
         dispatch(userLogged(user));

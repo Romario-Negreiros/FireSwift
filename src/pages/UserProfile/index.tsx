@@ -1,25 +1,65 @@
 import React from 'react';
 
-import { useParams } from 'react-router-dom';
+import { firestoredb } from '../../lib';
+import { useHistory } from 'react-router-dom';
+import handleFirebaseError from '../../utils/handleFirebaseError';
+import { toast } from 'react-toastify';
 
+import { Exception } from '../../global/styles';
 import { Container, Manage, Picture, UserBio, UserInfo, Friends } from './styles';
 import FakePicture from '../../assets/mock-profile.jpg';
-import { FriendsList } from '../../components';
+import { FriendsList, Loader } from '../../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
-interface Params {
-  username: string;
+import { User } from '../../global/types';
+
+interface State {
+  id: string;
 }
 
 const UserProfile: React.FC = () => {
-  const { username } = useParams<Params>();
+  const {
+    location: { state },
+  } = useHistory<State>();
+  const [user, setUser] = React.useState<User | null>(null);
+  const [error, setError] = React.useState<string>('');
+  const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    (async () => {
+      if (state) {
+        try {
+          const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
+          const userSnap = await firestoredb.getDoc(userRef);
+          if (userSnap.exists()) {
+            setUser(userSnap.data() as User);
+          } else setError('Nothing was found. The user might not exist!');
+        } catch (err) {
+          handleFirebaseError(err, setError);
+        }
+      } else {
+        toast("The user doesn't exist!");
+        setError('Nothing was found. The user might not exist!');
+      }
+      setIsLoaded(true);
+    })();
+  }, [state]);
+
+  if (!isLoaded) {
+    return <Loader />;
+  } else if (error || !user) {
+    return (
+      <Exception>
+        <p>{error}</p>
+      </Exception>
+    );
+  }
   return (
     <Container>
       <Picture>
-        <img src={FakePicture} alt={username} />
-        <h1>{username}</h1>
+        <img src={FakePicture} alt={user?.name} />
+        <h1>{user.name}</h1>
       </Picture>
       <Manage>
         <span>Add friend</span>
