@@ -1,11 +1,9 @@
 import React from 'react';
-import { CenteredContainer, LoaderSpin } from './styles';
+import { LoaderSpin } from './styles';
 
 const Loader: React.FC = () => {
   return (
-    <CenteredContainer>
       <LoaderSpin />
-    </CenteredContainer>
   );
 };
 
