@@ -170,4 +170,10 @@ export const User = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+  h2 {
+    cursor: pointer;
+    :hover {
+      opacity: 0.5;
+    }
+  }
 `;

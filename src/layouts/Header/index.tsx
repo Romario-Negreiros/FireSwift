@@ -41,7 +41,10 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
       <Nav>
         {user && (
           <User>
-            <h2>{user.name}</h2>
+            <Redirect to={{
+              pathname: `/${user.name}`,
+              state: { id: authentication.auth.currentUser?.uid },
+            }}><h2>{user.name}</h2></Redirect>
           </User>
         )}
         <Switch
