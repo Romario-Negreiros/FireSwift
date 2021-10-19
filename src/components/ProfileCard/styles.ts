@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const Profile = styled.li`
+interface StyledProps {
+  state?: string;
+}
+
+export const Profile = styled.li<StyledProps>`
   width: 150px;
   height: 100%;
   margin-right: 0.5rem;
@@ -35,7 +39,10 @@ export const Profile = styled.li`
     }
   }
   button {
-    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: ${props =>
+      props.state === 'remove'
+        ? 'linear-gradient(to right, #8e2de2, #4a00e0)'
+        : 'background: linear-gradient(to right, #ed213a, #93291e)'};
     display: flex;
     justify-content: center;
     gap: 1rem;

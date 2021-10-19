@@ -23,7 +23,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
   const currentUser = useAppSelector(state => state.user.user);
 
   return (
-    <Profile>
+    <Profile state={currentUser ? currentUser.friends.includes(user.id) ? 'remove' : 'add' : ''}>
       <div onClick={() => history.push(`/${user.name}`)}>
         <img src={Mock} alt={user.name} />
       </div>
