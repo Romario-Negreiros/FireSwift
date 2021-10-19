@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Container } from './styles';
-import { ProfileCard, Loader } from '..';
-import { Exception, InnerCenteredContainer } from '../../global/styles';
+import { ProfileCard, Loader, Exception } from '..';
+import { InnerCenteredContainer } from '../../global/styles';
 
 import handleFirebaseError from '../../utils/handleFirebaseError';
 import { firestoredb } from '../../lib';
@@ -56,9 +56,7 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
     return (
       <Container>
         <InnerCenteredContainer>
-          <Exception>
-            <p>{error}</p>
-          </Exception>
+          <Exception message={error} />
         </InnerCenteredContainer>
       </Container>
     );
@@ -66,8 +64,8 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
   return (
     <Container>
       <ul>
-        {[1, 1, 1, 1, 1, 1, 1, 1, 11, 1, 1].map(() => (
-          <ProfileCard />
+        {users.map(user => (
+          <ProfileCard key={user.id} user={user} />
         ))}
       </ul>
     </Container>
