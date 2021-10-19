@@ -24,6 +24,12 @@ const App: React.FC = () => {
     setTheme(theme.title === 'light' ? dark : light);
   };
 
+  const CloseButton: React.FC = () => {
+    return (
+      <FontAwesomeIcon color="#fff" icon={faTimes} />
+    );
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
@@ -33,7 +39,7 @@ const App: React.FC = () => {
             position="top-center"
             autoClose={3000}
             newestOnTop={true}
-            closeButton={<FontAwesomeIcon color="#fff" icon={faTimes} />}
+            closeButton={<CloseButton />}
           />
           <Pages />
         </Layout>
