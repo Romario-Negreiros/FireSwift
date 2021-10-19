@@ -52,7 +52,8 @@ Non-connected users will only be able to see the posts, no person's profile or c
 - [x] Login
 - [x] Account creation
 - [x] Add redux 
-- [ ] Add/remove friends mechanism
+- [x] Add/remove friends mechanism
+- [ ] Create posts mechanism
 
 ---
 
