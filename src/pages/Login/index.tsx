@@ -45,8 +45,9 @@ const Login: React.FC = () => {
       const userRef = firestoredb.doc(firestoredb.db, 'users', uid);
       const userSnap = await firestoredb.getDoc(userRef);
       if (userSnap.exists()) {
-        const user = userSnap.data() as UserStateType;
-        dispatch(userLogged(user));
+        const user = userSnap.data() as Omit<UserStateType, 'id'>;
+        const id = userSnap.id;
+        dispatch(userLogged({ id, ...user }));
       }
 
       history.push('/home');

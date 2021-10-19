@@ -60,7 +60,7 @@ const CreateAccount: React.FC = () => {
             friends: [],
           }
           await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
-          dispatch(userLogged(user));
+          dispatch(userLogged({ id: uid, ...user }));
           toast('User succesfully created!');
           history.push('/home');
         } else throw new Error('This email doesn\'t exist!');

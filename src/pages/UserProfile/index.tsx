@@ -5,10 +5,10 @@ import { useHistory } from 'react-router-dom';
 import handleFirebaseError from '../../utils/handleFirebaseError';
 import { toast } from 'react-toastify';
 
-import { Exception } from '../../global/styles';
+import { CenteredContainer } from '../../global/styles';
 import { Container, Manage, Picture, UserBio, UserInfo, Friends } from './styles';
 import FakePicture from '../../assets/mock-profile.jpg';
-import { FriendsList, Loader } from '../../components';
+import { FriendsList, Loader, Exception } from '../../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -39,7 +39,7 @@ const UserProfile: React.FC = () => {
           handleFirebaseError(err, setError);
         }
       } else {
-        toast("The user doesn't exist!");
+        toast.error("The user doesn't exist!");
         setError('Nothing was found. The user might not exist!');
       }
       setIsLoaded(true);
@@ -47,12 +47,16 @@ const UserProfile: React.FC = () => {
   }, [state]);
 
   if (!isLoaded) {
-    return <Loader />;
+    return (
+      <CenteredContainer>
+        <Loader />
+      </CenteredContainer>
+    );
   } else if (error || !user) {
     return (
-      <Exception>
-        <p>{error}</p>
-      </Exception>
+      <CenteredContainer>
+        <Exception message={error} />
+      </CenteredContainer>
     );
   }
   return (
