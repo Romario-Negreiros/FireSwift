@@ -56,7 +56,8 @@ export const List = styled.ul<ListProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  padding-top: 1rem;
+  gap: 2rem;
   ${props => (props.isMenuOpen ? 'width: 5rem' : 'width: 0rem')};
   transition: width 0.5s ease-in-out;
   background: ${({ theme: { bgs } }) => bgs.primary};
@@ -83,6 +84,7 @@ export const List = styled.ul<ListProps>`
     height: unset;
     width: unset;
     padding: unset;
+    gap: 1rem;
     li {
       .ballon {
         display: block;
