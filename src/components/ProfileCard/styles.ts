@@ -41,8 +41,8 @@ export const Profile = styled.li<StyledProps>`
   button {
     background: ${props =>
       props.state === 'remove'
-        ? 'linear-gradient(to right, #8e2de2, #4a00e0)'
-        : 'background: linear-gradient(to right, #ed213a, #93291e)'};
+        ? 'linear-gradient(to right, #ed213a, #93291e)'
+        :  'linear-gradient(to right, #8e2de2, #4a00e0)'};
     display: flex;
     justify-content: center;
     gap: 1rem;
