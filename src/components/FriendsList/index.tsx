@@ -11,7 +11,6 @@ import { User } from '../../global/types';
 
 interface Props {
   friendsIds?: string[];
-  setUser?: (callback: ((state: User | null) => User | null)) => void;
 }
 
 type Users = {
@@ -19,7 +18,7 @@ type Users = {
   name: string,
 }[];
 
-const FriendsList: React.FC<Props> = ({ friendsIds, setUser }) => {
+const FriendsList: React.FC<Props> = ({ friendsIds }) => {
   const [users, setUsers] = React.useState<Users | null>(null);
   const [error, setError] = React.useState<string>('');
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
@@ -38,7 +37,7 @@ const FriendsList: React.FC<Props> = ({ friendsIds, setUser }) => {
             if (friendsIds.some(friendId => friendId === id)) users.push({ id, name });   
           } else users.push({ id, name });
         });
-        if (!users.length) setError("You've got no friends yet!");
+        if (!users.length) setError("Nothing to see here!");
         setUsers(users);
       } catch (err) {
         handleFirebaseError(err, setError);
@@ -69,7 +68,7 @@ const FriendsList: React.FC<Props> = ({ friendsIds, setUser }) => {
     <Container>
       <ul>
         {users.map(user => (
-          <ProfileCard key={user.id} user={user} friendsIds={friendsIds as string[]} setUser={setUser} />
+          <ProfileCard key={user.id} user={user} />
         ))}
       </ul>
     </Container>

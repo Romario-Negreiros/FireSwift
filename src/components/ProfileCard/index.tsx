@@ -11,18 +11,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faUserMinus } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
-import { User } from '../../global/types';
-
 interface Props {
   user: {
     id: string;
     name: string;
   };
-  friendsIds: string[];
-  setUser?: (callback: ((state: User | null) => User | null)) => void;
 }
 
-const ProfileCard: React.FC<Props> = ({ user, friendsIds, setUser }) => {
+const ProfileCard: React.FC<Props> = ({ user }) => {
   const history = useHistory();
   const currentUser = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
@@ -51,15 +47,7 @@ const ProfileCard: React.FC<Props> = ({ user, friendsIds, setUser }) => {
       </div>
       {currentUser ? (
         currentUser.friends.includes(user.id) ? (
-          <button onClick={() => {
-            Friend.remove(user.id, currentUser, dispatch);
-            const index = friendsIds.indexOf(user.id);
-            friendsIds.splice(index, 1);
-            if(setUser)
-            setUser(state => { 
-              return { ...state, friends: friendsIds } as User
-            });
-        }}>
+          <button onClick={() => Friend.remove(user.id, currentUser, dispatch)}>
             Remove friend
             <FontAwesomeIcon size="1x" color="white" icon={faUserMinus} />
           </button>
