@@ -24,13 +24,26 @@ const EditProfile: React.FC = () => {
   const currentUser = useAppSelector(state => state.user.user);
   const { register, handleSubmit, setValue } = useForm<Inputs>();
   const [error, setError] = React.useState<string>('');
+  const [countries, setCountries] = React.useState<{name: string}[]>();
   // const history = useHistory();
   const onSubmit: SubmitHandler<Inputs> = data => {
     console.log(data, setError);
   };
 
+  const fetchCountries = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      const countries = await response.json();
+      setCountries(countries);
+    } catch(err) {
+      if(err instanceof Error)
+      setError(err.message)
+    }
+  };
+
   React.useEffect(() => {
     if (currentUser) {
+      fetchCountries('https://restcountries.com/v2/all?fields=name');
       setValue('bio', currentUser.bio);
       setValue('country', currentUser.country);
       setValue('relationship', currentUser.relationship);
@@ -78,17 +91,18 @@ const EditProfile: React.FC = () => {
             <Select>
               <p>Country</p>
               <select {...register('age')}>
-                {ages.map((v, i) => (
-                  <option value={i === 0 ? '' : v}>{i === 0 ? 'Select...' : v}</option>
+                {countries?.map((country, i) => (
+                  <option value={i === 0 ? '' : country.name}>{i === 0 ? 'Select...' : country.name}</option>
                 ))}
               </select>
             </Select>
             <Select>
               <p>Relationship</p>
               <select {...register('age')}>
-                {ages.map((v, i) => (
-                  <option value={i === 0 ? '' : v}>{i === 0 ? 'Select...' : v}</option>
-                ))}
+                <option value="">Select...</option>
+                <option value="Married">Married</option>
+                <option value="Single">Single</option>
+                <option value="Dating">Dating</option>
               </select>
             </Select>  
           </Grid>
