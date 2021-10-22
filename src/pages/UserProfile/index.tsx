@@ -110,7 +110,7 @@ const UserProfile: React.FC = () => {
       </UserInfo>
       <Friends>
         <h2>Friends</h2>
-        <FriendsList friendsIds={user.friends} setUser={setUser} />
+        <FriendsList friendsIds={user.friends} />
       </Friends>
     </Container>
   );
