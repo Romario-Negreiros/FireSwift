@@ -6,6 +6,7 @@ import Chats from './Chats';
 import Login from './Login';
 import CreateAccount from './CreateAccount';
 import UserProfile from './UserProfile';
+import EditProfile from './EditProfile';
 
 const Pages: React.FC = () => {
 
@@ -15,6 +16,7 @@ const Pages: React.FC = () => {
       <Route path="/chats" component={Chats} />
       <Route path="/login" component={Login} />
       <Route path="/createaccount" component={CreateAccount} />
+      <Route path="/editprofile" component={EditProfile} />
       <Route path="/:username" component={UserProfile} />
       <Redirect path="/" to="/home" />
     </Switch>

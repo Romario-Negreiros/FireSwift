@@ -14,7 +14,7 @@ import Logo from '../../assets/logo.png';
 import { Loader } from '../../components';
 import { Container } from './styles';
 import { CenteredContainer } from '../../global/styles';
-import { FormBorder, Form, ErrorBorder, ErrorMessage } from '../Login/styles';
+import { FormBorder, Form, ErrorBorder, ErrorMessage } from '../../global/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { User } from '@firebase/auth';
@@ -52,26 +52,24 @@ const CreateAccount: React.FC = () => {
         if (deliverability === 'DELIVERABLE' && is_valid_format.value) {
           await authentication.createUserWithEmailAndPassword(authentication.auth, email, password);
           await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
-          const{ uid } = authentication.auth.currentUser as User;
+          const { uid } = authentication.auth.currentUser as User;
           const user = {
             email,
-            name, 
-            password, 
+            name,
+            password,
             friends: [],
             bio: '',
-            info: {
-              age: null,
-              relationship: '',
-              country: '',
-              languages: [],
-              tastes: '',
-            }
-          }
+            age: null,
+            relationship: '',
+            country: '',
+            languages: [],
+            tastes: [],
+          };
           await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
           dispatch(userLogged({ id: uid, ...user }));
           toast('User succesfully created!');
           history.push('/home');
-        } else throw new Error('This email doesn\'t exist!');
+        } else throw new Error("This email doesn't exist!");
       } catch (err) {
         handleFirebaseError(err, setError);
       } finally {

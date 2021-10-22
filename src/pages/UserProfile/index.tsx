@@ -12,7 +12,7 @@ import { Container, Manage, Picture, UserBio, UserInfo, Friends } from './styles
 import FakePicture from '../../assets/mock-profile.jpg';
 import { FriendsList, Loader, Exception } from '../../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faUserMinus } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus, faUserMinus, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { User } from '../../global/types';
 
@@ -22,6 +22,7 @@ interface State {
 
 const UserProfile: React.FC = () => {
   const {
+    push,
     location: { state },
   } = useHistory<State>();
   const [user, setUser] = React.useState<User | null>(null);
@@ -34,16 +35,20 @@ const UserProfile: React.FC = () => {
   React.useEffect(() => {
     (async () => {
       if (state) {
-        try {
-          const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
-          const userSnap = await firestoredb.getDoc(userRef);
-          if (userSnap.exists()) {
-            const user = userSnap.data() as Omit<User, 'id'>;
-            const id = userSnap.id;
-            setUser({ id, ...user });
-          } else setError('Nothing was found. The user might not exist!');
-        } catch (err) {
-          handleFirebaseError(err, setError);
+        if (currentUser && currentUser.id === state.id) {
+          setUser(currentUser);
+        } else {
+          try {
+            const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
+            const userSnap = await firestoredb.getDoc(userRef);
+            if (userSnap.exists()) {
+              const user = userSnap.data() as Omit<User, 'id'>;
+              const id = userSnap.id;
+              setUser({ id, ...user });
+            } else setError('Nothing was found. The user might not exist!');
+          } catch (err) {
+            handleFirebaseError(err, setError);
+          }
         }
       } else {
         toast.error("The user doesn't exist!");
@@ -51,7 +56,7 @@ const UserProfile: React.FC = () => {
       }
       setIsLoaded(true);
     })();
-  }, [state]);
+  }, [state, currentUser]);
 
   if (!isLoaded) {
     return (
@@ -72,17 +77,24 @@ const UserProfile: React.FC = () => {
         <img src={FakePicture} alt={user.name} />
         <h1>{user.name}</h1>
       </Picture>
-      {currentUser && currentUser.id !== user.id ? currentUser.friends.includes(user.id) ? (
-        <Manage onClick={() => Friend.remove(user.id, currentUser, dispatch)}>
-          <span>Remove friend</span>
-          <FontAwesomeIcon size="1x" color="purple" icon={faUserMinus} />
-        </Manage>
+      {currentUser && currentUser.id !== user.id ? (
+        currentUser.friends.includes(user.id) ? (
+          <Manage onClick={() => Friend.remove(user.id, currentUser, dispatch)}>
+            <span>Remove friend</span>
+            <FontAwesomeIcon size="1x" color="purple" icon={faUserMinus} />
+          </Manage>
+        ) : (
+          <Manage onClick={() => Friend.add(user.id, currentUser, dispatch)}>
+            <span>Add friend</span>
+            <FontAwesomeIcon size="1x" color="purple" icon={faUserPlus} />
+          </Manage>
+        )
       ) : (
-        <Manage onClick={() => Friend.add(user.id, currentUser, dispatch)}>
-          <span>Add friend</span>
-          <FontAwesomeIcon size="1x" color="purple" icon={faUserPlus} />
+        <Manage onClick={() => push('editprofile')}>
+          <span>Edit profile</span>
+          <FontAwesomeIcon size="1x" color="purple" icon={faEdit} />
         </Manage>
-      ) : ''}
+      )}
       <UserBio>
         <p>Addiiiiiiieu baaaaaa arrrrrriii babababababba</p>
       </UserBio>

@@ -10,7 +10,8 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Logo from '../../assets/logo.png';
 
-import { Container, FormBorder, Form, CreateAccount, ErrorBorder, ErrorMessage } from './styles';
+import { Container, CreateAccount } from './styles';
+import { Form, FormBorder, ErrorBorder, ErrorMessage } from '../../global/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { CenteredContainer } from '../../global/styles';
