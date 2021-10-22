@@ -32,7 +32,9 @@ const Reset = createGlobalStyle`
      a {
         text-decoration: none;
     }
-    input {
+    input, select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
         border: 0 none;
         :focus {
             outline: 0;
@@ -52,7 +54,7 @@ const Reset = createGlobalStyle`
       background: ${({ theme: { bgs } }) => bgs.tertiary};
     }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(to right, #8e2de2, #4a00e0);
+      background: #4a00e0;
     }
     input::-ms-reveal,
     input::-ms-clear {
