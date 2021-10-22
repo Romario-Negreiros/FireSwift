@@ -9,11 +9,9 @@ export interface User {
   password: string;
   friends: string[];
   bio: string;
-  info: {
-    age: number | null;
-    relationship: string;
-    country: string;
-    languages: string[];
-    tastes: string;
-  }
+  age: number | null;
+  relationship: string;
+  country: string;
+  languages: string[];
+  tastes: string[];
 }
