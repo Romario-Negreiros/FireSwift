@@ -63,7 +63,7 @@ const CreateAccount: React.FC = () => {
             relationship: '',
             country: '',
             languages: [],
-            tastes: [],
+            hobbies: [],
           };
           await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
           dispatch(userLogged({ id: uid, ...user }));

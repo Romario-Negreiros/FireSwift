@@ -9,9 +9,19 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Logo from '../../assets/logo.png';
 
-import { CenteredContainer, FormBorder, ErrorBorder, ErrorMessage } from '../../global/styles';
-import { Form, Grid, Select } from './styles';
-import { Exception } from '../../components';
+import { CenteredContainer, ErrorBorder, ErrorMessage } from '../../global/styles';
+import { FormBorder, Form, Grid, Wrapper, Container } from './styles';
+import { Exception, DraggableList } from '../../components';
+
+interface Data {
+  countriesNames: {
+    name: string;
+  }[];
+  countriesLanguages: {
+    name: string;
+    image: string;
+  }[];
+}
 
 interface Inputs {
   bio: string;
@@ -20,30 +30,47 @@ interface Inputs {
   country: string;
 }
 
+interface Response {
+  name: string;
+  languages: {
+    nativeName: string;
+  }[];
+  flags: {
+    svg: string;
+  }
+}
+
 const EditProfile: React.FC = () => {
   const currentUser = useAppSelector(state => state.user.user);
   const { register, handleSubmit, setValue } = useForm<Inputs>();
   const [error, setError] = React.useState<string>('');
-  const [countries, setCountries] = React.useState<{name: string}[]>();
+  const [data, setData] = React.useState<Data>();
   // const history = useHistory();
   const onSubmit: SubmitHandler<Inputs> = data => {
     console.log(data, setError);
   };
 
-  const fetchCountries = async (url: string) => {
+  const fetchData = async (countries: string, hobbies?: string) => {
     try {
-      const response = await fetch(url);
-      const countries = await response.json();
-      setCountries(countries);
-    } catch(err) {
-      if(err instanceof Error)
-      setError(err.message)
+      const response = await fetch(countries);
+      const json = await response.json() as Response[];
+      const data: Partial<Data> = {}
+      data['countriesNames'] = json.filter(country => {
+        return { name: country.name }
+      });
+      const countriesLanguages = json.filter(country => {
+        return { name: country.languages[country.languages.length - 1].nativeName, image: country.flags.svg }
+      });
+      data['countriesLanguages'] = [...countriesLanguages] as unknown as Data['countriesLanguages'];
+      setData(data as Data);
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
     }
   };
 
   React.useEffect(() => {
     if (currentUser) {
-      fetchCountries('https://restcountries.com/v2/all?fields=name');
+      fetchData('https://restcountries.com/v2/all?fields=name,languages,flags');
       setValue('bio', currentUser.bio);
       setValue('country', currentUser.country);
       setValue('relationship', currentUser.relationship);
@@ -64,7 +91,7 @@ const EditProfile: React.FC = () => {
     ages.push(x);
   }
   return (
-    <CenteredContainer>
+    <Container>
       {error && (
         <ErrorBorder>
           <ErrorMessage>
@@ -76,27 +103,32 @@ const EditProfile: React.FC = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="logo">
             <img src={Logo} alt="logo" />
-            <h1>{currentUser.name}</h1>
+            <h1>Edit Profile</h1>
           </div>
           <Grid>
-            <input placeholder="Bio" {...register('bio')} />
-            <Select>
+            <Wrapper>
+              <p>Bio</p>
+              <input {...register('bio')} />
+            </Wrapper>
+            <Wrapper>
               <p>Age</p>
               <select {...register('age')}>
                 {ages.map((v, i) => (
                   <option value={i === 0 ? '' : v}>{i === 0 ? 'Select...' : v}</option>
                 ))}
               </select>
-            </Select>
-            <Select>
+            </Wrapper>
+            <Wrapper>
               <p>Country</p>
               <select {...register('age')}>
-                {countries?.map((country, i) => (
-                  <option value={i === 0 ? '' : country.name}>{i === 0 ? 'Select...' : country.name}</option>
+                {data?.countriesNames?.map((country, i) => (
+                  <option value={i === 0 ? '' : country.name}>
+                    {i === 0 ? 'Select...' : country.name}
+                  </option>
                 ))}
               </select>
-            </Select>
-            <Select>
+            </Wrapper>
+            <Wrapper>
               <p>Relationship</p>
               <select {...register('age')}>
                 <option value="">Select...</option>
@@ -104,13 +136,19 @@ const EditProfile: React.FC = () => {
                 <option value="Single">Single</option>
                 <option value="Dating">Dating</option>
               </select>
-            </Select>  
+            </Wrapper>
           </Grid>
+          {data && (
+            <>
+              <DraggableList title="Languages" currentUser={currentUser} data={data.countriesLanguages} />
+              {/* <DraggableList title="Hobbies" currentUser={currentUser} data={data} /> */}
+            </>
+          )}
 
           <button type="submit">Save updates</button>
         </Form>
       </FormBorder>
-    </CenteredContainer>
+    </Container>
   );
 };
 
