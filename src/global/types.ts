@@ -13,5 +13,5 @@ export interface User {
   relationship: string;
   country: string;
   languages: string[];
-  tastes: string[];
+  hobbies: string[];
 }
