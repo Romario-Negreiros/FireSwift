@@ -55,10 +55,10 @@ const EditProfile: React.FC = () => {
       const response = await fetch(countries);
       const json = await response.json() as Response[];
       const data: Partial<Data> = {}
-      data['countriesNames'] = json.filter(country => {
+      data['countriesNames'] = json.map(country => {
         return { name: country.name }
       });
-      const countriesLanguages = json.filter(country => {
+      const countriesLanguages = json.map(country => {
         return { name: country.languages[country.languages.length - 1].nativeName, image: country.flags.svg }
       });
       data['countriesLanguages'] = [...countriesLanguages] as unknown as Data['countriesLanguages'];
@@ -122,7 +122,7 @@ const EditProfile: React.FC = () => {
               <p>Country</p>
               <select {...register('age')}>
                 {data?.countriesNames?.map((country, i) => (
-                  <option value={i === 0 ? '' : country.name}>
+                  <option key={`option=${}`}value={i === 0 ? '' : country.name}>
                     {i === 0 ? 'Select...' : country.name}
                   </option>
                 ))}
@@ -141,7 +141,6 @@ const EditProfile: React.FC = () => {
           {data && (
             <>
               <DraggableList title="Languages" currentUser={currentUser} data={data.countriesLanguages} />
-              {/* <DraggableList title="Hobbies" currentUser={currentUser} data={data} /> */}
             </>
           )}
 
