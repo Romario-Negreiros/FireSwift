@@ -16,7 +16,6 @@ interface Props {
 } 
 
 const DraggableList: React.FC<Props> = ({ title, currentUser, data }) => {
-  
   return (
     <Container>
       <h1>{title}</h1>
@@ -24,8 +23,8 @@ const DraggableList: React.FC<Props> = ({ title, currentUser, data }) => {
         <li>
           <h2>Options</h2>
         </li>
-        {data.map(item => (
-          <li>
+        {data.map((item, i) => (
+          <li key={`lang-${i}`}>
             <span>{item.name}</span>
             <img src={item.image} alt={item.name} />
           </li>
