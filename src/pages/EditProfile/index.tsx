@@ -122,7 +122,7 @@ const EditProfile: React.FC = () => {
               <p>Country</p>
               <select {...register('age')}>
                 {data?.countriesNames?.map((country, i) => (
-                  <option key={`option=${}`}value={i === 0 ? '' : country.name}>
+                  <option key={`option-${i}`}value={i === 0 ? '' : country.name}>
                     {i === 0 ? 'Select...' : country.name}
                   </option>
                 ))}
