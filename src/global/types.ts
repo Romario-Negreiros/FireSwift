@@ -12,6 +12,9 @@ export interface User {
   age: number | null;
   relationship: string;
   country: string;
-  languages: string[];
+  languages: {
+    name: string;
+    image: string;
+  }[];
   hobbies: string[];
 }
