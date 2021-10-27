@@ -96,20 +96,20 @@ const UserProfile: React.FC = () => {
         </Manage>
       )}
       <UserBio>
-        <p>Addiiiiiiieu baaaaaa arrrrrriii babababababba</p>
+        <p>{user.bio}</p>
       </UserBio>
       <UserInfo>
         <li>
           <h2>Age</h2>
-          <span>18</span>
+          <span>{user.age}</span>
         </li>
         <li>
           <h2>Relationship</h2>
-          <span>Single</span>
+          <span>{user.relationship}</span>
         </li>
         <li>
           <h2>Country</h2>
-          <span>Argelia</span>
+          <span>{user.country}</span>
         </li>
         <li>
           <h2>Languages</h2>

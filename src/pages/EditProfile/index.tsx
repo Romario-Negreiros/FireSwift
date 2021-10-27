@@ -1,17 +1,19 @@
 import React from 'react';
 
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { updateUser } from '../../features/user/userSlice';
+import { firestoredb } from '../../lib';
 
-// import handleFirebaseError from '../../utils/handleFirebaseError';
-// import { toast } from 'react-toastify';
+import handleFirebaseError from '../../utils/handleFirebaseError';
+import { toast } from 'react-toastify';
 import { useForm, SubmitHandler } from 'react-hook-form';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Logo from '../../assets/logo.png';
 
 import { CenteredContainer, ErrorBorder, ErrorMessage } from '../../global/styles';
 import { FormBorder, Form, Grid, Wrapper, Container } from './styles';
-import { Exception, DraggableList } from '../../components';
+import { Exception, DraggableList, Loader } from '../../components';
 
 interface Data {
   countriesNames: {
@@ -37,52 +39,83 @@ interface Response {
   }[];
   flags: {
     svg: string;
-  }
+  };
 }
 
 const EditProfile: React.FC = () => {
   const currentUser = useAppSelector(state => state.user.user);
   const { register, handleSubmit, setValue } = useForm<Inputs>();
-  const [error, setError] = React.useState<string>('');
+  const [isLoaded, setIsLoaded] = React.useState(true);
+  const [error, setError] = React.useState('');
   const [data, setData] = React.useState<Data>();
-  // const history = useHistory();
-  const onSubmit: SubmitHandler<Inputs> = data => {
-    console.log(data, setError);
-  };
-
-  const fetchData = async (countries: string, hobbies?: string) => {
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
-      const response = await fetch(countries);
-      const json = await response.json() as Response[];
-      const data: Partial<Data> = {}
-      data['countriesNames'] = json.map(country => {
-        return { name: country.name }
-      });
-      const countriesLanguages = json.map(country => {
-        return { name: country.languages[country.languages.length - 1].nativeName, image: country.flags.svg }
-      });
-      data['countriesLanguages'] = [...countriesLanguages] as unknown as Data['countriesLanguages'];
-      setData(data as Data);
+      if (currentUser) {
+        setIsLoaded(false);
+        const userRef = firestoredb.doc(firestoredb.db, 'users', currentUser.id);
+        await firestoredb.updateDoc(userRef, {
+          ...data,
+        });
+        dispatch(updateUser({ ...data, ...currentUser }));
+        toast('Succesfully updated the data!');
+        history.goBack();
+      }
     } catch (err) {
-      if (err instanceof Error) setError(err.message);
+      handleFirebaseError(err, setError);
+    } finally {
+      setIsLoaded(true);
     }
   };
+
+  const fetchData = React.useCallback(async (countries: string, hobbies?: string) => {
+    if (currentUser) {
+      try {
+        const response = await fetch(countries);
+        const json = (await response.json()) as Response[];
+        const data: Partial<Data> = {};
+        data['countriesNames'] = json.map(country => {
+          return { name: country.name };
+        });
+        const countriesLanguages = json.map(country => {
+          return {
+            name: country.languages[country.languages.length - 1].nativeName,
+            image: country.flags.svg,
+          };
+        });
+        data['countriesLanguages'] = [
+          ...countriesLanguages,
+        ] as unknown as Data['countriesLanguages'];
+        setData(data as Data);
+      } catch (err) {
+        if (err instanceof Error) setError(err.message);
+      } finally {
+        setValue('country', currentUser.country);
+      }
+    }
+  }, [currentUser, setValue]);
 
   React.useEffect(() => {
     if (currentUser) {
       fetchData('https://restcountries.com/v2/all?fields=name,languages,flags');
       setValue('bio', currentUser.bio);
-      setValue('country', currentUser.country);
       setValue('relationship', currentUser.relationship);
       if (currentUser.age) setValue('age', currentUser.age);
     }
-  }, [currentUser, setValue]);
+  }, [currentUser, setValue, fetchData]);
 
   if (!currentUser) {
     const message = 'User not found or not logged in!';
     return (
       <CenteredContainer>
         <Exception message={message} />
+      </CenteredContainer>
+    );
+  } else if (!isLoaded) {
+    return (
+      <CenteredContainer>
+        <Loader />
       </CenteredContainer>
     );
   }
@@ -114,15 +147,17 @@ const EditProfile: React.FC = () => {
               <p>Age</p>
               <select {...register('age')}>
                 {ages.map((v, i) => (
-                  <option value={i === 0 ? '' : v}>{i === 0 ? 'Select...' : v}</option>
+                  <option key={`option-${i}`} value={i === 0 ? '' : v}>
+                    {i === 0 ? 'Select...' : v}
+                  </option>
                 ))}
               </select>
             </Wrapper>
             <Wrapper>
               <p>Country</p>
-              <select {...register('age')}>
+              <select {...register('country')}>
                 {data?.countriesNames?.map((country, i) => (
-                  <option key={`option-${i}`}value={i === 0 ? '' : country.name}>
+                  <option key={`option-${i}`} value={i === 0 ? '' : country.name}>
                     {i === 0 ? 'Select...' : country.name}
                   </option>
                 ))}
@@ -130,7 +165,7 @@ const EditProfile: React.FC = () => {
             </Wrapper>
             <Wrapper>
               <p>Relationship</p>
-              <select {...register('age')}>
+              <select {...register('relationship')}>
                 <option value="">Select...</option>
                 <option value="Married">Married</option>
                 <option value="Single">Single</option>
@@ -140,7 +175,11 @@ const EditProfile: React.FC = () => {
           </Grid>
           {data && (
             <>
-              <DraggableList title="Languages" currentUser={currentUser} data={data.countriesLanguages} />
+              <DraggableList
+                title="Languages"
+                currentUser={currentUser}
+                data={data.countriesLanguages}
+              />
             </>
           )}
 
