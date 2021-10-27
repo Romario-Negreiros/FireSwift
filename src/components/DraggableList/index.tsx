@@ -74,7 +74,7 @@ const DraggableList: React.FC<Props> = ({ title, currentUser, data }) => {
         </Droppable>
         <Droppable droppableId="userList">
           {provided => (
-            <ul className="userList" {...provided.droppableProps} ref={provided.innerRef}>
+            <ul className={`userList-${title}`} {...provided.droppableProps} ref={provided.innerRef}>
               {provided.placeholder}
               {userList.map((item, i) => (
                 <Draggable key={`${item.name}-${i}`} draggableId={`${item.name}-${i}`} index={i}>
