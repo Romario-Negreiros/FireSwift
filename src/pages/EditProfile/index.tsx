@@ -1,5 +1,6 @@
 import React from 'react';
 
+import GetUserListData from '../../utils/GetUserListData';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateUser } from '../../features/user/userSlice';
 import { firestoredb } from '../../lib';
@@ -53,6 +54,8 @@ const EditProfile: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       if (currentUser) {
+        const userData = GetUserListData(['Languages']);
+        console.log(userData);
         setIsLoaded(false);
         const userRef = firestoredb.doc(firestoredb.db, 'users', currentUser.id);
         await firestoredb.updateDoc(userRef, {
@@ -69,32 +72,35 @@ const EditProfile: React.FC = () => {
     }
   };
 
-  const fetchData = React.useCallback(async (countries: string, hobbies?: string) => {
-    if (currentUser) {
-      try {
-        const response = await fetch(countries);
-        const json = (await response.json()) as Response[];
-        const data: Partial<Data> = {};
-        data['countriesNames'] = json.map(country => {
-          return { name: country.name };
-        });
-        const countriesLanguages = json.map(country => {
-          return {
-            name: country.languages[country.languages.length - 1].nativeName,
-            image: country.flags.svg,
-          };
-        });
-        data['countriesLanguages'] = [
-          ...countriesLanguages,
-        ] as unknown as Data['countriesLanguages'];
-        setData(data as Data);
-      } catch (err) {
-        if (err instanceof Error) setError(err.message);
-      } finally {
-        setValue('country', currentUser.country);
+  const fetchData = React.useCallback(
+    async (countries: string, hobbies?: string) => {
+      if (currentUser) {
+        try {
+          const response = await fetch(countries);
+          const json = (await response.json()) as Response[];
+          const data: Partial<Data> = {};
+          data['countriesNames'] = json.map(country => {
+            return { name: country.name };
+          });
+          const countriesLanguages = json.map(country => {
+            return {
+              name: country.languages[country.languages.length - 1].nativeName,
+              image: country.flags.svg,
+            };
+          });
+          data['countriesLanguages'] = [
+            ...countriesLanguages,
+          ] as unknown as Data['countriesLanguages'];
+          setData(data as Data);
+        } catch (err) {
+          if (err instanceof Error) setError(err.message);
+        } finally {
+          setValue('country', currentUser.country);
+        }
       }
-    }
-  }, [currentUser, setValue]);
+    },
+    [currentUser, setValue]
+  );
 
   React.useEffect(() => {
     if (currentUser) {
@@ -177,7 +183,7 @@ const EditProfile: React.FC = () => {
             <>
               <DraggableList
                 title="Languages"
-                currentUser={currentUser}
+                userData={currentUser.languages}
                 data={data.countriesLanguages}
               />
             </>
