@@ -3,8 +3,6 @@ import React from 'react';
 import { Container } from './styles';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-import { User } from '../../global/types';
-
 interface Data {
   name: string;
   image: string;
@@ -12,13 +10,13 @@ interface Data {
 
 interface Props {
   title: string;
-  currentUser: User;
+  userData: Data[];
   data: Data[];
 }
 
-const DraggableList: React.FC<Props> = ({ title, currentUser, data }) => {
+const DraggableList: React.FC<Props> = ({ title, userData, data}) => {
   const [options, setOptions] = React.useState(data);
-  const [userList, setUserList] = React.useState(currentUser.languages);
+  const [userList, setUserList] = React.useState(userData);
 
   const setNewOrder = (options: Data[], userList: Data[]) => {
     setOptions(options);
