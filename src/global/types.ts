@@ -14,7 +14,6 @@ export interface User {
   country: string;
   languages: {
     name: string;
-    image: string;
   }[];
   hobbies: string[];
 }
