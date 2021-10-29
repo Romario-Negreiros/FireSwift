@@ -111,13 +111,22 @@ const UserProfile: React.FC = () => {
           <h2>Country</h2>
           <span>{user.country}</span>
         </li>
-        <li>
+        <li className="languages">
           <h2>Languages</h2>
-          <span>French</span>
+          {user.languages.map((lang, i) => (
+            <div key={`${lang.name}-${i}`}>
+              <span>{lang.name}</span>
+            </div>
+          ))}
         </li>
-        <li>
-          <h2>Tastes</h2>
-          <span>Music, sports</span>
+        <li className="hobbies">
+          <h2>Hobbies</h2>
+          <div>
+            <span>Music</span>
+          </div>
+          <div>
+            <span>Sports</span>
+          </div>
         </li>
       </UserInfo>
       <Friends>

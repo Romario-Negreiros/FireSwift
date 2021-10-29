@@ -80,6 +80,29 @@ export const UserInfo = styled.ul`
       width: 30%;
     }
   }
+  .languages,
+  .hobbies {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+    h2 {
+      width: 100%;
+    }
+    div {
+      margin-top: 0.5rem;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      background: ${({ theme: { bgs } }) => bgs.secondary};
+    }
+    img {
+      width: 2.5rem;
+      object-fit: cover;
+    }
+  }
   h2 {
     font-size: 1.6rem;
   }
