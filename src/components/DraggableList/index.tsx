@@ -5,7 +5,6 @@ import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautif
 
 interface Data {
   name: string;
-  image: string;
 }
 
 interface Props {
@@ -14,14 +13,14 @@ interface Props {
   data: Data[];
 }
 
-const DraggableList: React.FC<Props> = ({ title, userData, data}) => {
+const DraggableList: React.FC<Props> = ({ title, userData, data }) => {
   const [options, setOptions] = React.useState(data);
   const [userList, setUserList] = React.useState(userData);
 
   const setNewOrder = (options: Data[], userList: Data[]) => {
     setOptions(options);
     setUserList(userList);
-  }
+  };
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -52,27 +51,39 @@ const DraggableList: React.FC<Props> = ({ title, userData, data}) => {
           {provided => (
             <ul className="options" {...provided.droppableProps} ref={provided.innerRef}>
               {provided.placeholder}
-              {options.map((item, i) => (
-                <Draggable key={`${item.name}-${i}`} draggableId={`${item.name}-${i}`} index={i}>
-                  {(provided, snapshot) => (
-                    <li
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+              {options.map((item, i) => {
+                if (userData.some(userItem => item.name === userItem.name)) return null;
+                else {
+                  return (
+                    <Draggable
+                      key={`${item.name}-${i}`}
+                      draggableId={`${item.name}-${i}`}
+                      index={i}
                     >
-                      <span>{item.name}</span>
-                      <img src={item.image} alt={item.name} />
-                    </li>
-                  )}
-                </Draggable>
-              ))}
+                      {(provided, snapshot) => (
+                        <li
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                        >
+                          <span>{item.name}</span>
+                        </li>
+                      )}
+                    </Draggable>
+                  );
+                }
+              })}
             </ul>
           )}
         </Droppable>
         <Droppable droppableId="userList">
           {provided => (
-            <ul className={`userList-${title}`} {...provided.droppableProps} ref={provided.innerRef}>
+            <ul
+              className={`userList-${title}`}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
               {provided.placeholder}
               {userList.map((item, i) => (
                 <Draggable key={`${item.name}-${i}`} draggableId={`${item.name}-${i}`} index={i}>
@@ -84,7 +95,6 @@ const DraggableList: React.FC<Props> = ({ title, userData, data}) => {
                       style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                     >
                       <span>{item.name}</span>
-                      <img src={item.image} alt={item.name} />
                     </li>
                   )}
                 </Draggable>
