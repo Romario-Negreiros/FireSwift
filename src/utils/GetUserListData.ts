@@ -6,7 +6,6 @@ const GetUserListData = (lists: string[]) => {
     data[item] = children.map(child => {        
       return {
         name: child.firstElementChild?.innerHTML,
-        image: child.lastElementChild?.getAttribute('src'),
       };
     });
   });
