@@ -22,7 +22,6 @@ interface Data {
   }[];
   countriesLanguages: {
     name: string;
-    image: string;
   }[];
 }
 
@@ -54,14 +53,14 @@ const EditProfile: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       if (currentUser) {
-        const userData = GetUserListData(['Languages']);
-        console.log(userData);
+        const userData = GetUserListData(['languages']);
         setIsLoaded(false);
         const userRef = firestoredb.doc(firestoredb.db, 'users', currentUser.id);
         await firestoredb.updateDoc(userRef, {
           ...data,
+          ...userData,
         });
-        dispatch(updateUser({ ...data, ...currentUser }));
+        dispatch(updateUser({ ...data, ...currentUser, ...userData }));
         toast('Succesfully updated the data!');
         history.goBack();
       }
@@ -82,11 +81,12 @@ const EditProfile: React.FC = () => {
           data['countriesNames'] = json.map(country => {
             return { name: country.name };
           });
-          const countriesLanguages = json.map(country => {
-            return {
+          const countriesLanguages: Data['countriesLanguages'] = [];
+          json.forEach(country => {
+            if(countriesLanguages.some(lang => lang.name === country.languages[country.languages.length - 1].nativeName)) return
+            countriesLanguages.push({
               name: country.languages[country.languages.length - 1].nativeName,
-              image: country.flags.svg,
-            };
+            });
           });
           data['countriesLanguages'] = [
             ...countriesLanguages,
@@ -182,7 +182,7 @@ const EditProfile: React.FC = () => {
           {data && (
             <>
               <DraggableList
-                title="Languages"
+                title="languages"
                 userData={currentUser.languages}
                 data={data.countriesLanguages}
               />
