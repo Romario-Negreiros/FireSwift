@@ -56,7 +56,6 @@ const CreateAccount: React.FC = () => {
           const user = {
             email,
             name,
-            password,
             friends: [],
             bio: '',
             age: null,

@@ -98,6 +98,10 @@ export const UserInfo = styled.ul`
       border-radius: 5px;
       background: ${({ theme: { bgs } }) => bgs.secondary};
     }
+    span {
+      display: inline;
+      margin: 0;
+    }
     img {
       width: 2.5rem;
       object-fit: cover;
@@ -107,6 +111,8 @@ export const UserInfo = styled.ul`
     font-size: 1.6rem;
   }
   span {
+    display: inline-block;
+    margin-top: 0.5rem;
     font-size: 1.2rem;
   }
 `;
@@ -120,5 +126,58 @@ export const Friends = styled.div`
     margin-bottom: 1rem;
     color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.8rem;
+  }
+`;
+
+export const AccountOptions = styled.ul`
+  .title {
+    margin: 0;
+    background: unset;
+    text-align: center;
+    border: 0;
+    transition: unset;
+    cursor: auto;
+    :hover {
+      transform: unset;
+      opacity: unset;
+    }
+    @media screen and (min-width: 700px) {
+      max-width: 100%;
+    }
+  }
+  h2 {
+    margin-bottom: 1rem;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    font-size: 1.8rem;
+  }
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  @media screen and (min-width: 700px) {
+    padding: 0;
+  }
+  li {
+    width: 100%;
+    padding: 2rem;
+    background: ${({ theme: { bgs } }) => bgs.tertiary};
+    border-radius: 5px;
+    margin: 1rem 0;
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    :hover {
+      opacity: 0.5;
+      transform: scale(1.01);
+    }
+    @media screen and (min-width: 700px) {
+      max-width: calc(100% / 2 - 2rem);
+      margin: 1rem;
+    }
+  }
+  span {
+    color: ${({ theme: { fonts } }) => fonts.primary};
+    font-size: 1.4rem;
   }
 `;

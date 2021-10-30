@@ -8,7 +8,7 @@ import handleFirebaseError from '../../utils/handleFirebaseError';
 import { toast } from 'react-toastify';
 
 import { CenteredContainer } from '../../global/styles';
-import { Container, Manage, Picture, UserBio, UserInfo, Friends } from './styles';
+import { Container, Manage, Picture, UserBio, UserInfo, Friends, AccountOptions } from './styles';
 import FakePicture from '../../assets/mock-profile.jpg';
 import { FriendsList, Loader, Exception } from '../../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -132,6 +132,26 @@ const UserProfile: React.FC = () => {
         <h2>Friends</h2>
         <FriendsList friendsIds={user.friends} />
       </Friends>
+      <AccountOptions>
+        <li className="title">
+          <h2>Account Options</h2>
+        </li>
+        <li>
+          <span>Change password</span>
+        </li>
+        <li>
+          <span>Change account name</span>
+        </li>
+        <li>
+          <span>Delete profile</span>
+        </li>
+        <li>
+          <span>Make profile private</span>
+        </li>
+        <li>
+          <span>Change profile picture</span>
+        </li>
+      </AccountOptions>
     </Container>
   );
 };
