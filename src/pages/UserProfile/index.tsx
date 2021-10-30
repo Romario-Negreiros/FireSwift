@@ -121,12 +121,11 @@ const UserProfile: React.FC = () => {
         </li>
         <li className="hobbies">
           <h2>Hobbies</h2>
-          <div>
-            <span>Music</span>
-          </div>
-          <div>
-            <span>Sports</span>
-          </div>
+          {user.hobbies.map((hobby, i) => (
+            <div key={`${hobby.name}-${i}`}>
+              <span>{hobby.name}</span>
+            </div>
+          ))}
         </li>
       </UserInfo>
       <Friends>

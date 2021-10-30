@@ -1,6 +1,7 @@
 import React from 'react';
 
 import GetUserListData from '../../utils/GetUserListData';
+import hobbies from '../../app/hobbies';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateUser } from '../../features/user/userSlice';
 import { firestoredb } from '../../lib';
@@ -21,6 +22,9 @@ interface Data {
     name: string;
   }[];
   countriesLanguages: {
+    name: string;
+  }[];
+  hobbies: {
     name: string;
   }[];
 }
@@ -53,7 +57,7 @@ const EditProfile: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       if (currentUser) {
-        const userData = GetUserListData(['languages']);
+        const userData = GetUserListData(['languages', 'hobbies']);
         setIsLoaded(false);
         const userRef = firestoredb.doc(firestoredb.db, 'users', currentUser.id);
         await firestoredb.updateDoc(userRef, {
@@ -72,7 +76,7 @@ const EditProfile: React.FC = () => {
   };
 
   const fetchData = React.useCallback(
-    async (countries: string, hobbies?: string) => {
+    async (countries: string) => {
       if (currentUser) {
         try {
           const response = await fetch(countries);
@@ -83,7 +87,12 @@ const EditProfile: React.FC = () => {
           });
           const countriesLanguages: Data['countriesLanguages'] = [];
           json.forEach(country => {
-            if(countriesLanguages.some(lang => lang.name === country.languages[country.languages.length - 1].nativeName)) return
+            if (
+              countriesLanguages.some(
+                lang => lang.name === country.languages[country.languages.length - 1].nativeName
+              )
+            )
+              return;
             countriesLanguages.push({
               name: country.languages[country.languages.length - 1].nativeName,
             });
@@ -91,6 +100,7 @@ const EditProfile: React.FC = () => {
           data['countriesLanguages'] = [
             ...countriesLanguages,
           ] as unknown as Data['countriesLanguages'];
+          data['hobbies'] = hobbies;
           setData(data as Data);
         } catch (err) {
           if (err instanceof Error) setError(err.message);
@@ -110,7 +120,7 @@ const EditProfile: React.FC = () => {
       if (currentUser.age) setValue('age', currentUser.age);
     }
   }, [currentUser, setValue, fetchData]);
-
+console.log(typeof hobbies);
   if (!currentUser) {
     const message = 'User not found or not logged in!';
     return (
@@ -186,6 +196,7 @@ const EditProfile: React.FC = () => {
                 userData={currentUser.languages}
                 data={data.countriesLanguages}
               />
+              <DraggableList title="hobbies" userData={currentUser.hobbies} data={data.hobbies} />
             </>
           )}
 
