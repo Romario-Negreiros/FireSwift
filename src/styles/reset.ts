@@ -32,7 +32,7 @@ const Reset = createGlobalStyle`
      a {
         text-decoration: none;
     }
-    input, select {
+    input:not(.checkbox), select {
       -webkit-appearance: none;
       -moz-appearance: none;
         border: 0 none;
