@@ -177,7 +177,7 @@ export const AccountOptions = styled.ul`
     }
   }
   span {
-    color: ${({ theme: { fonts } }) => fonts.primary};
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.4rem;
   }
 `;
