@@ -7,3 +7,4 @@ export { default as Loader } from './Loader';
 export { default as ProfileCard } from './ProfileCard';
 export { default as Exception } from './Exception';
 export { default as DraggableList } from './DraggableList';
+export { default as Portal } from './Portal';

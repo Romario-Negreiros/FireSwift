@@ -9,8 +9,8 @@ import {
   Form,
   ErrorBorder,
   ErrorMessage,
-  CenteredContainer,
   CloseModal,
+  CenteredContainer,
 } from '../../../../global/styles';
 import { Loader } from '../../../';
 
@@ -19,7 +19,6 @@ import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
 interface Inputs {
-  newName: string;
   password: string;
 }
 
@@ -27,7 +26,7 @@ interface Props {
   setIsModalVisible: (isModalVisible: boolean) => void;
 }
 
-const ChangeAccountName: React.FC<Props> = ({ setIsModalVisible }) => {
+const PrivateProfile: React.FC<Props> = ({ setIsModalVisible }) => {
   const [isLoaded, setIsLoaded] = React.useState(true);
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
@@ -36,11 +35,7 @@ const ChangeAccountName: React.FC<Props> = ({ setIsModalVisible }) => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<Inputs>({
-    defaultValues: {
-      newName: 'oskoask',
-    },
-  });
+  } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -78,8 +73,10 @@ const ChangeAccountName: React.FC<Props> = ({ setIsModalVisible }) => {
             <img src={Logo} alt="logo" />
             <h1>Login</h1>
           </div>
-          <input {...register('newName', { required: 'Field cannot be empty!' })} />
-          <p>{errors.newName?.message}</p>
+          <div className="checkboxWrapper">
+            <input className="checkbox" type="checkbox" name="private" value="Private" />
+            <label htmlFor="private">Private profile?</label>
+          </div>
           <div>
             <input
               type={isPasswordVisible ? 'text' : 'password'}
@@ -108,4 +105,4 @@ const ChangeAccountName: React.FC<Props> = ({ setIsModalVisible }) => {
   );
 };
 
-export default ChangeAccountName;
+export default PrivateProfile;
