@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const CenteredContainer = styled.main`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 81px);
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 81px);
+  width: 100%;
 `;
 
 export const InnerCenteredContainer = styled(CenteredContainer)`
@@ -22,7 +22,9 @@ export const FormBorder = styled.section`
     grid-column: 1;
   }
 `;
+
 export const Form = styled.form`
+  position: relative;
   width: 100%;
   height: 100%;
   padding: 1rem 1rem 2rem;
@@ -55,7 +57,18 @@ export const Form = styled.form`
     font-size: 1.2rem;
     margin-bottom: 3rem;
   }
-  input, select {
+  .checkboxWrapper {
+
+  }
+  .checkbox {
+
+  }
+  label {
+    color: ${({theme: { fonts }}) => fonts.secondary};
+    font-size: 1.4rem;
+  }
+  input:not(.checkbox),
+  select {
     width: 100%;
     max-width: 300px;
     background: unset;
@@ -67,7 +80,7 @@ export const Form = styled.form`
       border-color: ${({ theme: { border } }) => border.secondary};
     }
   }
-  div {
+  div:not(.checkboxWrapper) {
     width: 100%;
     max-width: 300px;
     display: flex;
@@ -135,24 +148,35 @@ export const ErrorMessage = styled.div`
   width: 100%;
   height: 100%;
   padding: 1rem;
-  background: ${({theme: { bgs }}) => bgs.secondary};
-  p { 
-    color: ${({theme: { fonts }}) => fonts.secondary};
+  background: ${({ theme: { bgs } }) => bgs.secondary};
+  p {
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.4rem;
   }
 `;
 
 export const ModalBG = styled.section`
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 20;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 40;
+`;
+
+export const CloseModal = styled.div`
+  position: absolute;
+  width: 20px !important;
+  height: 20px;
+  right: 3px;
+  top: 6px;
+  svg {
+    cursor: pointer;
+  }
 `;
