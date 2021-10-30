@@ -15,5 +15,7 @@ export interface User {
   languages: {
     name: string;
   }[];
-  hobbies: string[];
+  hobbies: {
+    name: string;
+  }[];
 }
