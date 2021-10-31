@@ -18,17 +18,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
+import { ModalsProps } from '../../../../global/types';
+
 interface Inputs {
   newPassword: string;
   oldPassword: string;
   confirmOldPassword: string;
 }
 
-interface Props {
-  setIsModalVisible: (isModalVisible: boolean) => void;
-}
-
-const ChangePassword: React.FC<Props> = ({ setIsModalVisible }) => {
+const ChangePassword: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [isLoaded, setIsLoaded] = React.useState(true);
   const [error, setError] = React.useState('');
   const [isPassword1Visible, setIsPassword1Visible] = React.useState(false);

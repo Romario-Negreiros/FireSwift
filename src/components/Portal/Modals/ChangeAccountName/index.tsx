@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useAppDispatch } from '../../../../app/hooks';
+import { updateUser } from '../../../../features/user/userSlice';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import authenticateUser from '../../../../utils/authenticateUser';
+import { firestoredb } from '../../../../lib';
+import { toast } from 'react-toastify';
 
 import {
   ModalBG,
@@ -18,34 +23,40 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
+import { ModalsProps } from '../../../../global/types';
+
 interface Inputs {
   newName: string;
   password: string;
 }
 
-interface Props {
-  setIsModalVisible: (isModalVisible: boolean) => void;
-}
-
-const ChangeAccountName: React.FC<Props> = ({ setIsModalVisible }) => {
+const ChangeAccountName: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [isLoaded, setIsLoaded] = React.useState(true);
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const dispatch = useAppDispatch();
 
   const {
-    register,
+    register, 
     formState: { errors },
     handleSubmit,
   } = useForm<Inputs>({
     defaultValues: {
-      newName: 'oskoask',
+      newName: user.name,
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<Inputs> = async ({ newName, password }) => {
     try {
       setIsLoaded(false);
-      console.log(data);
+      await authenticateUser(user.email, password);
+      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+      await firestoredb.updateDoc(userRef, {
+        newName
+      });
+      dispatch(updateUser({ ...user, name: newName }));
+      toast('Name succesfully updated');
+      setIsModalVisible(false);
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
@@ -71,12 +82,14 @@ const ChangeAccountName: React.FC<Props> = ({ setIsModalVisible }) => {
           </CloseModal>
           {error && (
             <ErrorBorder>
-              <ErrorMessage>{error}</ErrorMessage>
+              <ErrorMessage>
+                <p>{error}</p>
+              </ErrorMessage>
             </ErrorBorder>
           )}
           <div className="logo">
             <img src={Logo} alt="logo" />
-            <h1>Login</h1>
+            <h1>Change name</h1>
           </div>
           <input {...register('newName', { required: 'Field cannot be empty!' })} />
           <p>{errors.newName?.message}</p>
