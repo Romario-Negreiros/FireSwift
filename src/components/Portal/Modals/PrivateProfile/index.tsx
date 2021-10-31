@@ -19,6 +19,7 @@ import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
 interface Inputs {
+  privateProfile: string;
   password: string;
 }
 
@@ -74,8 +75,8 @@ const PrivateProfile: React.FC<Props> = ({ setIsModalVisible }) => {
             <h1>Login</h1>
           </div>
           <div className="checkboxWrapper">
-            <input className="checkbox" type="checkbox" name="private" value="Private" />
-            <label htmlFor="private">Private profile?</label>
+            <input {...register('privateProfile')} className="checkbox" type="checkbox" id="privateProfile" name="privateProfile" value="Private" />
+            <label htmlFor="privateProfile">Private profile?</label>
           </div>
           <div>
             <input
