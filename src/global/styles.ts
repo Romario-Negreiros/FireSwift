@@ -58,13 +58,27 @@ export const Form = styled.form`
     margin-bottom: 3rem;
   }
   .checkboxWrapper {
-
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
   .checkbox {
-
+    -webkit-appearance: none;
+    background-color: ${({ theme: { bgs } }) => bgs.tertiary};
+    padding: 5px;
+    border-radius: 50%;
+    border: 1px solid ${({ theme: { border } }) => border.secondary};
+    cursor: pointer;
+    :hover {
+      background: ${({ theme: { gradients } }) => gradients.primary};
+    }
+  }
+  .checkbox:checked {
+    background: ${({ theme: { gradients } }) => gradients.primary};
   }
   label {
-    color: ${({theme: { fonts }}) => fonts.secondary};
+    cursor: pointer;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.4rem;
   }
   input:not(.checkbox),
