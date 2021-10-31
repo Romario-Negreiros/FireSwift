@@ -18,3 +18,8 @@ export interface User {
     name: string;
   }[];
 }
+
+export interface ModalsProps {
+  setIsModalVisible: (isModalVisible: boolean) => void;
+  user: User;
+}

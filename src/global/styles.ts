@@ -16,7 +16,7 @@ export const FormBorder = styled.section`
   grid-column: span 2;
   width: 100%;
   max-width: 400px;
-  background: linear-gradient(to right, #8e2de2, #4a00e0);
+  background: ${({ theme: { gradients } }) => gradients.primary};
   padding: 0.5rem;
   @media screen and (min-width: 700px) {
     grid-column: 1;
@@ -114,7 +114,7 @@ export const Form = styled.form`
   button {
     cursor: pointer;
     margin-top: 2rem;
-    background: linear-gradient(to right, #8e2de2, #4a00e0);
+    background: ${({ theme: { gradients } }) => gradients.primary};
     width: 100%;
     max-width: 300px;
     padding: 1rem 2rem;
@@ -147,8 +147,8 @@ export const Form = styled.form`
   }
 `;
 
-export const ErrorBorder = styled.div`
-  background: linear-gradient(to right, #ed213a, #93291e);
+export const ErrorBorder = styled.section`
+  background: ${({ theme: { gradients } }) => gradients.secondary};
   width: 100%;
   max-width: 400px;
   padding: 0.5rem;
@@ -158,7 +158,7 @@ export const ErrorBorder = styled.div`
   }
 `;
 
-export const ErrorMessage = styled.div`
+export const ErrorMessage = styled.section`
   width: 100%;
   height: 100%;
   padding: 1rem;
