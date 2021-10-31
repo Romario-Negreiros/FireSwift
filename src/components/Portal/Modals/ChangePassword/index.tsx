@@ -1,7 +1,9 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
+import authenticateUser from '../../../../utils/authenticateUser';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import { authentication } from '../../../../lib';
 
 import {
   ModalBG,
@@ -19,6 +21,7 @@ import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
 import { ModalsProps } from '../../../../global/types';
+import { toast } from 'react-toastify';
 
 interface Inputs {
   newPassword: string;
@@ -39,15 +42,22 @@ const ChangePassword: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
     handleSubmit,
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<Inputs> = async ({ newPassword, oldPassword, confirmOldPassword }) => {
+    if(oldPassword === confirmOldPassword) {
     try {
       setIsLoaded(false);
-      console.log(data);
+      await authenticateUser(user.email, oldPassword);
+      const userRef = authentication.auth.currentUser;
+      if(userRef)
+      await authentication.updatePassword(userRef, newPassword);
+      toast('Password succesfully updated!');
+      setIsModalVisible(false);
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
       setIsLoaded(true);
     }
+  } else setError('Old password and confirm old password fields must be equal!')
   };
 
   if (!isLoaded) {
