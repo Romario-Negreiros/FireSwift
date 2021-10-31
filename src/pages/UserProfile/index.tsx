@@ -11,7 +11,12 @@ import { CenteredContainer } from '../../global/styles';
 import { Container, Manage, Picture, UserBio, UserInfo, Friends, AccountOptions } from './styles';
 import FakePicture from '../../assets/mock-profile.jpg';
 import { FriendsList, Loader, Exception, Portal } from '../../components';
-import { ChangeAccountName, ChangePassword, DeleteProfile, PrivateProfile } from '../../components/Portal/Modals';
+import {
+  ChangeAccountName,
+  ChangePassword,
+  DeleteProfile,
+  PrivateProfile,
+} from '../../components/Portal/Modals';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faUserMinus, faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -41,24 +46,12 @@ const UserProfile: React.FC = () => {
       switch (action) {
         case 'changename':
           return <ChangeAccountName setIsModalVisible={setIsModalVisible} />;
-          case 'changepwd':
-            return (
-                <ChangePassword
-                    setIsModalVisible={setIsModalVisible}
-                />
-            );
+        case 'changepwd':
+          return <ChangePassword setIsModalVisible={setIsModalVisible} />;
         case 'deleteprofile':
-            return (
-                <DeleteProfile
-                    setIsModalVisible={setIsModalVisible}
-                />
-            );
+          return <DeleteProfile setIsModalVisible={setIsModalVisible} />;
         case 'privateprofile':
-            return (
-                <PrivateProfile
-                    setIsModalVisible={setIsModalVisible}
-                />
-            );
+          return <PrivateProfile setIsModalVisible={setIsModalVisible} />;
         default:
           return;
       }
@@ -171,23 +164,25 @@ const UserProfile: React.FC = () => {
           <h2>Friends</h2>
           <FriendsList friendsIds={user.friends} />
         </Friends>
-        <AccountOptions>
-          <li className="title">
-            <h2>Account Options</h2>
-          </li>
-          <li onClick={() => openModal('changepwd')}>
-            <span>Change password</span>
-          </li>
-          <li onClick={() => openModal('changename')}>
-            <span>Change account name</span>
-          </li>
-          <li onClick={() => openModal('deleteprofile')}>
-            <span>Delete profile</span>
-          </li>
-          <li onClick={() => openModal('privateprofile')}>
-            <span>Make profile private</span>
-          </li>
-        </AccountOptions>
+        {currentUser && currentUser.id === user.id && (
+          <AccountOptions>
+            <li className="title">
+              <h2>Account Options</h2>
+            </li>
+            <li onClick={() => openModal('changepwd')}>
+              <span>Change password</span>
+            </li>
+            <li onClick={() => openModal('changename')}>
+              <span>Change account name</span>
+            </li>
+            <li onClick={() => openModal('deleteprofile')}>
+              <span>Delete profile</span>
+            </li>
+            <li onClick={() => openModal('privateprofile')}>
+              <span>Make profile private</span>
+            </li>
+          </AccountOptions>
+        )}
       </Container>
       {isModalVisible && <Portal>{switchModal()}</Portal>}
     </>
