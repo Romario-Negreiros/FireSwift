@@ -45,13 +45,13 @@ const UserProfile: React.FC = () => {
     if (user) {
       switch (action) {
         case 'changename':
-          return <ChangeAccountName setIsModalVisible={setIsModalVisible} />;
+          return <ChangeAccountName setIsModalVisible={setIsModalVisible} user={user} />;
         case 'changepwd':
-          return <ChangePassword setIsModalVisible={setIsModalVisible} />;
+          return <ChangePassword setIsModalVisible={setIsModalVisible} user={user} />;
         case 'deleteprofile':
-          return <DeleteProfile setIsModalVisible={setIsModalVisible} />;
+          return <DeleteProfile setIsModalVisible={setIsModalVisible} user={user} />;
         case 'privateprofile':
-          return <PrivateProfile setIsModalVisible={setIsModalVisible} />;
+          return <PrivateProfile setIsModalVisible={setIsModalVisible} user={user} />;
         default:
           return;
       }
