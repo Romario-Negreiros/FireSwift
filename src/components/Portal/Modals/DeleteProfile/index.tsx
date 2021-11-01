@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { firestoredb, authentication } from '../../../../lib';
+import { useHistory } from 'react-router';
+import { useAppDispatch } from '../../../../app/hooks';
+import { userUnLogged } from '../../../../features/user/userSlice';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import authenticateUser from '../../../../utils/authenticateUser';
 
 import {
   ModalBG,
@@ -19,6 +24,7 @@ import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
 import { ModalsProps } from '../../../../global/types';
+import { toast } from 'react-toastify';
 
 interface Inputs {
   password: string;
@@ -30,6 +36,8 @@ const DeleteProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [error, setError] = React.useState('');
   const [isPassword1Visible, setIsPassword1Visible] = React.useState(false);
   const [isPassword2Visible, setIsPassword2Visible] = React.useState(false);
+  const history = useHistory();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -37,15 +45,24 @@ const DeleteProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
     handleSubmit,
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<Inputs> = async ({ password, confirmPassword }) => {
+    if(password === confirmPassword) {
     try {
       setIsLoaded(false);
-      console.log(data);
+      await authenticateUser(user.email, password);
+      const userRef = authentication.auth.currentUser;
+      if(userRef)
+      await authentication.deleteUser(userRef);
+      await firestoredb.deleteDoc(firestoredb.doc(firestoredb.db, 'users', user.id));
+      dispatch(userUnLogged(null));
+      toast('User succesfully deleted');
+      history.push('/login');
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
       setIsLoaded(true);
     }
+  } else setError('Password and confirm password fields must be equal!');
   };
 
   if (!isLoaded) {
@@ -66,7 +83,9 @@ const DeleteProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
           </CloseModal>
           {error && (
             <ErrorBorder>
-              <ErrorMessage>{error}</ErrorMessage>
+              <ErrorMessage>
+                <p>{error}</p>
+              </ErrorMessage>
             </ErrorBorder>
           )}
           <div className="logo">

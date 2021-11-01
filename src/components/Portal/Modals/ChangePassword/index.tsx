@@ -78,7 +78,9 @@ const ChangePassword: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
           </CloseModal>
           {error && (
             <ErrorBorder>
-              <ErrorMessage>{error}</ErrorMessage>
+              <ErrorMessage>
+                <p>{error}</p>
+              </ErrorMessage>
             </ErrorBorder>
           )}
           <div className="logo">
