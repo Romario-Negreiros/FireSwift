@@ -95,10 +95,17 @@ const UserProfile: React.FC = () => {
         <Loader />
       </CenteredContainer>
     );
-  } else if (error || !user) {
+  } else if (error || !user ) {
     return (
       <CenteredContainer>
         <Exception message={error} />
+      </CenteredContainer>
+    );
+  } else if (user.isPrivate && (user.id !== currentUser?.id || !currentUser)) {
+    const message = 'The user has made its profile private!';
+    return (
+      <CenteredContainer>
+        <Exception message={message} />
       </CenteredContainer>
     );
   }
