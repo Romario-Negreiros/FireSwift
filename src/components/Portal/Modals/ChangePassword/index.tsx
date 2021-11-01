@@ -85,7 +85,7 @@ const ChangePassword: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
           )}
           <div className="logo">
             <img src={Logo} alt="logo" />
-            <h1>Login</h1>
+            <h1>Change password</h1>
           </div>
           <div>
             <input

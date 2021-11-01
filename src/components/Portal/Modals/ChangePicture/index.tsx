@@ -1,11 +1,9 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { firestoredb } from '../../../../lib';
 import authenticateUser from '../../../../utils/authenticateUser';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
-import { useAppDispatch } from '../../../../app/hooks';
-import { updateUser } from '../../../../features/user/userSlice';
+import { storage } from '../../../../lib';
 import { toast } from 'react-toastify';
 
 import {
@@ -15,26 +13,29 @@ import {
   ErrorBorder,
   ErrorMessage,
   CloseModal,
-  CenteredContainer,
 } from '../../../../global/styles';
-import { Loader } from '../../../';
+import { Progress, Input, InputFileLabel } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTimes,
+  faEye,
+  faEyeSlash,
+  faFileUpload,
+  faFileAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
 import { ModalsProps } from '../../../../global/types';
 
 interface Inputs {
-  privateProfile: string;
   password: string;
 }
 
-const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
-  const [isLoaded, setIsLoaded] = React.useState(true);
+const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-  const dispatch = useAppDispatch();
+  const [hasFile, setHasFile] = React.useState(false);
 
   const {
     register,
@@ -42,34 +43,26 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
     handleSubmit,
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async ({ privateProfile, password }) => {
-    if(Boolean(privateProfile) !== user.isPrivate) {
+  const onSubmit: SubmitHandler<Inputs> = async ({ password }) => {
     try {
-      setIsLoaded(false);
       await authenticateUser(user.email, password);
-      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
-      await firestoredb.updateDoc(userRef, {
-        isPrivate: Boolean(privateProfile),
-      });
-      dispatch(updateUser({ ...user, isPrivate: Boolean(privateProfile) }));
-      toast('Changes succesfully saved!');
+      const input = document.querySelector('.image') as HTMLInputElement;
+      const storageRef = storage.ref(storage.storage, `users/${user.id}`);
+      if(input.files && input.files[0]) {
+        const image = input.files[0];
+        const task = await storage.uploadBytesResumable(storageRef, image);
+        const { totalBytes, bytesTransferred } = task;
+        const progress = (totalBytes / bytesTransferred) * 100;
+        const progressBar = document.querySelector('#file_progress') as HTMLProgressElement;
+        progressBar.value = progress;
+      } else await storage.deleteObject(storageRef);
+      toast('Picture succesfully changed');
+      setIsModalVisible(false);
     } catch (err) {
       handleFirebaseError(err, setError);
-    } finally {
-      setIsLoaded(true);
     }
-  } else setIsModalVisible(false);
   };
 
-  if (!isLoaded) {
-    return (
-      <ModalBG>
-        <CenteredContainer>
-          <Loader />
-        </CenteredContainer>
-      </ModalBG>
-    );
-  }
   return (
     <ModalBG>
       <FormBorder>
@@ -86,12 +79,26 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
           )}
           <div className="logo">
             <img src={Logo} alt="logo" />
-            <h1>Private profile</h1>
+            <h1>Change picture</h1>
           </div>
-          <div className="checkboxWrapper">
-            <input {...register('privateProfile')} className="checkbox" type="checkbox" id="privateProfile" name="privateProfile" value="Private" />
-            <label htmlFor="privateProfile">Private profile?</label>
-          </div>
+          <InputFileLabel>
+            <Input
+              type="file"
+              className="image"
+              name="image"
+              accept=".jpg,.jpeg,.png,.svg"
+              onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                event.currentTarget.files ? setHasFile(true) : setHasFile(false);
+              }}
+            ></Input>
+            Choose picture
+            <FontAwesomeIcon
+              size="1x"
+              color="purple"
+              icon={hasFile ? faFileAlt : faFileUpload}
+            ></FontAwesomeIcon>
+          </InputFileLabel>
+          <Progress id="file_progress" value="0" max="100"></Progress>
           <div>
             <input
               type={isPasswordVisible ? 'text' : 'password'}
@@ -120,4 +127,4 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   );
 };
 
-export default PrivateProfile;
+export default ChangePicture;
