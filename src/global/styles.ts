@@ -188,8 +188,8 @@ export const CloseModal = styled.div`
   position: absolute;
   width: 20px !important;
   height: 20px;
-  right: 3px;
-  top: 6px;
+  right: -30px;
+  top: -30px;
   svg {
     cursor: pointer;
   }
