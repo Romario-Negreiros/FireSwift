@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { firestoredb } from '../../../../lib';
+import authenticateUser from '../../../../utils/authenticateUser';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import { useAppDispatch } from '../../../../app/hooks';
+import { updateUser } from '../../../../features/user/userSlice';
+import { toast } from 'react-toastify';
 
 import {
   ModalBG,
@@ -29,6 +34,7 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [isLoaded, setIsLoaded] = React.useState(true);
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -36,15 +42,23 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
     handleSubmit,
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<Inputs> = async ({ privateProfile, password }) => {
+    if(Boolean(privateProfile) !== user.isPrivate) {
     try {
       setIsLoaded(false);
-      console.log(data);
+      await authenticateUser(user.email, password);
+      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+      await firestoredb.updateDoc(userRef, {
+        isPrivate: Boolean(privateProfile),
+      });
+      dispatch(updateUser({ ...user, isPrivate: Boolean(privateProfile) }));
+      toast('Changes succesfully saved!');
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
       setIsLoaded(true);
     }
+  } else setIsModalVisible(false);
   };
 
   if (!isLoaded) {

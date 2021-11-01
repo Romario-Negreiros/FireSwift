@@ -50,10 +50,10 @@ const DeleteProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
     try {
       setIsLoaded(false);
       await authenticateUser(user.email, password);
+      await firestoredb.deleteDoc(firestoredb.doc(firestoredb.db, 'users', user.id));
       const userRef = authentication.auth.currentUser;
       if(userRef)
       await authentication.deleteUser(userRef);
-      await firestoredb.deleteDoc(firestoredb.doc(firestoredb.db, 'users', user.id));
       dispatch(userUnLogged(null));
       toast('User succesfully deleted');
       history.push('/login');
