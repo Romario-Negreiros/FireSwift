@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword, deleteUser } from 'firebase/auth';
 import { collection, getDocs, addDoc, getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytesResumable, deleteObject } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -41,5 +42,8 @@ export const realtimedb = {
 }
 
 export const storage = {
-
+  storage: getStorage(app),
+  ref,
+  uploadBytesResumable,
+  deleteObject,
 }
