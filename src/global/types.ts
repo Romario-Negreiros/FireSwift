@@ -10,6 +10,7 @@ export interface User {
   bio: string;
   age: number | null;
   relationship: string;
+  isPrivate: boolean;
   country: string;
   languages: {
     name: string;
