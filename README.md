@@ -54,8 +54,8 @@ Non-connected users will only be able to see the posts, no person's profile or c
 - [x] Account creation
 - [x] Add redux 
 - [x] Add/remove friends mechanism
-- [ ] Create user profile managament 
-- [ ] Create draggable component to drag items between two lists (using react-beatiful-dmv as mentioned above in the libs list)
+- [x] Create user profile managament 
+- [x] Create draggable component to drag items between two lists (using react-beatiful-dmv as mentioned above in the libs list)
 
 ---
 
