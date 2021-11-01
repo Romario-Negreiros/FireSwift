@@ -14,6 +14,7 @@ import { FriendsList, Loader, Exception, Portal } from '../../components';
 import {
   ChangeAccountName,
   ChangePassword,
+  ChangePicture,
   DeleteProfile,
   PrivateProfile,
 } from '../../components/Portal/Modals';
@@ -52,6 +53,8 @@ const UserProfile: React.FC = () => {
           return <DeleteProfile setIsModalVisible={setIsModalVisible} user={user} />;
         case 'privateprofile':
           return <PrivateProfile setIsModalVisible={setIsModalVisible} user={user} />;
+        case 'changepic':
+          return <ChangePicture setIsModalVisible={setIsModalVisible} user={user} />;
         default:
           return;
       }
@@ -187,6 +190,9 @@ const UserProfile: React.FC = () => {
             </li>
             <li onClick={() => openModal('privateprofile')}>
               <span>Make profile private</span>
+            </li>
+            <li onClick={() => openModal('changepic')}>
+              <span>Change picture</span>
             </li>
           </AccountOptions>
         )}
