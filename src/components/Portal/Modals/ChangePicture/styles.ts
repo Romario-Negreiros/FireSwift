@@ -1,10 +1,5 @@
 import styled from 'styled-components';
 
-export const Progress = styled.progress`
-    width: 100%;
-    margin-bottom: 1rem;
-`;
-
 export const Input = styled.input`
     display: none;
 `;

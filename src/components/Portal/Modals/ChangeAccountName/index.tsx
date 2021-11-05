@@ -37,7 +37,7 @@ const ChangeAccountName: React.FC<ModalsProps> = ({ setIsModalVisible, user }) =
   const dispatch = useAppDispatch();
 
   const {
-    register, 
+    register,
     formState: { errors },
     handleSubmit,
   } = useForm<Inputs>({
@@ -52,7 +52,7 @@ const ChangeAccountName: React.FC<ModalsProps> = ({ setIsModalVisible, user }) =
       await authenticateUser(user.email, password);
       const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
       await firestoredb.updateDoc(userRef, {
-        newName
+        newName,
       });
       dispatch(updateUser({ ...user, name: newName }));
       toast('Name succesfully updated');
@@ -91,7 +91,15 @@ const ChangeAccountName: React.FC<ModalsProps> = ({ setIsModalVisible, user }) =
             <img src={Logo} alt="logo" />
             <h1>Change name</h1>
           </div>
-          <input {...register('newName', { required: 'Field cannot be empty!' })} />
+          <input
+            {...register('newName', {
+              required: 'Field cannot be empty!',
+              minLength: {
+                value: 6,
+                message: 'Minimum of 6 characters.',
+              },
+            })}
+          />
           <p>{errors.newName?.message}</p>
           <div>
             <input

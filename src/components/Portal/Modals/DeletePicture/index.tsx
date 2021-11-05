@@ -3,6 +3,8 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import authenticateUser from '../../../../utils/authenticateUser';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import { updateUser } from '../../../../features/user/userSlice';
+import { useAppDispatch } from '../../../../app/hooks';
 import { storage } from '../../../../lib';
 import { toast } from 'react-toastify';
 
@@ -32,6 +34,7 @@ interface Inputs {
 const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -44,6 +47,7 @@ const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
       await authenticateUser(user.email, password);
       const storageRef = storage.ref(storage.storage, `users/${user.id}`);
       await storage.deleteObject(storageRef);
+      dispatch(updateUser({ ...user, picture: '' }));
       toast('Picture succesfully deleted');
       setIsModalVisible(false);
     } catch(err) {
