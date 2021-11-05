@@ -14,15 +14,12 @@ import {
   ErrorMessage,
   CloseModal,
 } from '../../../../global/styles';
-import { Progress, Input, InputFileLabel } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTimes,
   faEye,
   faEyeSlash,
-  faFileUpload,
-  faFileAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
@@ -32,10 +29,9 @@ interface Inputs {
   password: string;
 }
 
-const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
+const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-  const [hasFile, setHasFile] = React.useState(false);
 
   const {
     register,
@@ -46,19 +42,11 @@ const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const onSubmit: SubmitHandler<Inputs> = async ({ password }) => {
     try {
       await authenticateUser(user.email, password);
-      const input = document.querySelector('.image') as HTMLInputElement;
       const storageRef = storage.ref(storage.storage, `users/${user.id}`);
-      if(input.files && input.files[0]) {
-        const image = input.files[0];
-        const task = await storage.uploadBytesResumable(storageRef, image);
-        const { totalBytes, bytesTransferred } = task;
-        const progress = (totalBytes / bytesTransferred) * 100;
-        const progressBar = document.querySelector('#file_progress') as HTMLProgressElement;
-        progressBar.value = progress;
-        toast('Picture succesfully changed');
-        setIsModalVisible(false);
-      } else setError('You need to choose a picture first!');
-    } catch (err) {
+      await storage.deleteObject(storageRef);
+      toast('Picture succesfully deleted');
+      setIsModalVisible(false);
+    } catch(err) {
       handleFirebaseError(err, setError);
     }
   };
@@ -79,26 +67,8 @@ const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
           )}
           <div className="logo">
             <img src={Logo} alt="logo" />
-            <h1>Change picture</h1>
+            <h1>Delete picture</h1>
           </div>
-          <InputFileLabel>
-            <Input
-              type="file"
-              className="image"
-              name="image"
-              accept=".jpg,.jpeg,.png,.svg"
-              onChange={(event: React.FormEvent<HTMLInputElement>) => {
-                event.currentTarget.files ? setHasFile(true) : setHasFile(false);
-              }}
-            ></Input>
-            Choose picture
-            <FontAwesomeIcon
-              size="1x"
-              color="purple"
-              icon={hasFile ? faFileAlt : faFileUpload}
-            ></FontAwesomeIcon>
-          </InputFileLabel>
-          <Progress id="file_progress" value="0" max="100"></Progress>
           <div>
             <input
               type={isPasswordVisible ? 'text' : 'password'}
@@ -127,4 +97,4 @@ const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   );
 };
 
-export default ChangePicture;
+export default DefaultPicture;

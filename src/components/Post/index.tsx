@@ -13,7 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import FakePost from '../../assets/mock-post.jpg';
-import FakePicture from '../../assets/mock-profile.jpg';
+import FakePicture from '../../assets/default-picture.png';
 
 const Post: React.FC = () => {
   const [value, setValue] = React.useState<string>('');

@@ -5,11 +5,11 @@ interface StyledProps {
 }
 
 export const Profile = styled.li<StyledProps>`
-  width: 150px;
+  width: 130px;
   height: 100%;
   margin-right: 0.5rem;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 60% 25% 25%;
   border-radius: 5px;
   border: 1px solid ${({ theme: { border } }) => border.primary};
   overflow: hidden;
@@ -18,24 +18,23 @@ export const Profile = styled.li<StyledProps>`
   div {
     width: 100%;
     img {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
       :hover {
-        cursor: pointer;
         opacity: 0.5;
       }
-      width: 100%;
-      object-fit: cover;
     }
     :nth-child(2) {
-      height: 30%;
       padding: 0.5rem 0 0 0.5rem;
     }
     span {
+      color: ${({theme: { fonts }}) => fonts.secondary};
+      font-size: 1.2rem;
+      cursor: pointer;
       :hover {
-        cursor: pointer;
         opacity: 0.5;
       }
-      color: ${({ theme: { fonts } }) => fonts.secondary};
-      font-size: 1.4rem;
     }
   }
   button {

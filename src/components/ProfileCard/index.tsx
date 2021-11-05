@@ -6,7 +6,7 @@ import Friend from '../../utils/Friend';
 
 import { Profile } from './styles';
 
-import Mock from '../../assets/mock-profile.jpg';
+import Mock from '../../assets/default-picture.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faUserMinus } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
@@ -26,6 +26,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
   return (
     <Profile state={currentUser ? (currentUser.friends.includes(user.id) ? 'remove' : 'add') : ''}>
       <div
+        className="image"
         onClick={() =>
           history.push({
             pathname: `/${user.name}`,

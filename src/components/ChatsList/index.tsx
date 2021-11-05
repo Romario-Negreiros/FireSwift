@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FakePicture from '../../assets/mock-profile.jpg';
+import FakePicture from '../../assets/default-picture.png';
 
 import { Container, DropdownButton, List, User, Message } from './styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
