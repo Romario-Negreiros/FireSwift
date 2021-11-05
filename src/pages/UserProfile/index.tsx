@@ -69,8 +69,6 @@ const UserProfile: React.FC = () => {
     setAction(action);
   };
 
-
-
   React.useEffect(() => {
     (async () => {
       if (state) {

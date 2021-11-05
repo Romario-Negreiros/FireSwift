@@ -6,7 +6,7 @@ import Friend from '../../utils/Friend';
 
 import { Profile } from './styles';
 
-import Mock from '../../assets/default-picture.png';
+import DefaultPicture from '../../assets/default-picture.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faUserMinus } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ interface Props {
   user: {
     id: string;
     name: string;
+    picture?: string;
   };
 }
 
@@ -34,7 +35,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
           })
         }
       >
-        <img src={Mock} alt={user.name} />
+        <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
       </div>
       <div
         onClick={() =>
