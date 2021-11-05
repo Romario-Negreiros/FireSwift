@@ -21,7 +21,7 @@ export const userSlice = createSlice({
       state.user = action.payload
     },
     updateUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload
+      state.user = { ...action.payload }
     },
   },
 });
