@@ -7,6 +7,7 @@ export interface User {
   name: string;
   email: string;
   friends: string[];
+  picture?: string;
   bio: string;
   age: number | null;
   relationship: string;
