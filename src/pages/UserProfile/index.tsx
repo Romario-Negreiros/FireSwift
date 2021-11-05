@@ -2,14 +2,14 @@ import React from 'react';
 
 import Friend from '../../utils/Friend';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { firestoredb } from '../../lib';
+import { firestoredb, storage } from '../../lib';
 import { useHistory } from 'react-router-dom';
 import handleFirebaseError from '../../utils/handleFirebaseError';
 import { toast } from 'react-toastify';
 
 import { CenteredContainer } from '../../global/styles';
 import { Container, Manage, Picture, UserBio, UserInfo, Friends, AccountOptions } from './styles';
-import FakePicture from '../../assets/mock-profile.jpg';
+import DefaultPicture from '../../assets/default-picture.png';
 import { FriendsList, Loader, Exception, Portal } from '../../components';
 import {
   ChangeAccountName,
@@ -17,6 +17,7 @@ import {
   ChangePicture,
   DeleteProfile,
   PrivateProfile,
+  DeletePicture,
 } from '../../components/Portal/Modals';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,6 +56,8 @@ const UserProfile: React.FC = () => {
           return <PrivateProfile setIsModalVisible={setIsModalVisible} user={user} />;
         case 'changepic':
           return <ChangePicture setIsModalVisible={setIsModalVisible} user={user} />;
+        case 'deletepic':
+          return <DeletePicture setIsModalVisible={setIsModalVisible} user={user} />;
         default:
           return;
       }
@@ -66,19 +69,31 @@ const UserProfile: React.FC = () => {
     setAction(action);
   };
 
+
+
   React.useEffect(() => {
     (async () => {
       if (state) {
+        const storageRef = storage.ref(storage.storage, `users/${state.id}`)
         if (currentUser && currentUser.id === state.id) {
-          setUser(currentUser);
+          try {
+            const pictureUrl = await storage.getDownloadURL(storageRef);
+            setUser({ ...currentUser, picture: pictureUrl });
+          } catch(err) {
+            setUser(currentUser);
+          }
         } else {
           try {
             const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
             const userSnap = await firestoredb.getDoc(userRef);
             if (userSnap.exists()) {
               const user = userSnap.data() as Omit<User, 'id'>;
-              const id = userSnap.id;
-              setUser({ id, ...user });
+              try {
+                const pictureUrl = await storage.getDownloadURL(storageRef);
+                setUser({ id: state.id, ...user, picture: pictureUrl });
+              } catch(err) {
+                setUser({ id: state.id, ...user })
+              }
             } else setError('Nothing was found. The user might not exist!');
           } catch (err) {
             handleFirebaseError(err, setError);
@@ -116,7 +131,7 @@ const UserProfile: React.FC = () => {
     <>
       <Container>
         <Picture>
-          <img src={FakePicture} alt={user.name} />
+          <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
           <h1>{user.name}</h1>
         </Picture>
         {currentUser && currentUser.id !== user.id ? (
@@ -194,6 +209,11 @@ const UserProfile: React.FC = () => {
             <li onClick={() => openModal('changepic')}>
               <span>Change picture</span>
             </li>
+            {user.picture && (
+              <li onClick={() => openModal('deletepic')}>
+                <span>Delete picture</span>
+              </li>
+            )}
           </AccountOptions>
         )}
       </Container>
