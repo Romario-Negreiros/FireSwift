@@ -72,26 +72,22 @@ const UserProfile: React.FC = () => {
   React.useEffect(() => {
     (async () => {
       if (state) {
-        const storageRef = storage.ref(storage.storage, `users/${state.id}`)
+        const storageRef = storage.ref(storage.storage, `users/${state.id}`);
         if (currentUser && currentUser.id === state.id) {
-          try {
+          if (currentUser.hasPicture) {
             const pictureUrl = await storage.getDownloadURL(storageRef);
             setUser({ ...currentUser, picture: pictureUrl });
-          } catch(err) {
-            setUser(currentUser);
-          }
+          } else setUser({ ...currentUser });
         } else {
           try {
             const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
             const userSnap = await firestoredb.getDoc(userRef);
             if (userSnap.exists()) {
               const user = userSnap.data() as Omit<User, 'id'>;
-              try {
+              if (user.hasPicture) {
                 const pictureUrl = await storage.getDownloadURL(storageRef);
                 setUser({ id: state.id, ...user, picture: pictureUrl });
-              } catch(err) {
-                setUser({ id: state.id, ...user })
-              }
+              } else setUser({ id: state.id, ...user });
             } else setError('Nothing was found. The user might not exist!');
           } catch (err) {
             handleFirebaseError(err, setError);
@@ -111,7 +107,7 @@ const UserProfile: React.FC = () => {
         <Loader />
       </CenteredContainer>
     );
-  } else if (error || !user ) {
+  } else if (error || !user) {
     return (
       <CenteredContainer>
         <Exception message={error} />
@@ -207,7 +203,7 @@ const UserProfile: React.FC = () => {
             <li onClick={() => openModal('changepic')}>
               <span>Change picture</span>
             </li>
-            {user.picture && (
+            {user.hasPicture && (
               <li onClick={() => openModal('deletepic')}>
                 <span>Delete picture</span>
               </li>

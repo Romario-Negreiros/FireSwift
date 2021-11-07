@@ -61,6 +61,7 @@ const CreateAccount: React.FC = () => {
             age: null,
             relationship: '',
             isPrivate: false,
+            hasPicture: false,
             country: '',
             languages: [],
             hobbies: [],
