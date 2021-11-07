@@ -5,7 +5,7 @@ import authenticateUser from '../../../../utils/authenticateUser';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
 import { updateUser } from '../../../../features/user/userSlice';
 import { useAppDispatch } from '../../../../app/hooks';
-import { storage } from '../../../../lib';
+import { firestoredb, storage } from '../../../../lib';
 import { toast } from 'react-toastify';
 
 import {
@@ -18,11 +18,7 @@ import {
 } from '../../../../global/styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faEye,
-  faEyeSlash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../../assets/logo.png';
 
 import { ModalsProps } from '../../../../global/types';
@@ -47,10 +43,14 @@ const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
       await authenticateUser(user.email, password);
       const storageRef = storage.ref(storage.storage, `users/${user.id}`);
       await storage.deleteObject(storageRef);
-      dispatch(updateUser({ ...user, picture: '' }));
+      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+      await firestoredb.updateDoc(userRef, {
+        hasPicture: false,
+      });
+      dispatch(updateUser({ ...user, picture: '', hasPicture: false }));
       toast('Picture succesfully deleted');
       setIsModalVisible(false);
-    } catch(err) {
+    } catch (err) {
       handleFirebaseError(err, setError);
     }
   };

@@ -15,6 +15,7 @@ interface Props {
   user: {
     id: string;
     name: string;
+    hasPicture: boolean;
     picture?: string;
   };
 }
@@ -23,7 +24,6 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
   const history = useHistory();
   const currentUser = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
-
   return (
     <Profile state={currentUser ? (currentUser.friends.includes(user.id) ? 'remove' : 'add') : ''}>
       <div
@@ -35,7 +35,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
           })
         }
       >
-        <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
+        <img src={user.hasPicture ? user.picture : DefaultPicture} alt={user.name} />
       </div>
       <div
         onClick={() =>
@@ -60,7 +60,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
           </button>
         )
       ) : (
-        <button onClick={() => toast('You need to be logged in to complete this action!')}>
+        <button onClick={() => toast.error('You need to be logged in to complete this action!')}>
           Add friend
           <FontAwesomeIcon size="1x" color="white" icon={faUserPlus} />
         </button>

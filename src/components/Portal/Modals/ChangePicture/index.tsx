@@ -5,7 +5,7 @@ import authenticateUser from '../../../../utils/authenticateUser';
 import handleFirebaseError from '../../../../utils/handleFirebaseError';
 import { updateUser } from '../../../../features/user/userSlice';
 import { useAppDispatch } from '../../../../app/hooks';
-import { storage } from '../../../../lib';
+import { storage, firestoredb } from '../../../../lib';
 import { toast } from 'react-toastify';
 
 import {
@@ -51,12 +51,15 @@ const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
       await authenticateUser(user.email, password);
       const input = document.querySelector('.imgInput') as HTMLInputElement;
       const storageRef = storage.ref(storage.storage, `users/${user.id}`);
-      console.log(input);
       if(input.files && input.files[0]) {
         const image = input.files[0];
         await storage.uploadBytesResumable(storageRef, image);
         const pictureUrl = await storage.getDownloadURL(storageRef);
-        dispatch(updateUser({ ...user, picture: pictureUrl }));
+        const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+        await firestoredb.updateDoc(userRef, {
+          hasPicture: true,
+        });
+        dispatch(updateUser({ ...user, picture: pictureUrl, hasPicture: true }));
         toast('Picture succesfully changed');
         setIsModalVisible(false);
       } else setError('You need to choose a picture first!');

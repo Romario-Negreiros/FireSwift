@@ -15,8 +15,9 @@ interface Props {
 
 interface ShortUser {
   id: string;
-  picture?: string;
   name: string;
+  hasPicture: boolean;
+  picture?: string;
 }
 
 const FriendsList: React.FC<Props> = ({ friendsIds }) => {
@@ -32,11 +33,12 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
         );
         const users: ShortUser[] = [];
 
-        usersSnapshot.forEach(user => {
-          const { name } = user.data() as User;
+        usersSnapshot.forEach(userSnapShot => {
+          const user = userSnapShot.data() as User;
           const userObj: ShortUser = {
-            id: user.id,
-            name,
+            id: userSnapShot.id,
+            name: user.name,
+            hasPicture: user.hasPicture,
           };
           
           if (friendsIds) {
@@ -44,17 +46,16 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
           } else users.push(userObj);
         });
         
-        for(let x in users) {
-          const storageRef = storage.ref(storage.storage, `users/${users[x].id}`);
-          try {
+        for(let user of users) {
+          const storageRef = storage.ref(storage.storage, `users/${user.id}`);
+          if(user.hasPicture) {
             const pictureUrl = await storage.getDownloadURL(storageRef);
-            users[x] = {
-              ...users[x],
+            user = {
+              ...user,
               picture: pictureUrl,
             };
-          } catch(err) {}
         }
-
+      }
         if (!users.length) setError('Nothing to see here!');
         setUsers(users);
       } catch (err) {
