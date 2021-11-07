@@ -41,21 +41,38 @@ Non-connected users will only be able to see the posts, no person's profile or c
 
 ### Progress
 
-- [x] Create main page styles
-  - [x] Header
-  - [x] Friends' list
-  - [x] Feed
-- [x] Create login page styles
-- [x] Create page for account creation styles
-- [x] Create page for chats
-- [x] Create page for user profile
-- [x] Integrate with firebase
-- [x] Login
-- [x] Account creation
-- [x] Add redux 
-- [x] Add/remove friends mechanism
-- [x] Create user profile managament 
-- [x] Create draggable component to drag items between two lists (using react-beatiful-dmv as mentioned above in the libs list)
+- [x] Pages
+    - [x] Main page
+    - [x] login page 
+    - [x] Page for account creation 
+    - [x] Page for chats
+    - [x] Page for user profile
+- [ ] Components
+    - [x] Draggable list
+    - [x] Friends' list
+    - [x] Feed
+    - [x] Profile card
+    - [x] Post
+    - [x] Loader
+    - [x] Exception
+    - [x] Chat components 
+- [ ] Layouts    
+    - [x] Header
+    - [ ] Footer
+- [x] User features
+    - [x] Login
+    - [x] Account creation
+    - [x] Add/remove friends mechanism
+    - [x] Create user profile managament 
+    - [ ] Create posts system
+    - [ ] Create chat system
+- [ ] Integrations
+    - [x] Firestore
+    - [x] Firebase auth
+    - [x] Firebase storage
+    - [ ] Firebase real-time database
+    - [ ] Firebase messaging
+    - [x] Redux 
 
 ---
 
