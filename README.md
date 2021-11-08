@@ -56,6 +56,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Loader
     - [x] Exception
     - [x] Chat components 
+    - [ ] Modals
 - [ ] Layouts    
     - [x] Header
     - [ ] Footer
