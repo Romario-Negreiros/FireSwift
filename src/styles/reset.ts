@@ -15,6 +15,9 @@ const Reset = createGlobalStyle`
           background: ${({ theme: { bgs } }) => bgs.primary};
         }
     }
+    svg {
+        transition: transform ease-in-out 0.3s;
+    }
     body {
         background: ${({ theme: { bgs } }) => bgs.secondary};
         position: relative;
@@ -47,8 +50,8 @@ const Reset = createGlobalStyle`
       }
     }
     ::-webkit-scrollbar {
-      height: 4px;
-      width: 4px;
+      height: 6px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
       background: ${({ theme: { bgs } }) => bgs.tertiary};
