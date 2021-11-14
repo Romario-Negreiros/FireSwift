@@ -1,12 +1,19 @@
 import React from 'react';
 
+import { useHistory } from 'react-router';
+
 import { Container } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faHammer, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const SocialOptions: React.FC = () => {
   const [searchValue, setSearchValue] = React.useState('');
+  const history = useHistory();
+
+  const redirect = (path: string) => {
+    history.push(path)
+  }
 
   return (
     <Container>
@@ -26,8 +33,8 @@ const SocialOptions: React.FC = () => {
         </li>
         <li>
           <div className="tools">
-            <div>
-              <FontAwesomeIcon icon={faBox} color="purple" size="2x" />
+            <div onClick={() => redirect('/create')}>
+              <FontAwesomeIcon icon={faHammer} color="purple" size="2x" />
             </div>
           </div>
         </li>
