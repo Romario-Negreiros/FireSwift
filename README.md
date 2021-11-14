@@ -47,6 +47,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Page for account creation 
     - [x] Page for chats
     - [x] Page for user profile
+    - [ ] Page for content creation
 - [ ] Components
     - [x] Draggable list
     - [x] Friends' list
@@ -67,6 +68,8 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Create user profile managament 
     - [ ] Create posts system
     - [ ] Create chat system
+    - [ ] Create group system
+    - [ ] Create story system
 - [ ] Integrations
     - [x] Firestore
     - [x] Firebase auth
