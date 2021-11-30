@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userUnLogged } from '../../features/user/userSlice';
 
@@ -30,12 +31,12 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
   const signOut = () => {
     authentication.auth.signOut();
     dispatch(userUnLogged(null));
+    toast('Succesfully unlogged');
   };
 
   return (
     <Container>
       <div>
-        <img src="" alt="" />
         <h2>FireSwift</h2>
       </div>
       <Nav>

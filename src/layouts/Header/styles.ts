@@ -4,13 +4,16 @@ import { Link } from 'react-router-dom';
 
 export const Container = styled.header`
   width: 100%;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: ${({ theme: { bgs } }) => bgs.primary};
   border-bottom: 1px solid ${({ theme: { border } }) => border.primary};
   margin-bottom: 2rem;
+  @media screen and (min-width: 300px) {
+    padding: 2rem;
+  }
   .sun {
     transform: translate(4px, 0px);
   }
@@ -169,13 +172,16 @@ export const Redirect = styled(Link)`
 `;
 
 export const User = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  h2 {
-    cursor: pointer;
-    :hover {
-      opacity: 0.5;
+  display: none !important;
+  @media screen and (min-width: 300px) {
+    display: flex !important;
+    gap: 1rem;
+    align-items: center;
+    h2 {
+      cursor: pointer;
+      :hover {
+        opacity: 0.5;
+      }
     }
   }
 `;
