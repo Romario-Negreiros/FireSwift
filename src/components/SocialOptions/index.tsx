@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 
 import { Container } from './styles';
+import { CustomIconBox } from '../../global/styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHammer, faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +18,7 @@ const SocialOptions: React.FC = () => {
 
   return (
     <Container>
-      <ul>
+      <ul className="innerList">
         <li>
           <div className="explore">
             <input
@@ -32,11 +33,11 @@ const SocialOptions: React.FC = () => {
           </div>
         </li>
         <li>
-          <div className="tools">
-            <div onClick={() => redirect('/create')}>
+          <ul className="tools">
+            <CustomIconBox onClick={() => redirect('/create')}>
               <FontAwesomeIcon icon={faHammer} color="purple" size="2x" />
-            </div>
-          </div>
+            </CustomIconBox>
+          </ul>
         </li>
       </ul>
     </Container>

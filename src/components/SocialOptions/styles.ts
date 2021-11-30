@@ -4,21 +4,21 @@ export const Container = styled.section`
   width: 100%;
   border: 1px solid ${({ theme: { border } }) => border.primary};
   padding: 5px;
-  ul {
+  .innerList {
     width: 100%;
     height: 100%;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-  }
-  li {
-    width: 100%;
-    height: 50%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @media screen and (min-width: 700px) {
-      width: 50%;
+    > li {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      @media screen and (min-width: 700px) {
+        width: 50%;
+      }
     }
   }
   .explore {
@@ -64,21 +64,5 @@ export const Container = styled.section`
     align-items: center;
     justify-content: flex-end;
     gap: 1rem;
-    div {
-      cursor: pointer;
-      padding: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: ${({ theme: { bgs } }) => bgs.tertiary};
-      border-radius: 50%;
-      transition: filter ease-in-out 0.3s;
-      :hover {
-        filter: brightness(2);
-      }
-      :hover svg {
-        transform: scale(1.1);
-      }
-    }
   }
 `;
