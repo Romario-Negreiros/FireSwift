@@ -194,3 +194,28 @@ export const CloseModal = styled.div`
     cursor: pointer;
   }
 `;
+
+export const CreationContainer = styled.section`
+  width: 100%;
+  min-height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const CustomIconBox = styled.li`
+  cursor: pointer;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${({ theme: { bgs } }) => bgs.tertiary};
+  border-radius: 50%;
+  transition: filter ease-in-out 0.3s;
+  :hover {
+    filter: brightness(2);
+  }
+  :hover svg {
+    transform: scale(1.1);
+  }
+`;
