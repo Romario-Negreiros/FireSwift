@@ -7,7 +7,7 @@ import { CreationContainer, Form, FormBorder } from '../../../global/styles';
 import { FileOptions, TextField, CustomLabelBox } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHammer } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   id: string;
@@ -43,11 +43,42 @@ const CreatePost: React.FC<Props> = ({ id: string }) => {
           />
           <p>{errors.postContent?.message}</p>
 
+          <h3>Add image, video or file</h3>
           <FileOptions>
-            <li>
+            <li className="addTool">
               <CustomLabelBox htmlFor="img">
-                <FontAwesomeIcon icon={faHammer} color="purple" size="2x" />
-                <input type="file" name="img" id="img" style={{ display: 'none' }}></input>
+                <FontAwesomeIcon icon={faImage} color="purple" size="2x" />
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.svg"
+                  name="img"
+                  id="img"
+                  style={{ display: 'none' }}
+                ></input>
+              </CustomLabelBox>
+            </li>
+            <li className="addTool">
+              <CustomLabelBox htmlFor="vid">
+                <FontAwesomeIcon icon={faVideo} color="purple" size="2x" />
+                <input
+                  type="file"
+                  accept=".mp4,.mov,.wmv,.avi,.avchd"
+                  name="vid"
+                  id="vid"
+                  style={{ display: 'none' }}
+                ></input>
+              </CustomLabelBox>
+            </li>
+            <li className="addTool">
+              <CustomLabelBox htmlFor="doc">
+                <FontAwesomeIcon icon={faFile} color="purple" size="2x" />
+                <input
+                  type="file"
+                  accept=".mp4,.mov,.wmv,.avi,.avchd"
+                  name="doc"
+                  id="doc"
+                  style={{ display: 'none' }}
+                ></input>
               </CustomLabelBox>
             </li>
           </FileOptions>
