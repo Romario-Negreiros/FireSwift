@@ -66,6 +66,10 @@ export const View = styled.section`
     font-size: 2rem;
     color: ${({theme: { fonts }}) => fonts.secondary};
   }
+  h3 {
+    font-size: 1.5rem;
+    color: ${({theme: { fonts }}) => fonts.secondary};
+  }
 `;
 
 export const DefaultView = styled.section`
