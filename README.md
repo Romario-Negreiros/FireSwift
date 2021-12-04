@@ -27,7 +27,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
 - React toastify
 - React switch
 - React beatiful dnd
-- UUID - [UUID](https://www.npmjs.com/package/uuid)
+- UUID - [NPM Link](https://www.npmjs.com/package/uuid)
 
 ---
 
