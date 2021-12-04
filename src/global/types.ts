@@ -22,6 +22,14 @@ export interface User {
   }[];
 }
 
+export interface Post {
+  id: string;
+  author: string;
+  date: string;
+  time: string;
+  content: string;
+}
+
 export interface ModalsProps {
   setIsModalVisible: (isModalVisible: boolean) => void;
   user: User;
