@@ -37,6 +37,7 @@ type ReactionList = {
 export interface Post {
   id: string;
   author: string;
+  authorID: string;
   date: string;
   time: string;
   content: string;
