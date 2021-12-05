@@ -164,6 +164,7 @@ export const ErrorMessage = styled.section`
   padding: 1rem;
   background: ${({ theme: { bgs } }) => bgs.secondary};
   p {
+    word-wrap: break-word;
     color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.4rem;
   }

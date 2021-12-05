@@ -22,12 +22,42 @@ export interface User {
   }[];
 }
 
+type Reaction = {
+  id: string;
+}[];
+
+type ReactionList = {
+  like: Reaction;
+  heart: Reaction;
+  smile: Reaction;
+  cry: Reaction;
+  angry: Reaction;
+};
+
 export interface Post {
   id: string;
   author: string;
   date: string;
   time: string;
   content: string;
+  reactions: ReactionList;
+  media: {
+    images: string[];
+    videos: string[];
+    docs: string[];
+  }
+  comments: {
+    id: string;
+    author: string;
+    content: string;
+    reactions: ReactionList;
+    replies: {
+      id: string;
+      author: string;
+      content: string;
+      reactions: ReactionList;
+    }[];
+  }[];
 }
 
 export interface ModalsProps {
