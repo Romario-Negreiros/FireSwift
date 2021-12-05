@@ -15,13 +15,19 @@ import {
 import FakePost from '../../assets/mock-post.jpg';
 import FakePicture from '../../assets/default-picture.png';
 
-const Post: React.FC = () => {
+import { Post as PostType } from '../../global/types';
+
+interface Props {
+  post: PostType;
+};
+
+const Post: React.FC<Props> = ({ post }) => {
   const [value, setValue] = React.useState<string>('');
 
   return (
     <Container>
       <Text>
-        <p>Some random text yeaaaaah yeeeevve neeeeev looooooov agaaaaaaaan</p>
+        <p>{post.content}</p>
       </Text>
       <Image>
         <img src={FakePost} alt="post" />
@@ -57,50 +63,19 @@ const Post: React.FC = () => {
         </div>
       </Input>
       <Comments>
-        <li>
+        {post.comments.map(comment => (
+        <li key={comment.id}>
           <div>
             <div>
               <img src={FakePicture} alt="fake pic" />
             </div>
-            <h3>Author yooooo</h3>
+            <h3>{comment.author}</h3>
           </div>
           <div>
-            <p>Yoooooooooo Content aloooooot offffff</p>
+            <p>{comment.content}</p>
           </div>
         </li>
-        <li>
-          <div>
-            <div>
-              <img src={FakePicture} alt="fake pic" />
-            </div>
-            <h3>Author yooooo</h3>
-          </div>
-          <div>
-            <p>Yoooooooooo Content aloooooot offffff</p>
-          </div>
-        </li>
-        <li>
-          <div>
-            <div>
-              <img src={FakePicture} alt="fake pic" />
-            </div>
-            <h3>Author yooooo</h3>
-          </div>
-          <div>
-            <p>Yoooooooooo Content aloooooot offffff</p>
-          </div>
-        </li>
-        <li>
-          <div>
-            <div>
-              <img src={FakePicture} alt="fake pic" />
-            </div>
-            <h3>Author yooooo</h3>
-          </div>
-          <div>
-            <p>Yoooooooooo Content aloooooot offffff</p>
-          </div>
-        </li>
+        ))}
       </Comments>
     </Container>
   );
