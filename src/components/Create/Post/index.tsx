@@ -48,31 +48,49 @@ const CreatePost: React.FC<Props> = ({ user }) => {
       setIsLoaded(false);
       const currentDate = getFormattedDate();
       const post = {
+        authorID: user.id,
         author: user.name,
         date: currentDate.date,
         time: currentDate.time,
         content: postContent,
+        reactions: {
+          like: [],
+          heart: [],
+          smile: [],
+          cry: [],
+          angry: [],
+        },
+        replies: [],
       };
       const postID = uuidv4();
-      await firestoredb.setDoc(
-        firestoredb.doc(firestoredb.db, 'media/posts', `${user.id}/${postID}`),
-        post
-      );
+      await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'media/posts/users', postID), post);
       if (files.images) {
-        const storageRef = storage.ref(storage.storage, `posts/${user.id}/${postID}/images`);
-        for (let img of files.images) {
+        const { images } = files;
+        for (let img of images) {
+          const storageRef = storage.ref(
+            storage.storage,
+            `posts/${user.id}/${postID}/images/${images.indexOf(img)}`
+          );
           await storage.uploadBytesResumable(storageRef, img);
         }
       }
       if (files.videos) {
-        const storageRef = storage.ref(storage.storage, `posts/${user.id}/${postID}/videos`);
-        for (let vid of files.videos) {
+        const { videos } = files;
+        for (let vid of videos) {
+          const storageRef = storage.ref(
+            storage.storage,
+            `posts/${user.id}/${postID}/videos/${videos.indexOf(vid)}`
+          );
           await storage.uploadBytesResumable(storageRef, vid);
         }
       }
       if (files.docs) {
-        const storageRef = storage.ref(storage.storage, `posts/${user.id}/${postID}/docs`);
+        const { docs } = files;
         for (let doc of files.docs) {
+          const storageRef = storage.ref(
+            storage.storage,
+            `posts/${user.id}/${postID}/docs/${docs.indexOf(doc)}`
+          );
           await storage.uploadBytesResumable(storageRef, doc);
         }
       }
@@ -82,6 +100,7 @@ const CreatePost: React.FC<Props> = ({ user }) => {
       handleFirebaseError(err, setError);
     } finally {
       setIsLoaded(true);
+      setError('');
     }
   };
 
@@ -101,14 +120,14 @@ const CreatePost: React.FC<Props> = ({ user }) => {
   }
   return (
     <CreationContainer>
-      {error && (
-        <ErrorBorder>
-          <ErrorMessage>
-            <p>{error}</p>
-          </ErrorMessage>
-        </ErrorBorder>
-      )}
       <FormBorder>
+        {error && (
+          <ErrorBorder>
+            <ErrorMessage>
+              <p>{error}</p>
+            </ErrorMessage>
+          </ErrorBorder>
+        )}
         <Form onSubmit={handleSubmit(onSubmit)}>
           <TextField
             {...register('postContent', {
