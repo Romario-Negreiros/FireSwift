@@ -33,12 +33,13 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
         );
         const users: ShortUser[] = [];
 
-        usersSnapshot.forEach(userSnapShot => {
-          const user = userSnapShot.data() as Omit<User, 'id'>;
+        usersSnapshot.forEach(user => {
+          const { id } = user;
+          const userData = user.data() as Omit<User, 'id'>;
           const userObj: ShortUser = {
-            id: userSnapShot.id,
-            name: user.name,
-            hasPicture: user.hasPicture,
+            id,
+            name: userData.name,
+            hasPicture: userData.hasPicture,
           };
           
           if (friendsIds) {
