@@ -22,7 +22,7 @@ import { Loader } from '../..';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile, faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 
-import { User } from '../../../global/types';
+import { Post, User } from '../../../global/types';
 
 interface Props {
   user: User;
@@ -47,12 +47,17 @@ const CreatePost: React.FC<Props> = ({ user }) => {
     try {
       setIsLoaded(false);
       const currentDate = getFormattedDate();
-      const post = {
+      const post: Omit<Post, 'id'> = {
         authorID: user.id,
         author: user.name,
         date: currentDate.date,
         time: currentDate.time,
         content: postContent,
+        media: {
+          images: [],
+          videos: [],
+          docs: [],
+        },
         reactions: {
           like: [],
           heart: [],
@@ -60,28 +65,31 @@ const CreatePost: React.FC<Props> = ({ user }) => {
           cry: [],
           angry: [],
         },
-        replies: [],
+        comments: [],
       };
       const postID = uuidv4();
-      await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'media/posts/users', postID), post);
       if (files.images) {
         const { images } = files;
         for (let img of images) {
           const storageRef = storage.ref(
             storage.storage,
             `posts/${user.id}/${postID}/images/${images.indexOf(img)}`
-          );
-          await storage.uploadBytesResumable(storageRef, img);
+            );
+            await storage.uploadBytesResumable(storageRef, img);
+            const imgURL = await storage.getDownloadURL(storageRef);
+            post.media.images.push(imgURL);
+          }
         }
-      }
-      if (files.videos) {
+        if (files.videos) {
         const { videos } = files;
         for (let vid of videos) {
           const storageRef = storage.ref(
             storage.storage,
             `posts/${user.id}/${postID}/videos/${videos.indexOf(vid)}`
-          );
+            );
           await storage.uploadBytesResumable(storageRef, vid);
+          const vidURL = await storage.getDownloadURL(storageRef);
+          post.media.videos.push(vidURL);
         }
       }
       if (files.docs) {
@@ -90,12 +98,16 @@ const CreatePost: React.FC<Props> = ({ user }) => {
           const storageRef = storage.ref(
             storage.storage,
             `posts/${user.id}/${postID}/docs/${docs.indexOf(doc)}`
-          );
-          await storage.uploadBytesResumable(storageRef, doc);
+            );
+            await storage.uploadBytesResumable(storageRef, doc);
+            const docURL = await storage.getDownloadURL(storageRef);
+            post.media.docs.push(docURL);
+          }
         }
-      }
-      toast('Post succesfully created!');
-      reset();
+        console.log(post);
+        await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'media/posts/users', postID), post);
+        toast('Post succesfully created!');
+        reset();
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
