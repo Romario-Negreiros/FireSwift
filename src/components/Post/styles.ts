@@ -15,19 +15,57 @@ export const Container = styled.li`
   }
 `;
 
+export const Author = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.5rem;
+  align-items: center;
+  div {
+    overflow: hidden;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  h2 {
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    font-size: 1.5rem;
+  }
+`;
+
 export const Text = styled.div`
-  padding: 1rem;
+  padding: 0.5rem;
   p {
     font-size: 1.4rem;
-    text-indent: 0.5rem;
     color: ${({ theme: { fonts } }) => fonts.secondary};
   }
 `;
 
-export const Image = styled.div`
-  img {
+export const Media = styled.div`
+  ul.images {
     width: 100%;
-    object-fit: cover;
+    display: grid;
+    gap: 0;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  video {
+    margin: 1rem 0;
+    width: 100%;
+    height: 200px;
+  }
+  li {
+    text-align: center;
+  }
+  img {
+    width: fit-content;
+    height: 100px;
   }
 `;
 
@@ -42,6 +80,18 @@ export const Reactions = styled.ul`
     :hover {
       transform: scale(1.1);
     }
+  }
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    :nth-child(2) {
+      margin-top: 0.5rem;
+    }
+  }
+  span {
+    color: ${({ theme: { fonts } }) => fonts.primary};
+    font-size: 1.2rem;
   }
 `;
 
@@ -90,26 +140,7 @@ export const Comments = styled.ul`
       backdrop-filter: brightness(1.2);
       -webkit-backdrop-filter: brightness(1.2);
     }
-    div:nth-child(1) {
-      display: flex;
-      gap: 0.8rem;
-      align-items: center;
-      div {
-        overflow: hidden;
-        padding: 0;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 3rem;
-        height: 3rem;
-      }
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    div {
+    div:nth-child(2) {
       padding: 1rem;
       color: ${({ theme: { fonts } }) => fonts.secondary};
     }
