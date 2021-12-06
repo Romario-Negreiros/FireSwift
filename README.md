@@ -42,13 +42,14 @@ Non-connected users will only be able to see the posts, no person's profile or c
 
 ### Progress
 
-- [x] Pages
+- [] Pages
     - [x] Main page
     - [x] login page 
     - [x] Page for account creation 
     - [x] Page for chats
     - [x] Page for user profile
-    - [ ] Page for content creation
+    - [x] Page for content creation
+    - [ ] More soon...
 - [ ] Components
     - [x] Draggable list
     - [x] Friends' list
@@ -58,11 +59,12 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Loader
     - [x] Exception
     - [x] Chat components 
-    - [ ] Modals
+    - [x] Modals
+    - [ ] More soon...
 - [ ] Layouts    
     - [x] Header
     - [ ] Footer
-- [x] User features
+- [] User features
     - [x] Login
     - [x] Account creation
     - [x] Add/remove friends mechanism
