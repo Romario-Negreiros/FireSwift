@@ -48,12 +48,12 @@ export interface Post {
     docs: string[];
   }
   comments: {
-    id: string;
+    authorID: string;
     author: string;
     content: string;
     reactions: ReactionList;
     replies: {
-      id: string;
+      authorID: string;
       author: string;
       content: string;
       reactions: ReactionList;
