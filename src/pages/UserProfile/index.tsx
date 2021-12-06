@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 import { CenteredContainer } from '../../global/styles';
 import { Container, Manage, Picture, UserBio, UserInfo, Friends, AccountOptions } from './styles';
-import DefaultPicture from '../../assets/default-picture.png';
 import { FriendsList, Loader, Exception, Portal } from '../../components';
 import {
   ChangeAccountName,
@@ -22,6 +21,7 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faUserMinus, faEdit } from '@fortawesome/free-solid-svg-icons';
+import DefaultPicture from '../../assets/default-picture.png';
 
 import { User } from '../../global/types';
 
