@@ -45,8 +45,11 @@ export interface Post {
   media: {
     images: string[];
     videos: string[];
-    docs: string[];
-  }
+    docs: {
+      url: string;
+      name: string;
+    }[];
+  };
   comments: {
     authorID: string;
     author: string;
