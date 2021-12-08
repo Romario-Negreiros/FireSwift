@@ -12,6 +12,11 @@ import {
   faLaugh,
   faSadCry,
   faAngry,
+  faFilePdf,
+  faFileWord,
+  faFilePowerpoint,
+  faFileExcel,
+  faFile,
 } from '@fortawesome/free-solid-svg-icons';
 
 import DefaultPicture from '../../assets/default-picture.png';
@@ -25,6 +30,14 @@ interface Props {
 const Post: React.FC<Props> = ({ post }) => {
   const [value, setValue] = React.useState('');
   const [authorPicture, setAuthorPicture] = React.useState('');
+
+  const getIcon = (docName: string) => {
+    if(docName.match('.pdf')) return faFilePdf
+    else if(docName.match('.docx') || docName.match('dot')) return faFileWord
+    else if(docName.match('.pptx')) return faFilePowerpoint
+    else if(docName.match('.xlsx') || docName.match('.xlsm')) return faFileExcel
+    else return faFile
+  }
 
   React.useEffect(() => {
     (async () => {
@@ -46,24 +59,31 @@ const Post: React.FC<Props> = ({ post }) => {
         <p>{post.content}</p>
       </Text>
       <Media>
-        {post.media.images && (
-          <ul className="images">
+        {post.media.images.length && (
+          <ul className="mediaList">
             {post.media.images.map((img, i) => (
-              <li>
+              <li key={`img${i}`}>
                 <img src={img} alt={`img${i}`} />
               </li>
             ))}
           </ul>
         )}
-        {post.media.videos && (
+        {post.media.videos.length && (
           <video controls>
             <source src={post.media.videos[0]} />
             Your browser doesn't support the video player!
           </video>
         )}
-        {post.media.docs && (
-          <ul className="docs">
-            <li></li>
+        {post.media.docs.length && (
+          <ul className="mediaList">
+            {post.media.docs.map((img, i) => (
+              <li key={`doc${i}`}>
+                <a download href={img.url} className="docView">
+                  <FontAwesomeIcon icon={getIcon(img.name)} size="4x" />
+                  {img.name}
+                </a>
+              </li>
+            ))}
           </ul>
         )}
       </Media>

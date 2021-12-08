@@ -49,10 +49,10 @@ export const Text = styled.div`
 `;
 
 export const Media = styled.div`
-  ul.images {
+  ul.mediaList {
     width: 100%;
     display: grid;
-    gap: 0;
+    gap: 0.5rem;
     grid-template-columns: repeat(3, 1fr);
   }
   video {
@@ -60,8 +60,24 @@ export const Media = styled.div`
     width: 100%;
     height: 200px;
   }
+  .docView {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: ${({theme: { fonts }}) => fonts.primary};
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+    :hover {
+      transform: scale(1.1);
+      opacity: 0.5;;
+    }
+  }
   li {
     text-align: center;
+    height: 100%;
   }
   img {
     width: fit-content;

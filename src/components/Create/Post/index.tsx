@@ -74,19 +74,19 @@ const CreatePost: React.FC<Props> = ({ user }) => {
           const storageRef = storage.ref(
             storage.storage,
             `posts/${user.id}/${postID}/images/${images.indexOf(img)}`
-            );
-            await storage.uploadBytesResumable(storageRef, img);
-            const imgURL = await storage.getDownloadURL(storageRef);
-            post.media.images.push(imgURL);
-          }
+          );
+          await storage.uploadBytesResumable(storageRef, img);
+          const imgURL = await storage.getDownloadURL(storageRef);
+          post.media.images.push(imgURL);
         }
-        if (files.videos) {
+      }
+      if (files.videos) {
         const { videos } = files;
         for (let vid of videos) {
           const storageRef = storage.ref(
             storage.storage,
             `posts/${user.id}/${postID}/videos/${videos.indexOf(vid)}`
-            );
+          );
           await storage.uploadBytesResumable(storageRef, vid);
           const vidURL = await storage.getDownloadURL(storageRef);
           post.media.videos.push(vidURL);
@@ -98,16 +98,19 @@ const CreatePost: React.FC<Props> = ({ user }) => {
           const storageRef = storage.ref(
             storage.storage,
             `posts/${user.id}/${postID}/docs/${docs.indexOf(doc)}`
-            );
-            await storage.uploadBytesResumable(storageRef, doc);
-            const docURL = await storage.getDownloadURL(storageRef);
-            post.media.docs.push(docURL);
-          }
+          );
+          await storage.uploadBytesResumable(storageRef, doc);
+          const docURL = await storage.getDownloadURL(storageRef);
+          const docObj = {
+            url: docURL,
+            name: doc.name,
+          };
+          post.media.docs.push(docObj);
         }
-        console.log(post);
-        await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'media/posts/users', postID), post);
-        toast('Post succesfully created!');
-        reset();
+      }
+      await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'media/posts/users', postID), post);
+      toast('Post succesfully created!');
+      reset();
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
