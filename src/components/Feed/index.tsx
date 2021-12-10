@@ -10,9 +10,9 @@ import { Post as PostType } from '../../global/types';
 import handleFirebaseError from '../../utils/handleFirebaseError';
 
 const Feed: React.FC = () => {
-  const [posts, setPosts] = React.useState<PostType[]>();
+  const [posts, setPosts] = React.useState<PostType[]>([]);
   const [error, setError] = React.useState('');
-  const [isLoaded, setIsLoaded] = React.useState(true);
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
   React.useEffect(() => {
     (async () => {
@@ -63,7 +63,7 @@ const Feed: React.FC = () => {
     <Container>
       <ul>
         {posts.map(post => (
-          <Post key={post.id} post={post} />
+          <Post key={post.id} post={post} setPosts={setPosts as (callback: (oldPosts: PostType[]) => void) => void} />
         ))}
       </ul>
     </Container>

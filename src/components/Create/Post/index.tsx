@@ -58,13 +58,7 @@ const CreatePost: React.FC<Props> = ({ user }) => {
           videos: [],
           docs: [],
         },
-        reactions: {
-          like: [],
-          heart: [],
-          smile: [],
-          cry: [],
-          angry: [],
-        },
+        reactions: [],
         comments: [],
       };
       const postID = uuidv4();
