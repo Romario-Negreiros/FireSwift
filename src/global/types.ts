@@ -23,16 +23,9 @@ export interface User {
 }
 
 type Reaction = {
-  id: string;
-}[];
-
-type ReactionList = {
-  like: Reaction;
-  heart: Reaction;
-  smile: Reaction;
-  cry: Reaction;
-  angry: Reaction;
-};
+  id: string,
+  reaction: string,
+}
 
 export interface Post {
   id: string;
@@ -41,7 +34,7 @@ export interface Post {
   date: string;
   time: string;
   content: string;
-  reactions: ReactionList;
+  reactions: Reaction[];
   media: {
     images: string[];
     videos: string[];
@@ -54,12 +47,12 @@ export interface Post {
     authorID: string;
     author: string;
     content: string;
-    reactions: ReactionList;
+    reactions: Reaction[];
     replies: {
       authorID: string;
       author: string;
       content: string;
-      reactions: ReactionList;
+      reactions: Reaction[];
     }[];
   }[];
 }
