@@ -23,9 +23,9 @@ export interface User {
 }
 
 type Reaction = {
-  id: string,
-  reaction: string,
-}
+  id: string;
+  reaction: string;
+};
 
 export interface Post {
   id: string;
@@ -44,13 +44,13 @@ export interface Post {
     }[];
   };
   comments: {
-    authorID: string;
-    author: string;
+    id: string;
+    author: Pick<User, 'id' | 'name' | 'hasPicture' | 'picture'>;
     content: string;
     reactions: Reaction[];
     replies: {
-      authorID: string;
-      author: string;
+      id: string;
+      author: User;
       content: string;
       reactions: Reaction[];
     }[];
