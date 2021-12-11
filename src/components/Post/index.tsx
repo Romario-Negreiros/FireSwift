@@ -4,6 +4,7 @@ import { storage } from '../../lib';
 import { useAppSelector } from '../../app/hooks';
 import { toast } from 'react-toastify';
 import setReaction from '../../utils/setReaction';
+import setComment from '../../utils/setComment';
 
 import { Container, Author, Text, Media, Reactions, Input, Comments } from './styles';
 
@@ -44,9 +45,13 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
     else return faFile;
   };
 
-  const handleClick = (reaction: string) => {
+  const handleClick = (reaction?: string) => {
     if (user) {
-      setReaction(user.id, post, reaction, setPosts);
+      if(reaction)
+        setReaction(user.id, post, reaction, setPosts);
+      else 
+        setComment(user, post, setPosts, value);
+        setValue('');
     } else {
       toast('You need to be logged in to complete this action!');
     }
@@ -64,9 +69,11 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
 
   React.useEffect(() => {
     (async () => {
-      const storageRef = storage.ref(storage.storage, `users/${post.authorID}`);
-      const authorPictureURL = await storage.getDownloadURL(storageRef);
-      setAuthorPicture(authorPictureURL);
+        if(user && user.hasPicture) {
+          const storageRef = storage.ref(storage.storage, `users${user.id}`);
+          const authorPicture = await storage.getDownloadURL(storageRef);
+          setAuthorPicture(authorPicture);
+        }
     })();
   });
 
@@ -185,19 +192,22 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
           onChange={(event: React.FormEvent<HTMLInputElement>) =>
             setValue(event.currentTarget.value)
           }
+          onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
+            if(event.key === 'Enter') handleClick();    
+          }}
         />
-        <div>
+        <div onClick={() => handleClick()}>
           <FontAwesomeIcon color="purple" size="2x" icon={faPaperPlane} />
         </div>
       </Input>
       <Comments>
         {post.comments.map(comment => (
-          <li key={comment.authorID}>
+          <li key={comment.id}>
             <div>
               <div>
-                <img src={DefaultPicture} alt="fake pic" />
+                <img src={comment.author.hasPicture ? comment.author.picture : DefaultPicture} alt="fake pic" />
               </div>
-              <h2>{comment.author}</h2>
+              <h2>{comment.author.name}</h2>
             </div>
             <div>
               <p>{comment.content}</p>
