@@ -30,10 +30,10 @@ const setReaction = async (
       });
       return [...removeOldReaction, postCopy];
     });
-    const postRef = firestoredb.doc(firestoredb.db, "media/posts/users", post.id)
+    const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
     await firestoredb.updateDoc(postRef, {
       reactions: postCopy.reactions,
-    })
+    });
   } catch (err) {
     if (err instanceof Error) toast.error('Something went wrong, please try again!' + err.message);
   }
