@@ -3,7 +3,7 @@ import { firestoredb } from '../lib';
 import { toast } from 'react-toastify';
 import { Post } from '../global/types';
 
-const setReaction = async (
+const setPostReaction = async (
   id: string,
   post: Post,
   posts: Post[],
@@ -32,4 +32,4 @@ const setReaction = async (
   }
 };
 
-export default setReaction;
+export default setPostReaction;

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { toast } from 'react-toastify';
 import { Post, User } from '../global/types';
+import getFormattedDate from './getFormattedDate';
 
 const setComment = async (
   user: User,
@@ -24,12 +25,14 @@ const setComment = async (
       const pictureUrl = await storage.getDownloadURL(storageRef);
       author.picture = pictureUrl;
     }
+    const { time } = getFormattedDate();
     const comment = {
       id: uuidv4(),
       author: author,
       content: newComment,
       reactions: [],
       replies: [],
+      time,
     };
     postsCopy.forEach(postCopy => {
       if(postCopy.id === post.id) {
