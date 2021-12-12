@@ -3,26 +3,24 @@ import React from 'react';
 import { storage } from '../../lib';
 import { useAppSelector } from '../../app/hooks';
 import { toast } from 'react-toastify';
-import setReaction from '../../utils/setReaction';
+import setPostReaction from '../../utils/setPostReaction';
 import setComment from '../../utils/setComment';
+import checkTime from '../../utils/checkTime';
 
-import { Container, Author, Text, Media, Reactions, Input, Comments } from './styles';
+import {
+  Container,
+  Author,
+  Text,
+  Media,
+  PostReactions,
+  Input,
+  Comments,
+  CommentReactions,
+} from './styles';
+import { Reactions, Contents } from './break-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPaperPlane,
-  faThumbsUp,
-  faHeart,
-  faLaugh,
-  faSadCry,
-  faAngry,
-  faFilePdf,
-  faFileWord,
-  faFilePowerpoint,
-  faFileExcel,
-  faFile,
-} from '@fortawesome/free-solid-svg-icons';
-
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import DefaultPicture from '../../assets/default-picture.png';
 
 import { Post as PostType } from '../../global/types';
@@ -35,20 +33,15 @@ interface Props {
 
 const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
   const [value, setValue] = React.useState('');
+  const [willReply, setWillReply] = React.useState('');
+  const [replyValue, setReplyValue] = React.useState('');
   const [authorPicture, setAuthorPicture] = React.useState('');
+  const [showCommentReactions, setShowCommentReactions] = React.useState('');
   const user = useAppSelector(state => state.user.user);
-
-  const getIcon = (docName: string) => {
-    if (docName.match('.pdf')) return faFilePdf;
-    else if (docName.match('.docx') || docName.match('dot')) return faFileWord;
-    else if (docName.match('.pptx')) return faFilePowerpoint;
-    else if (docName.match('.xlsx') || docName.match('.xlsm')) return faFileExcel;
-    else return faFile;
-  };
 
   const handleClick = (reaction?: string) => {
     if (user) {
-      if (reaction) setReaction(user.id, post, posts, setPosts, reaction);
+      if (reaction) setPostReaction(user.id, post, posts, setPosts, reaction);
       else {
         if (value) {
           setComment(user, post, posts, setPosts, value);
@@ -60,16 +53,6 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
     } else {
       toast('You need to be logged in to complete this action!');
     }
-  };
-
-  const handleRender = (reaction: string): PostType['reactions'] => {
-    const filteredReactions: PostType['reactions'] = [];
-    post.reactions.forEach(reactionObj => {
-      if (reactionObj.reaction === reaction) {
-        filteredReactions.push(reactionObj);
-      }
-    });
-    return filteredReactions;
   };
 
   React.useEffect(() => {
@@ -94,101 +77,11 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
         <p>{post.content}</p>
       </Text>
       <Media>
-        {post.media.images.length && (
-          <ul className="mediaList">
-            {post.media.images.map((img, i) => (
-              <li key={`img${i}`}>
-                <img src={img} alt={`img${i}`} />
-              </li>
-            ))}
-          </ul>
-        )}
-        {post.media.videos.length && (
-          <video controls>
-            <source src={post.media.videos[0]} />
-            Your browser doesn't support the video player!
-          </video>
-        )}
-        {post.media.docs.length && (
-          <ul className="mediaList">
-            {post.media.docs.map((img, i) => (
-              <li key={`doc${i}`}>
-                <a download href={img.url} className="docView">
-                  <FontAwesomeIcon icon={getIcon(img.name)} size="4x" />
-                  {img.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
+        <Contents post={post} />
       </Media>
-      <Reactions>
-        <li onClick={() => handleClick('like')}>
-          <div>
-            <FontAwesomeIcon color="blue" size="2x" icon={faThumbsUp} />
-          </div>
-          <div>
-            <span>
-              {(() => {
-                const totalCorrespondingReactions = handleRender('like');
-                return totalCorrespondingReactions.length;
-              })()}
-            </span>
-          </div>
-        </li>
-        <li onClick={() => handleClick('heart')}>
-          <div>
-            <FontAwesomeIcon color="red" size="2x" icon={faHeart} />
-          </div>
-          <div>
-            <span>
-              {(() => {
-                const totalCorrespondingReactions = handleRender('heart');
-                return totalCorrespondingReactions.length;
-              })()}
-            </span>
-          </div>
-        </li>
-        <li onClick={() => handleClick('smile')}>
-          <div>
-            <FontAwesomeIcon color="yellow" size="2x" icon={faLaugh} />
-          </div>
-          <div>
-            <span>
-              {(() => {
-                const totalCorrespondingReactions = handleRender('smile');
-                return totalCorrespondingReactions.length;
-              })()}
-            </span>
-          </div>
-        </li>
-        <li onClick={() => handleClick('cry')}>
-          <div>
-            <FontAwesomeIcon color="yellow" size="2x" icon={faSadCry} />
-          </div>
-          <div>
-            <span>
-              {(() => {
-                const totalCorrespondingReactions = handleRender('cry');
-                return totalCorrespondingReactions.length;
-              })()}
-            </span>
-          </div>
-        </li>
-        <li onClick={() => handleClick('angry')}>
-          <div>
-            <FontAwesomeIcon color="red" size="2x" icon={faAngry} />
-          </div>
-          <div>
-            <span>
-              {(() => {
-                const totalCorrespondingReactions = handleRender('angry');
-                return totalCorrespondingReactions.length;
-              })()}
-            </span>
-          </div>
-        </li>
-      </Reactions>
+      <PostReactions>
+        <Reactions reactions={post.reactions} handleClick={handleClick} />
+      </PostReactions>
       <Input>
         <input
           name="comment"
@@ -220,6 +113,55 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
             <div>
               <p>{comment.content}</p>
             </div>
+            {willReply === comment.id ? (
+              <Input>
+                <input
+                  name="reply"
+                  placeholder="Leave a reply!"
+                  value={replyValue}
+                  onChange={(event: React.FormEvent<HTMLInputElement>) =>
+                    setReplyValue(event.currentTarget.value)
+                  }
+                  onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (event.key === 'Enter') handleClick();
+                  }}
+                />
+                <div onClick={() => handleClick()}>
+                  <FontAwesomeIcon color="purple" size="2x" icon={faPaperPlane} />
+                </div>
+              </Input>
+            ) : (
+              ''
+            )}
+            <div className="bottomContent">
+              <div>
+                <span
+                  onClick={() =>
+                    showCommentReactions === comment.id
+                      ? setShowCommentReactions('')
+                      : setShowCommentReactions(comment.id)
+                  }
+                >
+                  Like
+                </span>
+                <span>Replies({comment.replies.length})</span>
+                <span
+                  onClick={() =>
+                    willReply === comment.id ? setWillReply('') : setWillReply(comment.id)
+                  }
+                >
+                  Reply
+                </span>
+              </div>
+              <span className="time">{checkTime(comment.time)}</span>
+            </div>
+            {showCommentReactions === comment.id ? (
+              <CommentReactions>
+                <Reactions reactions={comment.reactions} handleClick={handleClick} />
+              </CommentReactions>
+            ) : (
+              ''
+            )}
           </li>
         ))}
       </Comments>

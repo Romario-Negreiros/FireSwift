@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.li`
+  position: relative;
   background: ${({ theme: { bgs } }) => bgs.tertiary};
   width: 100%;
   border-radius: 5px;
@@ -66,13 +67,13 @@ export const Media = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    color: ${({theme: { fonts }}) => fonts.primary};
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     text-decoration: none;
     cursor: pointer;
-    transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     :hover {
       transform: scale(1.1);
-      opacity: 0.5;;
+      opacity: 0.5;
     }
   }
   li {
@@ -85,7 +86,7 @@ export const Media = styled.div`
   }
 `;
 
-export const Reactions = styled.ul`
+export const PostReactions = styled.ul`
   display: flex;
   flex-flow: row;
   justify-content: space-around;
@@ -106,7 +107,7 @@ export const Reactions = styled.ul`
     }
   }
   span {
-    color: ${({ theme: { fonts } }) => fonts.primary};
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.2rem;
   }
 `;
@@ -143,6 +144,7 @@ export const Input = styled.div`
 export const Comments = styled.ul`
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   padding: 0.5rem;
   max-height: 300px;
   overflow: auto;
@@ -152,16 +154,46 @@ export const Comments = styled.ul`
     width: 100%;
     display: flex;
     flex-direction: column;
-    :hover {
-      backdrop-filter: brightness(1.2);
-      -webkit-backdrop-filter: brightness(1.2);
-    }
     div:nth-child(2) {
       padding: 1rem;
       color: ${({ theme: { fonts } }) => fonts.secondary};
     }
     p {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
     }
   }
+  .bottomContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    div {
+      width: 70%;
+    }
+    span {
+      display: inline-block;
+      color: ${({ theme: { fonts } }) => fonts.secondary};
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+    }
+    span:not(.time) {
+      cursor: pointer;
+      :hover {
+        opacity: 0.5;
+      }
+    }
+  }
+`;
+
+export const CommentReactions = styled(PostReactions)`
+  margin-top: 0.5rem;
+  background: ${({ theme: { bgs } }) => bgs.secondary};
+  padding: 0;
+  li {
+    border: 0 none;
+    margin-top: 1rem;
+  }
+  div {
+    :nth-child(2) {
+      margin-top: 0rem;
+    }
 `;
