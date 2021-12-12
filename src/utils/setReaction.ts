@@ -1,41 +1,34 @@
 import { firestoredb } from '../lib';
 
 import { toast } from 'react-toastify';
-
 import { Post } from '../global/types';
 
 const setReaction = async (
   id: string,
   post: Post,
-  newReaction: string,
-  setPosts: (callback: (oldPosts: Post[]) => void) => void
+  posts: Post[],
+  setPosts: (posts: Post[]) => void,
+  newReaction: string
 ) => {
   try {
-    const postCopy = { ...post };
-    if (postCopy.reactions.some(reactionObj => reactionObj.id === id)) {
-      postCopy.reactions.forEach(reactionObj => {
-        if (reactionObj.id === id) reactionObj.reaction = newReaction;
-      });
-    } else {
-      postCopy.reactions.push({
+    const postsCopy = [...posts];
+    const postIndex = postsCopy.findIndex(postCopy => postCopy.id === post.id);
+    const reactionIndex = postsCopy[postIndex].reactions.findIndex(reaction => reaction.id === id);
+    if (reactionIndex === -1) {
+      postsCopy[postIndex].reactions.push({
         id,
         reaction: newReaction,
       });
+    } else {
+      postsCopy[postIndex].reactions[reactionIndex].reaction = newReaction;
     }
-    setPosts(oldPosts => {
-      const removeOldReaction = oldPosts.filter(oldPost => {
-        return (
-          oldPost.id === post.id && oldPost.reactions.some(reactionObj => reactionObj.id === id)
-        );
-      });
-      return [...removeOldReaction, postCopy];
-    });
     const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
     await firestoredb.updateDoc(postRef, {
-      reactions: postCopy.reactions,
+      reactions: postsCopy[postIndex].reactions,
     });
+    setPosts(postsCopy);
   } catch (err) {
-    if (err instanceof Error) toast.error('Something went wrong, please try again!' + err.message);
+    if (err instanceof Error) toast.error('Something unnexpected happened!');
   }
 };
 

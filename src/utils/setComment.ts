@@ -7,11 +7,12 @@ import { Post, User } from '../global/types';
 const setComment = async (
   user: User,
   post: Post,
-  setPosts: (callback: (oldPosts: Post[]) => void) => void,
+  posts: Post[],
+  setPosts: (posts: Post[]) => void,
   newComment: string
 ) => {
   try {
-    const postCopy = { ...post };
+    const postsCopy = [...posts];
     const author = {
       id: user.id,
       name: user.name,
@@ -30,20 +31,17 @@ const setComment = async (
       reactions: [],
       replies: [],
     };
-    postCopy.comments.push(comment);
-    setPosts(oldPosts => {
-      const oldPostsCopy = [...oldPosts];
-      oldPostsCopy.forEach(oldPost => {
-        if (oldPost.id === post.id) {
-          oldPost.comments.push(comment);
-        }
-      });
-      return oldPostsCopy;
-    });
+    postsCopy.forEach(postCopy => {
+      if(postCopy.id === post.id) {
+        postCopy.comments.push(comment);
+      }
+    })
+    const postIndex = postsCopy.findIndex(postCopy => postCopy.id === post.id);
     const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
     await firestoredb.updateDoc(postRef, {
-      comments: postCopy.comments,
-    });
+      comments: postsCopy[postIndex].comments
+    })
+    setPosts(postsCopy);
   } catch (err) {
     if (err instanceof Error) toast.error('Something went wrong!' + err.message);
   }
