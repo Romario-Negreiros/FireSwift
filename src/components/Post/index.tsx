@@ -29,10 +29,11 @@ import { Post as PostType } from '../../global/types';
 
 interface Props {
   post: PostType;
-  setPosts: (callback: (oldPosts: PostType[]) => void) => void;
+  posts: PostType[];
+  setPosts: (posts: PostType[]) => void;
 }
 
-const Post: React.FC<Props> = ({ post, setPosts }) => {
+const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
   const [value, setValue] = React.useState('');
   const [authorPicture, setAuthorPicture] = React.useState('');
   const user = useAppSelector(state => state.user.user);
@@ -47,11 +48,15 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
 
   const handleClick = (reaction?: string) => {
     if (user) {
-      if(reaction)
-        setReaction(user.id, post, reaction, setPosts);
-      else 
-        setComment(user, post, setPosts, value);
-        setValue('');
+      if (reaction) setReaction(user.id, post, posts, setPosts, reaction);
+      else {
+        if (value) {
+          setComment(user, post, posts, setPosts, value);
+          setValue('');
+        } else {
+          toast.error('Comment cannot be empty!');
+        }
+      }
     } else {
       toast('You need to be logged in to complete this action!');
     }
@@ -69,11 +74,11 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
 
   React.useEffect(() => {
     (async () => {
-        if(user && user.hasPicture) {
-          const storageRef = storage.ref(storage.storage, `users${user.id}`);
-          const authorPicture = await storage.getDownloadURL(storageRef);
-          setAuthorPicture(authorPicture);
-        }
+      if (user && user.hasPicture) {
+        const storageRef = storage.ref(storage.storage, `users${user.id}`);
+        const authorPicture = await storage.getDownloadURL(storageRef);
+        setAuthorPicture(authorPicture);
+      }
     })();
   });
 
@@ -193,7 +198,7 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
             setValue(event.currentTarget.value)
           }
           onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-            if(event.key === 'Enter') handleClick();    
+            if (event.key === 'Enter') handleClick();
           }}
         />
         <div onClick={() => handleClick()}>
@@ -203,12 +208,15 @@ const Post: React.FC<Props> = ({ post, setPosts }) => {
       <Comments>
         {post.comments.map(comment => (
           <li key={comment.id}>
-            <div>
+            <Author>
               <div>
-                <img src={comment.author.hasPicture ? comment.author.picture : DefaultPicture} alt="fake pic" />
+                <img
+                  src={comment.author.hasPicture ? comment.author.picture : DefaultPicture}
+                  alt="fake pic"
+                />
               </div>
               <h2>{comment.author.name}</h2>
-            </div>
+            </Author>
             <div>
               <p>{comment.content}</p>
             </div>

@@ -63,7 +63,7 @@ const Feed: React.FC = () => {
     <Container>
       <ul>
         {posts.map(post => (
-          <Post key={post.id} post={post} setPosts={setPosts as (callback: (oldPosts: PostType[]) => void) => void} />
+          <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
         ))}
       </ul>
     </Container>
