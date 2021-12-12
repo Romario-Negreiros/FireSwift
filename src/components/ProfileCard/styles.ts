@@ -47,7 +47,7 @@ export const Profile = styled.li<StyledProps>`
     gap: 1rem;
     padding: 0.5rem;
     border: 0 none;
-    color: ${({ theme: { fonts } }) => fonts.secondary};
+    color: ${({ theme: { fonts } }) => fonts.primary};
     font-size: 1.4rem;
     :hover {
       cursor: pointer;
