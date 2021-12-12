@@ -48,6 +48,7 @@ export interface Post {
     author: Pick<User, 'id' | 'name' | 'hasPicture' | 'picture'>;
     content: string;
     reactions: Reaction[];
+    time: string;
     replies: {
       id: string;
       author: User;
