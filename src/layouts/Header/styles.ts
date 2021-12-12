@@ -152,7 +152,8 @@ export const Line = styled.span`
 
 export const Alert = styled.div`
   position: absolute;
-  top: -5px;
+  top: -11px;
+  left: 20px;
   width: 18px;
   height: 18px;
   border-radius: 50%;

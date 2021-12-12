@@ -9,9 +9,9 @@ import {
   faMoon,
   faSun,
   faHome,
-  faCoffee,
   faSignInAlt,
   faSignOutAlt,
+  faCommentDots,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { ThemeContext } from 'styled-components';
@@ -82,7 +82,7 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
               <Alert>
                 <span>99+</span>
               </Alert>
-              <FontAwesomeIcon icon={faCoffee} />
+              <FontAwesomeIcon icon={faCommentDots} />
             </Redirect>
             <div className="ballon">
               <span>Chats</span>
