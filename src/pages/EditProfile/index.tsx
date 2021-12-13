@@ -1,10 +1,10 @@
 import React from 'react';
 
-import getUserListData from '../../utils/getUserListData';
 import hobbies from '../../app/hobbies';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateUser } from '../../features/user/userSlice';
 import { firestoredb } from '../../lib';
+import getUserListData from '../../utils/getUserListData';
 
 import handleFirebaseError from '../../utils/handleFirebaseError';
 import { toast } from 'react-toastify';
