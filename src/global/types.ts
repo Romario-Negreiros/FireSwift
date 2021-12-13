@@ -51,9 +51,10 @@ export interface Post {
     time: string;
     replies: {
       id: string;
-      author: User;
+      author: Pick<User, 'id' | 'name' | 'hasPicture' | 'picture'>;
       content: string;
       reactions: Reaction[];
+      time: string;
     }[];
   }[];
 }
