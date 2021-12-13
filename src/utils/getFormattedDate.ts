@@ -14,7 +14,7 @@ const getFormattedDate = (): funcReturn => {
   const crtSecs = d.getSeconds();
   const formattedDate = {
     date: `${crtYear}/${crtMonth}/${crtDay}`,
-    time: `${crtHours}:${crtMins}:${crtSecs}`,
+    time: `${crtHours < 10 ? '0' + crtHours : crtHours}:${crtMins < 10 ? '0' + crtMins : crtMins}:${crtSecs < 10 ? '0' + crtSecs : crtSecs}`,
   };
   return formattedDate;
 };

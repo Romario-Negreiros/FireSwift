@@ -1,4 +1,4 @@
-const GetUserListData = (lists: string[]) => {
+const getUserListData = (lists: string[]) => {
   const data: any = {};
   lists.forEach(item => {
     const ul = document.querySelector(`.userList-${item}`) as HTMLUListElement;
@@ -12,4 +12,4 @@ const GetUserListData = (lists: string[]) => {
   return data;
 };
 
-export default GetUserListData;
+export default getUserListData;
