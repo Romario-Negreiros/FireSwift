@@ -7,6 +7,7 @@ import setPostReaction from '../../utils/setPostReaction';
 import setCommentReaction from '../../utils/setCommentReaction';
 import setComment from '../../utils/setComment';
 import setReply from '../../utils/setReply';
+import setReplyReaction from '../../utils/setReplyReaction';
 import checkTime from '../../utils/checkTime';
 
 import {
@@ -19,6 +20,7 @@ import {
   Comments,
   CommentReactions,
   Replies,
+  ReplyReactions,
 } from './styles';
 import { Reactions, Contents } from './break-components';
 
@@ -44,13 +46,15 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
   const [showReplyReactions, setShowReplyReactions] = React.useState('');
   const user = useAppSelector(state => state.user.user);
 
-  const handleClick = (reaction?: string, type?: string) => {
+  const handleClick = (reaction?: string, type?: string, commentID?: string) => {
     if (user) {
       if (reaction) {
         if (type === 'COMMENT_REACTIONS') {
           setCommentReaction(user.id, showCommentReactions, post, posts, setPosts, reaction);
         } else if (type === 'POST_REACTIONS')
           setPostReaction(user.id, post, posts, setPosts, reaction);
+          else if (type === 'REPLY_REACTIONS' && commentID)
+          setReplyReaction(user.id, commentID, showReplyReactions, post, posts, setPosts, reaction);
       } else {
         if (type === 'NEW_COMMENT') {
           if (value) {
@@ -223,6 +227,16 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
                       </div>
                       <span className="time">{checkTime(reply.time)}</span>
                     </div>
+                    {showReplyReactions === reply.id ? (
+                      <ReplyReactions>
+                        <Reactions 
+                          reactions={reply.reactions}
+                          handleClick={handleClick}
+                          commentID={comment.id}
+                          type="REPLY_REACTIONS"
+                        />
+                      </ReplyReactions>
+                    ): ''}
                   </li>
                 ))}
               </Replies>

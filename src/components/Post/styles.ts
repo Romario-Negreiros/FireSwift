@@ -203,3 +203,12 @@ export const Replies = styled(Comments)`
     background: ${({ theme: { bgs } }) => bgs.secondary};
   }
 `;
+
+export const ReplyReactions = styled(CommentReactions) `
+  li {
+    :hover {
+      transform: none;
+      opacity: 0.5;
+    }
+  }
+`;

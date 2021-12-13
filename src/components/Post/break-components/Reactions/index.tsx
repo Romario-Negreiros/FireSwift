@@ -7,11 +7,12 @@ import { Post } from '../../../../global/types';
 
 interface Props {
   reactions: Post['reactions'];
-  handleClick: (reaction?: string, type?: string) => void;
+  handleClick: (reaction?: string, type?: string, commentID?: string) => void;
+  commentID?: string;
   type: string;
 }
 
-const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
+const Reactions: React.FC<Props> = ({ reactions, handleClick, commentID, type }) => {
   const handleRender = (reaction: string): Post['reactions'] => {
     const filteredReactions: Post['reactions'] = [];
     reactions.forEach(reactionObj => {
@@ -24,7 +25,11 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
 
   return (
     <>
-      <li onClick={() => handleClick('like', type)}>
+      <li
+        onClick={() =>
+          commentID ? handleClick('like', type, commentID) : handleClick('like', type)
+        }
+      >
         <div>
           <FontAwesomeIcon color="blue" size="2x" icon={faThumbsUp} />
         </div>
@@ -37,7 +42,11 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('heart', type)}>
+      <li
+        onClick={() =>
+          commentID ? handleClick('heart', type, commentID) : handleClick('heart', type)
+        }
+      >
         <div>
           <FontAwesomeIcon color="red" size="2x" icon={faHeart} />
         </div>
@@ -50,7 +59,11 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('smile', type)}>
+      <li
+        onClick={() =>
+          commentID ? handleClick('smile', type, commentID) : handleClick('smile', type)
+        }
+      >
         <div>
           <FontAwesomeIcon color="yellow" size="2x" icon={faLaugh} />
         </div>
@@ -63,7 +76,9 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('cry', type)}>
+      <li
+        onClick={() => (commentID ? handleClick('cry', type, commentID) : handleClick('cry', type))}
+      >
         <div>
           <FontAwesomeIcon color="yellow" size="2x" icon={faSadCry} />
         </div>
@@ -76,7 +91,11 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('angry', type)}>
+      <li
+        onClick={() =>
+          commentID ? handleClick('angry', type, commentID) : handleClick('angry', type)
+        }
+      >
         <div>
           <FontAwesomeIcon color="red" size="2x" icon={faAngry} />
         </div>
