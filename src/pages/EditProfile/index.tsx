@@ -64,7 +64,7 @@ const EditProfile: React.FC = () => {
           ...data,
           ...userData,
         });
-        dispatch(updateUser({ ...data, ...currentUser, ...userData }));
+        dispatch(updateUser({ ...currentUser, ...data, ...userData }));
         toast('Succesfully updated the data!');
         history.goBack();
       }
@@ -120,7 +120,7 @@ const EditProfile: React.FC = () => {
       if (currentUser.age) setValue('age', currentUser.age);
     }
   }, [currentUser, setValue, fetchData]);
-console.log(typeof hobbies);
+
   if (!currentUser) {
     const message = 'User not found or not logged in!';
     return (
