@@ -197,3 +197,9 @@ export const CommentReactions = styled(PostReactions)`
       margin-top: 0rem;
     }
 `;
+
+export const Replies = styled(Comments)`
+  li {
+    background: ${({ theme: { bgs } }) => bgs.secondary};
+  }
+`;

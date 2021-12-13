@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import setPostReaction from '../../utils/setPostReaction';
 import setCommentReaction from '../../utils/setCommentReaction';
 import setComment from '../../utils/setComment';
+import setReply from '../../utils/setReply';
 import checkTime from '../../utils/checkTime';
 
 import {
@@ -17,6 +18,7 @@ import {
   Input,
   Comments,
   CommentReactions,
+  Replies,
 } from './styles';
 import { Reactions, Contents } from './break-components';
 
@@ -38,6 +40,8 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
   const [replyValue, setReplyValue] = React.useState('');
   const [authorPicture, setAuthorPicture] = React.useState('');
   const [showCommentReactions, setShowCommentReactions] = React.useState('');
+  const [showRepliesList, setShowRepliesList] = React.useState('');
+  const [showReplyReactions, setShowReplyReactions] = React.useState('');
   const user = useAppSelector(state => state.user.user);
 
   const handleClick = (reaction?: string, type?: string) => {
@@ -48,11 +52,21 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
         } else if (type === 'POST_REACTIONS')
           setPostReaction(user.id, post, posts, setPosts, reaction);
       } else {
-        if (value) {
-          setComment(user, post, posts, setPosts, value);
-          setValue('');
-        } else {
-          toast.error('Comment cannot be empty!');
+        if (type === 'NEW_COMMENT') {
+          if (value) {
+            setComment(user, post, posts, setPosts, value);
+            setValue('');
+          } else {
+            toast.error('Comment cannot be empty!');
+          }
+        } else if (type === 'NEW_REPLY') {
+          if (replyValue) {
+            setReply(willReply, user, post, posts, setPosts, replyValue);
+            setReplyValue('');
+            setWillReply('');
+          } else {
+            toast.error('Reply cannot be empty!');
+          }
         }
       }
     } else {
@@ -96,10 +110,10 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
             setValue(event.currentTarget.value)
           }
           onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-            if (event.key === 'Enter') handleClick();
+            if (event.key === 'Enter') handleClick(undefined, 'NEW_COMMENT');
           }}
         />
-        <div onClick={() => handleClick()}>
+        <div onClick={() => handleClick(undefined, 'NEW_COMMENT')}>
           <FontAwesomeIcon color="purple" size="2x" icon={faPaperPlane} />
         </div>
       </Input>
@@ -128,10 +142,10 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
                     setReplyValue(event.currentTarget.value)
                   }
                   onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                    if (event.key === 'Enter') handleClick();
+                    if (event.key === 'Enter') handleClick(undefined, 'NEW_REPLY');
                   }}
                 />
-                <div onClick={() => handleClick()}>
+                <div onClick={() => handleClick(undefined, 'NEW_REPLY')}>
                   <FontAwesomeIcon color="purple" size="2x" icon={faPaperPlane} />
                 </div>
               </Input>
@@ -147,9 +161,17 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
                       : setShowCommentReactions(comment.id)
                   }
                 >
-                  Like
+                  React
                 </span>
-                <span>Replies({comment.replies.length})</span>
+                <span
+                  onClick={() =>
+                    showRepliesList === comment.id
+                      ? setShowRepliesList('')
+                      : setShowRepliesList(comment.id)
+                  }
+                >
+                  Replies({comment.replies.length})
+                </span>
                 <span
                   onClick={() =>
                     willReply === comment.id ? setWillReply('') : setWillReply(comment.id)
@@ -162,8 +184,48 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
             </div>
             {showCommentReactions === comment.id ? (
               <CommentReactions>
-                <Reactions reactions={comment.reactions} handleClick={handleClick} type="COMMENT_REACTIONS" />
+                <Reactions
+                  reactions={comment.reactions}
+                  handleClick={handleClick}
+                  type="COMMENT_REACTIONS"
+                />
               </CommentReactions>
+            ) : (
+              ''
+            )}
+            {showRepliesList === comment.id ? (
+              <Replies>
+                {comment.replies.map(reply => (
+                  <li key={reply.id}>
+                    <Author>
+                      <div>
+                        <img
+                          src={reply.author.hasPicture ? reply.author.picture : DefaultPicture}
+                          alt="fake pic"
+                        />
+                      </div>
+                      <h2>{reply.author.name}</h2>
+                    </Author>
+                    <div>
+                      <p>{reply.content}</p>
+                    </div>
+                    <div className="bottomContent">
+                      <div>
+                        <span
+                          onClick={() =>
+                            showReplyReactions === reply.id
+                              ? setShowReplyReactions('')
+                              : setShowReplyReactions(reply.id)
+                          }
+                        >
+                          React
+                        </span>
+                      </div>
+                      <span className="time">{checkTime(reply.time)}</span>
+                    </div>
+                  </li>
+                ))}
+              </Replies>
             ) : (
               ''
             )}
