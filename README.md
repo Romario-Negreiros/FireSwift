@@ -69,11 +69,11 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Account creation
     - [x] Add/remove friends mechanism
     - [x] Create user profile managament 
-    - [ ] Create posts system
+    - [x] Create posts system
         - [x] Posts' reactions
         - [x] Comments
         - [x] Comments' reactions
-        - [ ] Comments' replies
+        - [x] Comments' replies
     - [ ] Create chat system
     - [ ] Create group system
     - [ ] Create story system
