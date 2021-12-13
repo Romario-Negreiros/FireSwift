@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GetUserListData from '../../utils/GetUserListData';
+import getUserListData from '../../utils/getUserListData';
 import hobbies from '../../app/hobbies';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateUser } from '../../features/user/userSlice';
@@ -57,7 +57,7 @@ const EditProfile: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       if (currentUser) {
-        const userData = GetUserListData(['languages', 'hobbies']);
+        const userData = getUserListData(['languages', 'hobbies']);
         setIsLoaded(false);
         const userRef = firestoredb.doc(firestoredb.db, 'users', currentUser.id);
         await firestoredb.updateDoc(userRef, {
