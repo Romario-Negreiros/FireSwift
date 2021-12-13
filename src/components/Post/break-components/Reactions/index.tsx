@@ -7,10 +7,11 @@ import { Post } from '../../../../global/types';
 
 interface Props {
   reactions: Post['reactions'];
-  handleClick: (reaction?: string) => void;
+  handleClick: (reaction?: string, type?: string) => void;
+  type: string;
 }
 
-const Reactions: React.FC<Props> = ({ reactions, handleClick }) => {
+const Reactions: React.FC<Props> = ({ reactions, handleClick, type }) => {
   const handleRender = (reaction: string): Post['reactions'] => {
     const filteredReactions: Post['reactions'] = [];
     reactions.forEach(reactionObj => {
@@ -23,7 +24,7 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick }) => {
 
   return (
     <>
-      <li onClick={() => handleClick('like')}>
+      <li onClick={() => handleClick('like', type)}>
         <div>
           <FontAwesomeIcon color="blue" size="2x" icon={faThumbsUp} />
         </div>
@@ -36,7 +37,7 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('heart')}>
+      <li onClick={() => handleClick('heart', type)}>
         <div>
           <FontAwesomeIcon color="red" size="2x" icon={faHeart} />
         </div>
@@ -49,7 +50,7 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('smile')}>
+      <li onClick={() => handleClick('smile', type)}>
         <div>
           <FontAwesomeIcon color="yellow" size="2x" icon={faLaugh} />
         </div>
@@ -62,7 +63,7 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('cry')}>
+      <li onClick={() => handleClick('cry', type)}>
         <div>
           <FontAwesomeIcon color="yellow" size="2x" icon={faSadCry} />
         </div>
@@ -75,7 +76,7 @@ const Reactions: React.FC<Props> = ({ reactions, handleClick }) => {
           </span>
         </div>
       </li>
-      <li onClick={() => handleClick('angry')}>
+      <li onClick={() => handleClick('angry', type)}>
         <div>
           <FontAwesomeIcon color="red" size="2x" icon={faAngry} />
         </div>

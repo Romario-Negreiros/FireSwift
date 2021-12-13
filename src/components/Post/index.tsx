@@ -4,6 +4,7 @@ import { storage } from '../../lib';
 import { useAppSelector } from '../../app/hooks';
 import { toast } from 'react-toastify';
 import setPostReaction from '../../utils/setPostReaction';
+import setCommentReaction from '../../utils/setCommentReaction';
 import setComment from '../../utils/setComment';
 import checkTime from '../../utils/checkTime';
 
@@ -39,10 +40,14 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
   const [showCommentReactions, setShowCommentReactions] = React.useState('');
   const user = useAppSelector(state => state.user.user);
 
-  const handleClick = (reaction?: string) => {
+  const handleClick = (reaction?: string, type?: string) => {
     if (user) {
-      if (reaction) setPostReaction(user.id, post, posts, setPosts, reaction);
-      else {
+      if (reaction) {
+        if (type === 'COMMENT_REACTIONS') {
+          setCommentReaction(user.id, showCommentReactions, post, posts, setPosts, reaction);
+        } else if (type === 'POST_REACTIONS')
+          setPostReaction(user.id, post, posts, setPosts, reaction);
+      } else {
         if (value) {
           setComment(user, post, posts, setPosts, value);
           setValue('');
@@ -80,7 +85,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
         <Contents post={post} />
       </Media>
       <PostReactions>
-        <Reactions reactions={post.reactions} handleClick={handleClick} />
+        <Reactions reactions={post.reactions} handleClick={handleClick} type="POST_REACTIONS" />
       </PostReactions>
       <Input>
         <input
@@ -157,7 +162,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
             </div>
             {showCommentReactions === comment.id ? (
               <CommentReactions>
-                <Reactions reactions={comment.reactions} handleClick={handleClick} />
+                <Reactions reactions={comment.reactions} handleClick={handleClick} type="COMMENT_REACTIONS" />
               </CommentReactions>
             ) : (
               ''
