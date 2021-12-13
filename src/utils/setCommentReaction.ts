@@ -30,7 +30,7 @@ const setCommentReaction = async (
     }
     const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
     await firestoredb.updateDoc(postRef, {
-      comments: postsCopy[postIndex].comments[commentIndex].reactions,
+      comments: postsCopy[postIndex].comments,
     });
     setPosts(postsCopy);
   } catch (err) {
