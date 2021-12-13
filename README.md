@@ -70,6 +70,10 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Add/remove friends mechanism
     - [x] Create user profile managament 
     - [ ] Create posts system
+        - [x] Posts' reactions
+        - [x] Comments
+        - [x] Comments' reactions
+        - [ ] Comments' replies
     - [ ] Create chat system
     - [ ] Create group system
     - [ ] Create story system
