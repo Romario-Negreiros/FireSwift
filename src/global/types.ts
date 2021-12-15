@@ -7,8 +7,7 @@ export interface User {
   name: string;
   email: string;
   friends: string[];
-  picture?: string;
-  hasPicture: boolean;
+  picture: string;
   bio: string;
   age: number | null;
   relationship: string;
@@ -20,6 +19,10 @@ export interface User {
   hobbies: {
     name: string;
   }[];
+  chats: {
+    chatID: string;
+    receiverID: string;
+  }[];
 }
 
 type Reaction = {
@@ -27,34 +30,86 @@ type Reaction = {
   reaction: string;
 };
 
+type Medias = {
+  images: string[];
+  videos: string[];
+  docs: {
+    url: string;
+    name: string;
+  }[];
+};
+
 export interface Post {
   id: string;
   author: string;
   authorID: string;
-  date: string;
-  time: string;
+  formattedDate: {
+    date: string;
+    time: string;
+  };
   content: string;
   reactions: Reaction[];
-  media: {
-    images: string[];
-    videos: string[];
-    docs: {
-      url: string;
-      name: string;
-    }[];
-  };
+  media: Medias;
   comments: {
     id: string;
-    author: Pick<User, 'id' | 'name' | 'hasPicture' | 'picture'>;
+    author: Pick<User, 'id' | 'name' | 'picture'>;
     content: string;
     reactions: Reaction[];
-    time: string;
+    formattedDate: {
+      date: string;
+      time: string;
+    };
     replies: {
       id: string;
-      author: Pick<User, 'id' | 'name' | 'hasPicture' | 'picture'>;
+      author: Pick<User, 'id' | 'name' | 'picture'>;
       content: string;
       reactions: Reaction[];
-      time: string;
+      formattedDate: {
+        date: string;
+        time: string;
+      };
+    }[];
+  }[];
+}
+
+export interface Result {
+  id: string;
+  name: string;
+  picture: string;
+  chats: {
+    chatID: string;
+    receiverID: string;
+  }[];
+  type: string;
+}
+
+export enum MessageStates {
+  sent = 'SENT',
+  viewed = 'VIEWED',
+}
+
+export interface Chat {
+  chatID: string;
+  chatCreation: {
+    date: string;
+    time: string;
+  };
+  users: {
+    id: string;
+    name: string;
+    picture: string;
+    chats: {
+      chatID: string;
+      receiverID: string;
+    }[];
+    messages: {
+      text: string;
+      state: MessageStates;
+      formattedDate: {
+        date: string;
+        time: string;
+      };
+      media: Medias;
     }[];
   }[];
 }

@@ -220,3 +220,64 @@ export const CustomIconBox = styled.li`
     transform: scale(1.1);
   }
 `;
+
+export const Input = styled.div`
+  padding: 1rem;
+  border-bottom: 1px solid ${({ theme: { border } }) => border.primary};
+  border-top: 1px solid ${({ theme: { border } }) => border.primary};
+  display: flex;
+  align-items: center;
+  input {
+    width: 80%;
+    background: unset;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    padding: 0.2rem;
+    border-bottom: 1px solid ${({ theme: { border } }) => border.primary};
+    :hover,
+    :focus {
+      border-color: ${({ theme: { border } }) => border.secondary};
+    }
+  }
+  div {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    :hover {
+      transform: scale(1.1);
+    }
+  }
+`;
+
+export const Author = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.5rem;
+  align-items: center;
+  div:not(.name) {
+    overflow: hidden;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem !important;
+    height: 3rem;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  .name {
+    h2 {
+      color: ${({ theme: { fonts } }) => fonts.secondary};
+      font-size: 1.5rem;
+    }
+    small {
+      color: ${({ theme: { fonts } }) => fonts.secondary};
+      font-size: 1.2rem;
+      display: block;
+    }
+  }
+`;
