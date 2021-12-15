@@ -21,48 +21,10 @@ export const Container = styled.section`
       }
     }
   }
-  .explore {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    input {
-      width: 90%;
-      background: unset;
-      color: ${({ theme: { fonts } }) => fonts.secondary};
-      padding: 0.2rem;
-      border-bottom: 1px solid ${({ theme: { border } }) => border.primary};
-      :hover,
-      :focus {
-        border-color: ${({ theme: { border } }) => border.secondary};
-      }
-    }
-    div {
-      cursor: pointer;
-      width: 10%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      :hover svg {
-        transform: scale(1.1);
-      }
-    }
-    @media screen and (min-width: 500px) {
-      input {
-        width: 94%;
-      }
-      div {
-        width: 6%;
-      }
-    }
-    @media screen and (min-width: 700px) {
-      width: 50%;
-    }
-  }
   .tools {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 1rem;
   }
 `;

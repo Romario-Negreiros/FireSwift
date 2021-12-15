@@ -1,27 +1,25 @@
 import React from 'react';
 
-import { storage } from '../../lib';
 import { useAppSelector } from '../../app/hooks';
 import { toast } from 'react-toastify';
-import setPostReaction from '../../utils/setPostReaction';
-import setCommentReaction from '../../utils/setCommentReaction';
-import setComment from '../../utils/setComment';
-import setReply from '../../utils/setReply';
-import setReplyReaction from '../../utils/setReplyReaction';
-import checkTime from '../../utils/checkTime';
+import setPostReaction from '../../utils/setters/setPostReaction';
+import setCommentReaction from '../../utils/setters/setCommentReaction';
+import setComment from '../../utils/setters/setComment';
+import setReply from '../../utils/setters/setReply';
+import setReplyReaction from '../../utils/setters/setReplyReaction';
+import checkTime from '../../utils/general/checkTime';
 
 import {
   Container,
-  Author,
   Text,
   Media,
   PostReactions,
-  Input,
   Comments,
   CommentReactions,
   Replies,
   ReplyReactions,
 } from './styles';
+import { Input, Author } from '../../global/styles';
 import { Reactions, Contents } from './break-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -40,7 +38,6 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
   const [value, setValue] = React.useState('');
   const [willReply, setWillReply] = React.useState('');
   const [replyValue, setReplyValue] = React.useState('');
-  const [authorPicture, setAuthorPicture] = React.useState('');
   const [showCommentReactions, setShowCommentReactions] = React.useState('');
   const [showRepliesList, setShowRepliesList] = React.useState('');
   const [showReplyReactions, setShowReplyReactions] = React.useState('');
@@ -53,7 +50,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
           setCommentReaction(user.id, showCommentReactions, post, posts, setPosts, reaction);
         } else if (type === 'POST_REACTIONS')
           setPostReaction(user.id, post, posts, setPosts, reaction);
-          else if (type === 'REPLY_REACTIONS' && commentID)
+        else if (type === 'REPLY_REACTIONS' && commentID)
           setReplyReaction(user.id, commentID, showReplyReactions, post, posts, setPosts, reaction);
       } else {
         if (type === 'NEW_COMMENT') {
@@ -78,23 +75,15 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
     }
   };
 
-  React.useEffect(() => {
-    (async () => {
-      if (user && user.hasPicture) {
-        const storageRef = storage.ref(storage.storage, `users${user.id}`);
-        const authorPicture = await storage.getDownloadURL(storageRef);
-        setAuthorPicture(authorPicture);
-      }
-    })();
-  });
-
   return (
     <Container>
       <Author>
         <div>
-          <img src={authorPicture ? authorPicture : DefaultPicture} alt={post.author} />
+          <img src={user && user.picture ? user.picture : DefaultPicture} alt={post.author} />
         </div>
-        <h2>{post.author}</h2>
+        <div className="name">
+          <h2>{post.author}</h2>
+        </div>
       </Author>
       <Text>
         <p>{post.content}</p>
@@ -127,11 +116,13 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
             <Author>
               <div>
                 <img
-                  src={comment.author.hasPicture ? comment.author.picture : DefaultPicture}
+                  src={comment.author.picture ? comment.author.picture : DefaultPicture}
                   alt="fake pic"
                 />
               </div>
-              <h2>{comment.author.name}</h2>
+              <div className="name">
+                <h2>{comment.author.name}</h2>
+              </div>
             </Author>
             <div>
               <p>{comment.content}</p>
@@ -184,7 +175,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
                   Reply
                 </span>
               </div>
-              <span className="time">{checkTime(comment.time)}</span>
+              <span className="time">{checkTime(comment.formattedDate)}</span>
             </div>
             {showCommentReactions === comment.id ? (
               <CommentReactions>
@@ -204,7 +195,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
                     <Author>
                       <div>
                         <img
-                          src={reply.author.hasPicture ? reply.author.picture : DefaultPicture}
+                          src={reply.author.picture ? reply.author.picture : DefaultPicture}
                           alt="fake pic"
                         />
                       </div>
@@ -225,18 +216,20 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
                           React
                         </span>
                       </div>
-                      <span className="time">{checkTime(reply.time)}</span>
+                      <span className="time">{checkTime(reply.formattedDate)}</span>
                     </div>
                     {showReplyReactions === reply.id ? (
                       <ReplyReactions>
-                        <Reactions 
+                        <Reactions
                           reactions={reply.reactions}
                           handleClick={handleClick}
                           commentID={comment.id}
                           type="REPLY_REACTIONS"
                         />
                       </ReplyReactions>
-                    ): ''}
+                    ) : (
+                      ''
+                    )}
                   </li>
                 ))}
               </Replies>

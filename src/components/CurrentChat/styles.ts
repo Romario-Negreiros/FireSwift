@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { Message as Reusable } from '../ChatsList/styles';
-import { Input as Reusable2 } from '../Post/styles';
+import { Input as Reusable2 } from '../../global/styles';
 
 export const Container = styled.section`
   width: 100%;

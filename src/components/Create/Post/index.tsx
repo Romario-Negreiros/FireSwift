@@ -2,9 +2,9 @@ import React from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { firestoredb, storage } from '../../../lib';
-import handleFirebaseError from '../../../utils/handleFirebaseError';
-import getInputItems from '../../../utils/getInputItems';
-import getFormattedDate from '../../../utils/getFormattedDate';
+import handleFirebaseError from '../../../utils/general/handleFirebaseError';
+import getInputItems from '../../../utils/getters/getInputItems';
+import getFormattedDate from '../../../utils/getters/getFormattedDate';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -50,8 +50,7 @@ const CreatePost: React.FC<Props> = ({ user }) => {
       const post: Omit<Post, 'id'> = {
         authorID: user.id,
         author: user.name,
-        date: currentDate.date,
-        time: currentDate.time,
+        formattedDate: currentDate,
         content: postContent,
         media: {
           images: [],

@@ -26,7 +26,7 @@ const Contents: React.FC<Props> = ({ post }) => {
 
   return (
     <>
-      {post.media.images.length && (
+      {post.media.images.length ? (
         <ul className="mediaList">
           {post.media.images.map((img, i) => (
             <li key={`img${i}`}>
@@ -34,14 +34,14 @@ const Contents: React.FC<Props> = ({ post }) => {
             </li>
           ))}
         </ul>
-      )}
-      {post.media.videos.length && (
+      ) : ''}
+      {post.media.videos.length ? (
         <video controls>
           <source src={post.media.videos[0]} />
           Your browser doesn't support the video player!
         </video>
-      )}
-      {post.media.docs.length && (
+      ) : ''}
+      {post.media.docs.length ? (
         <ul className="mediaList">
           {post.media.docs.map((img, i) => (
             <li key={`doc${i}`}>
@@ -52,7 +52,7 @@ const Contents: React.FC<Props> = ({ post }) => {
             </li>
           ))}
         </ul>
-      )}
+      ) : ''}
     </>
   );
 };

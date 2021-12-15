@@ -4,8 +4,8 @@ import { Container } from './styles';
 import { ProfileCard, Loader, Exception } from '..';
 import { InnerCenteredContainer } from '../../global/styles';
 
-import handleFirebaseError from '../../utils/handleFirebaseError';
-import { firestoredb, storage } from '../../lib';
+import handleFirebaseError from '../../utils/general/handleFirebaseError';
+import { firestoredb } from '../../lib';
 
 import { User } from '../../global/types';
 
@@ -16,8 +16,7 @@ interface Props {
 interface ShortUser {
   id: string;
   name: string;
-  hasPicture: boolean;
-  picture?: string;
+  picture: string;
 }
 
 const FriendsList: React.FC<Props> = ({ friendsIds }) => {
@@ -39,24 +38,14 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
           const userObj: ShortUser = {
             id,
             name: userData.name,
-            hasPicture: userData.hasPicture,
+            picture: userData.picture,
           };
           
           if (friendsIds) {
             if (friendsIds.some(friendId => friendId === userObj.id)) users.push(userObj);
           } else users.push(userObj);
         });
-        
-        for(let user of users) {
-          const storageRef = storage.ref(storage.storage, `users/${user.id}`);
-          if(user.hasPicture) {
-            const pictureUrl = await storage.getDownloadURL(storageRef);
-            user = {
-              ...user,
-              picture: pictureUrl,
-            };
-        }
-      }
+      
         if (!users.length) setError('Nothing to see here!');
         setUsers(users);
       } catch (err) {

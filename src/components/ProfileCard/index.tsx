@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { useHistory } from 'react-router';
-import Friend from '../../utils/Friend';
+import Friend from '../../utils/classes/Friend';
 
 import { Profile } from './styles';
 
@@ -15,8 +15,7 @@ interface Props {
   user: {
     id: string;
     name: string;
-    hasPicture: boolean;
-    picture?: string;
+    picture: string;
   };
 }
 
@@ -35,7 +34,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
           })
         }
       >
-        <img src={user.hasPicture ? user.picture : DefaultPicture} alt={user.name} />
+        <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
       </div>
       <div
         onClick={() =>

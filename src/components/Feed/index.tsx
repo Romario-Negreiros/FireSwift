@@ -7,7 +7,7 @@ import { InnerCenteredContainer } from '../../global/styles';
 import { Post, Loader, Exception } from '..';
 
 import { Post as PostType } from '../../global/types';
-import handleFirebaseError from '../../utils/handleFirebaseError';
+import handleFirebaseError from '../../utils/general/handleFirebaseError';
 
 const Feed: React.FC = () => {
   const [posts, setPosts] = React.useState<PostType[]>([]);
