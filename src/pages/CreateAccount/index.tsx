@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../app/hooks';
 import { userLogged } from '../../features/user/userSlice';
 
 import { toast } from 'react-toastify';
-import handleFirebaseError from '../../utils/handleFirebaseError';
+import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { authentication, firestoredb } from '../../lib';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
@@ -61,10 +61,11 @@ const CreateAccount: React.FC = () => {
             age: null,
             relationship: '',
             isPrivate: false,
-            hasPicture: false,
+            picture: '',
             country: '',
             languages: [],
             hobbies: [],
+            chats: [],
           };
           await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
           dispatch(userLogged({ id: uid, ...user }));

@@ -3,7 +3,7 @@ import React from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { userLogged } from '../../features/user/userSlice';
 
-import handleFirebaseError from '../../utils/handleFirebaseError';
+import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { authentication, firestoredb } from '../../lib';
 import { useHistory } from 'react-router';
 import { useForm, SubmitHandler } from 'react-hook-form';

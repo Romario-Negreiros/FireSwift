@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Friend from '../../utils/Friend';
+import Friend from '../../utils/classes/Friend';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { firestoredb, storage } from '../../lib';
+import { firestoredb } from '../../lib';
 import { useHistory } from 'react-router-dom';
-import handleFirebaseError from '../../utils/handleFirebaseError';
+import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { toast } from 'react-toastify';
 
 import { CenteredContainer } from '../../global/styles';
@@ -70,35 +70,25 @@ const UserProfile: React.FC = () => {
   };
 
   React.useEffect(() => {
-    (async () => {
-      if (state) {
-        const storageRef = storage.ref(storage.storage, `users/${state.id}`);
-        if (currentUser && currentUser.id === state.id) {
-          if (currentUser.hasPicture) {
-            const pictureUrl = await storage.getDownloadURL(storageRef);
-            setUser({ ...currentUser, picture: pictureUrl });
-          } else setUser({ ...currentUser });
-        } else {
-          try {
-            const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
-            const userSnap = await firestoredb.getDoc(userRef);
-            if (userSnap.exists()) {
-              const user = userSnap.data() as Omit<User, 'id'>;
-              if (user.hasPicture) {
-                const pictureUrl = await storage.getDownloadURL(storageRef);
-                setUser({ id: state.id, ...user, picture: pictureUrl });
-              } else setUser({ id: state.id, ...user });
-            } else setError('Nothing was found. The user might not exist!');
-          } catch (err) {
-            handleFirebaseError(err, setError);
-          }
+    if (state) {
+      (async () => {
+        try {
+          const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
+          const userSnap = await firestoredb.getDoc(userRef);
+          if (userSnap.exists()) {
+            const user = userSnap.data() as Omit<User, 'id'>;
+            setUser({ id: state.id, ...user });
+          } else setError('Nothing was found. The user might not exist!');
+        } catch (err) {
+          handleFirebaseError(err, setError);
+        } finally {
+          setIsLoaded(true);
         }
-      } else {
-        toast.error("The user doesn't exist!");
-        setError('Nothing was found. The user might not exist!');
-      }
-      setIsLoaded(true);
-    })();
+      })();
+    } else {
+      toast.error("The user doesn't exist!");
+      setError('Nothing was found. The user might not exist!');
+    }
   }, [state, currentUser]);
 
   if (!isLoaded) {
@@ -203,7 +193,7 @@ const UserProfile: React.FC = () => {
             <li onClick={() => openModal('changepic')}>
               <span>Change picture</span>
             </li>
-            {user.hasPicture && (
+            {user.picture && (
               <li onClick={() => openModal('deletepic')}>
                 <span>Delete picture</span>
               </li>

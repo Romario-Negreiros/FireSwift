@@ -4,9 +4,9 @@ import hobbies from '../../app/hobbies';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateUser } from '../../features/user/userSlice';
 import { firestoredb } from '../../lib';
-import getUserListData from '../../utils/getUserListData';
+import getUserListData from '../../utils/getters/getUserListData';
 
-import handleFirebaseError from '../../utils/handleFirebaseError';
+import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { toast } from 'react-toastify';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
