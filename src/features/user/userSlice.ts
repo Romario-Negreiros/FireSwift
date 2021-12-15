@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { User } from '../../global/types';
 
-export type userState = {
+type userState = {
   user: User | null;
 };
 
-const initialState: userState | null = {
+const initialState: userState = {
   user: null,
 };
 
