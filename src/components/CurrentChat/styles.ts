@@ -25,7 +25,7 @@ interface MessageProps {
 }
 
 export const Message = styled(Reusable)<MessageProps>`
-  align-self: ${({ status }) => (status === 'sent' ? 'flex-end' : 'flex-start')};
+  align-self: ${({ status }) => (status === 'owner' ? 'flex-end' : 'flex-start')};
   width: fit-content;
   max-width: 80%;
   word-wrap: wrap;

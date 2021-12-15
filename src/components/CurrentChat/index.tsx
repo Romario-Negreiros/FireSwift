@@ -1,29 +1,48 @@
 import React from 'react';
 
 import { Container, Message, Input } from './styles';
+import { InnerCenteredContainer } from '../../global/styles';
+import { Exception } from '..';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
-const CurrentChat: React.FC = () => {
-  const [value, setValue] = React.useState<string>('');
+import { Chat, User } from '../../global/types';
 
+interface Props {
+  userChats: Chat[];
+  currentChatID: string;
+  currentUser: User;
+}
+
+const CurrentChat: React.FC<Props> = ({ userChats, currentChatID, currentUser }) => {
+  const [value, setValue] = React.useState<string>('');
+  const [currentChatData, setCurrentChatData] = React.useState<Chat | null>(null);
+
+  React.useEffect(() => {
+    userChats.forEach(chat => {
+      if (chat.chatID === currentChatID) setCurrentChatData(chat);
+      else setCurrentChatData(null);
+    });
+  }, [currentChatID, userChats]);
+
+  if (!currentChatData) {
+    return (
+      <Container>
+        <InnerCenteredContainer>
+          <Exception message={'Choose a chat to start talking!'} />
+        </InnerCenteredContainer>
+      </Container>
+    );
+  }
   return (
     <Container>
       <ul>
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(() => (
-          <Message key={Math.round(Math.random() * 551324)} status="sent">
-            <span>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit pariatur
-              veritatis possimus magni vero harum provident architecto quis voluptas!
-            </span>
+        {currentChatData.messages.map(msg => (
+          <Message key={msg.id} status={msg.userID === currentUser.id ? 'owner' : ''}>
+            <span>{msg.text}</span>
             <div className="status">
               <FontAwesomeIcon color="white" icon={faCheck} />
-              {/*
-                  No icon > being sent
-                  Icon no bg > sent not received
-                  Icon and lighter bg > sent and received
-                  Icon and darker bg > sent, received and read
-                */}
             </div>
           </Message>
         ))}
@@ -31,7 +50,7 @@ const CurrentChat: React.FC = () => {
       <Input>
         <input
           name="comment"
-          placeholder="zzzzz"
+          placeholder="Aa"
           value={value}
           onChange={(event: React.FormEvent<HTMLInputElement>) =>
             setValue(event.currentTarget.value)

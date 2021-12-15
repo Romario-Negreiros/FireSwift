@@ -2,6 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 import { useHistory } from 'react-router-dom';
+import { useAppDispatch } from '../../../../../app/hooks';
 import setChat from '../../../../../utils/setters/setChat';
 
 import { Container, Result, Options } from './styles';
@@ -24,6 +25,7 @@ interface Props {
 
 const DropDown: React.FC<Props> = ({ error, results, user }) => {
   const history = useHistory();
+  const dispatch = useAppDispatch();
 
   if (error) {
     return (
@@ -69,18 +71,16 @@ const DropDown: React.FC<Props> = ({ error, results, user }) => {
                           id: user.id,
                           name: user.name,
                           picture: user.picture,
-                          messages: [],
                           chats: user.chats,
                         },
                         {
                           id: item.id,
                           name: item.name,
                           picture: item.picture,
-                          messages: [],
                           chats: item.chats
                         },
                       ];
-                      setChat(chatUsers, history);
+                      setChat(chatUsers, user, history, dispatch);
                     } else toast.error('You already have a chat with this user!');
                   } else toast.error('You need to be logged in to create a chat!');
                 }}
