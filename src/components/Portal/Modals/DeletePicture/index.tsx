@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import authenticateUser from '../../../../utils/authenticateUser';
-import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import authenticateUser from '../../../../utils/general/authenticateUser';
+import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
 import { updateUser } from '../../../../features/user/userSlice';
 import { useAppDispatch } from '../../../../app/hooks';
 import { firestoredb, storage } from '../../../../lib';
@@ -45,9 +45,9 @@ const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
       await storage.deleteObject(storageRef);
       const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
       await firestoredb.updateDoc(userRef, {
-        hasPicture: false,
+        picture: '',
       });
-      dispatch(updateUser({ ...user, picture: '', hasPicture: false }));
+      dispatch(updateUser({ ...user, picture: '' }));
       toast('Picture succesfully deleted');
       setIsModalVisible(false);
     } catch (err) {

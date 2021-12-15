@@ -2,8 +2,8 @@ import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { firestoredb } from '../../../../lib';
-import authenticateUser from '../../../../utils/authenticateUser';
-import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import authenticateUser from '../../../../utils/general/authenticateUser';
+import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
 import { useAppDispatch } from '../../../../app/hooks';
 import { updateUser } from '../../../../features/user/userSlice';
 import { toast } from 'react-toastify';

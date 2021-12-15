@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import authenticateUser from '../../../../utils/authenticateUser';
-import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import authenticateUser from '../../../../utils/general/authenticateUser';
+import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
 import { updateUser } from '../../../../features/user/userSlice';
 import { useAppDispatch } from '../../../../app/hooks';
 import { storage, firestoredb } from '../../../../lib';
@@ -57,9 +57,9 @@ const ChangePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
         const pictureUrl = await storage.getDownloadURL(storageRef);
         const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
         await firestoredb.updateDoc(userRef, {
-          hasPicture: true,
+          picture: pictureUrl,
         });
-        dispatch(updateUser({ ...user, picture: pictureUrl, hasPicture: true }));
+        dispatch(updateUser({ ...user, picture: pictureUrl }));
         toast('Picture succesfully changed');
         setIsModalVisible(false);
       } else setError('You need to choose a picture first!');

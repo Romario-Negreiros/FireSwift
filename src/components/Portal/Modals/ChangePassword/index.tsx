@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import authenticateUser from '../../../../utils/authenticateUser';
-import handleFirebaseError from '../../../../utils/handleFirebaseError';
+import authenticateUser from '../../../../utils/general/authenticateUser';
+import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
 import { authentication } from '../../../../lib';
 
 import {

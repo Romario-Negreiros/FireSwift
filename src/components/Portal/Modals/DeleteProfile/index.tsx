@@ -5,8 +5,8 @@ import { firestoredb, authentication } from '../../../../lib';
 import { useHistory } from 'react-router';
 import { useAppDispatch } from '../../../../app/hooks';
 import { userUnLogged } from '../../../../features/user/userSlice';
-import handleFirebaseError from '../../../../utils/handleFirebaseError';
-import authenticateUser from '../../../../utils/authenticateUser';
+import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
+import authenticateUser from '../../../../utils/general/authenticateUser';
 
 import {
   ModalBG,
