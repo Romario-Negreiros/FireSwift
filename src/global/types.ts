@@ -102,15 +102,17 @@ export interface Chat {
       chatID: string;
       receiverID: string;
     }[];
-    messages: {
-      text: string;
-      state: MessageStates;
-      formattedDate: {
-        date: string;
-        time: string;
-      };
-      media: Medias;
-    }[];
+  }[];
+  messages: {
+    userID: string;
+    id: string;
+    text: string;
+    state: MessageStates;
+    formattedDate: {
+      date: string;
+      time: string;
+    };
+    media: Medias;
   }[];
 }
 
