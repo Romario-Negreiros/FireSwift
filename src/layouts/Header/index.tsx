@@ -18,7 +18,7 @@ import { ThemeContext } from 'styled-components';
 import { Container, Nav, List, Burguer, Line, Alert, Redirect, User } from './styles';
 import Switch from 'react-switch';
 
-import handleMobileMenu from '../../utils/handleMobileMenu';
+import handleMobileMenu from '../../utils/general/handleMobileMenu';
 
 import { Props } from '../../global/types';
 import { authentication } from '../../lib';
