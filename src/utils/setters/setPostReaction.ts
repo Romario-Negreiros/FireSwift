@@ -1,7 +1,7 @@
-import { firestoredb } from '../lib';
-
+import { firestoredb } from '../../lib';
 import { toast } from 'react-toastify';
-import { Post } from '../global/types';
+
+import { Post } from '../../global/types';
 
 const setPostReaction = async (
   id: string,

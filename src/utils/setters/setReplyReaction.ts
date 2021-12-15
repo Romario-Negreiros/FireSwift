@@ -1,11 +1,12 @@
-import { firestoredb } from '../lib';
-
+import { firestoredb } from '../../lib';
 import { toast } from 'react-toastify';
-import { Post } from '../global/types';
 
-const setCommentReaction = async (
+import { Post } from '../../global/types';
+
+const setReplyReaction = async (
   userID: string,
   commentID: string,
+  replyID: string,
   post: Post,
   posts: Post[],
   setPosts: (posts: Post[]) => void,
@@ -17,16 +18,19 @@ const setCommentReaction = async (
     const commentIndex = postsCopy[postIndex].comments.findIndex(
       comment => comment.id === commentID
     );
-    const reactionIndex = postsCopy[postIndex].comments[commentIndex].reactions.findIndex(
+    const replyIndex = postsCopy[postIndex].comments[commentIndex].replies.findIndex(
+      reply => reply.id === replyID
+    );
+    const reactionIndex = postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions.findIndex(
       reaction => reaction.id === userID
     );
     if (reactionIndex === -1) {
-      postsCopy[postIndex].comments[commentIndex].reactions.push({
+      postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions.push({
         id: userID,
         reaction: newReaction,
       });
     } else {
-      postsCopy[postIndex].comments[commentIndex].reactions[reactionIndex].reaction = newReaction;
+      postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions[reactionIndex].reaction = newReaction;
     }
     const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
     await firestoredb.updateDoc(postRef, {
@@ -38,4 +42,4 @@ const setCommentReaction = async (
   }
 };
 
-export default setCommentReaction;
+export default setReplyReaction;

@@ -1,11 +1,11 @@
-import { User } from '../global/types';
+import { User } from '../../global/types';
 
 import { toast } from 'react-toastify';
 
-import { firestoredb } from '../lib';
-import { updateUser } from '../features/user/userSlice';
+import { firestoredb } from '../../lib';
+import { updateUser } from '../../features/user/userSlice';
 
-import { AppDispatch } from '../app/store';
+import { AppDispatch } from '../../app/store';
 
 class Friend {
   static remove = async (id: string, user: User, dispatch: AppDispatch) => {

@@ -13,7 +13,7 @@ const getFormattedDate = (): funcReturn => {
   const crtMins = d.getMinutes();
   const crtSecs = d.getSeconds();
   const formattedDate = {
-    date: `${crtYear}/${crtMonth}/${crtDay}`,
+    date: `${crtYear}/${crtMonth < 10 ? '0' + crtMonth : crtMonth}/${crtDay < 10 ? '0' + crtDay : crtDay}`,
     time: `${crtHours < 10 ? '0' + crtHours : crtHours}:${crtMins < 10 ? '0' + crtMins : crtMins}:${crtSecs < 10 ? '0' + crtSecs : crtSecs}`,
   };
   return formattedDate;

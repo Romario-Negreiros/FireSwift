@@ -1,9 +1,9 @@
-import { firestoredb, storage } from '../lib';
 import { v4 as uuidv4 } from 'uuid';
-
+import { firestoredb } from '../../lib';
+import getFormattedDate from '../getters/getFormattedDate';
 import { toast } from 'react-toastify';
-import { Post, User } from '../global/types';
-import getFormattedDate from './getFormattedDate';
+
+import { Post, User } from '../../global/types';
 
 const setComment = async (
   user: User,
@@ -17,22 +17,16 @@ const setComment = async (
     const author = {
       id: user.id,
       name: user.name,
-      hasPicture: user.hasPicture,
-      picture: '',
+      picture: user.picture,
     };
-    if (user.hasPicture) {
-      const storageRef = storage.ref(storage.storage, `users${user.id}`);
-      const pictureUrl = await storage.getDownloadURL(storageRef);
-      author.picture = pictureUrl;
-    }
-    const { time } = getFormattedDate();
+    const formattedDate = getFormattedDate();
     const comment = {
       id: uuidv4(),
       author: author,
       content: newComment,
       reactions: [],
       replies: [],
-      time,
+      formattedDate,
     };
     postsCopy.forEach(postCopy => {
       if(postCopy.id === post.id) {
