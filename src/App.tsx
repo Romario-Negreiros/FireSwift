@@ -1,6 +1,6 @@
 import React from 'react';
 
-import usePersistedState from './utils/usePersistedState';
+import usePersistedState from './utils/hooks/usePersistedState';
 
 import { Provider } from 'react-redux';
 import store from './app/store';
