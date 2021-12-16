@@ -34,6 +34,8 @@ export const Message = styled(Reusable)<MessageProps>`
   background: linear-gradient(to right, #8e2de2, #4a00e0);
   border-radius: 5px;
   span {
+    display: block;
+    margin-right: 1.5rem;
     width: 80%;
   }
   .status {

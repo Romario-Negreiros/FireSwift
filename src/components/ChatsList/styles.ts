@@ -35,7 +35,7 @@ export const List = styled.ul<ListProps>`
   position: relative;
   z-index: 30;
   width: 100%;
-  background: ${({ theme: { bgs } }) => bgs.tertiary};
+  background: ${({ theme: { bgs } }) => bgs.secondary};
   overflow: auto;
   visibility: ${({ isDropdownOpen }) => (isDropdownOpen ? 'visible' : 'hidden')};
   max-height: ${({ isDropdownOpen }) => (isDropdownOpen ? '60vh' : '0vh')};
@@ -53,6 +53,7 @@ export const List = styled.ul<ListProps>`
     }
   }
   @media screen and (min-width: 700px) {
+    background: ${({ theme: { bgs } }) => bgs.tertiary};
     position: unset;
     grid-column: 1 / 1;
     visibility: visible;

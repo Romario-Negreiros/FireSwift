@@ -19,10 +19,6 @@ export interface User {
   hobbies: {
     name: string;
   }[];
-  chats: {
-    chatID: string;
-    receiverID: string;
-  }[];
 }
 
 type Reaction = {
@@ -30,7 +26,7 @@ type Reaction = {
   reaction: string;
 };
 
-type Medias = {
+interface Medias {
   images: string[];
   videos: string[];
   docs: {
@@ -76,44 +72,7 @@ export interface Result {
   id: string;
   name: string;
   picture: string;
-  chats: {
-    chatID: string;
-    receiverID: string;
-  }[];
   type: string;
-}
-
-export enum MessageStates {
-  sent = 'SENT',
-  viewed = 'VIEWED',
-}
-
-export interface Chat {
-  chatID: string;
-  chatCreation: {
-    date: string;
-    time: string;
-  };
-  users: {
-    id: string;
-    name: string;
-    picture: string;
-    chats: {
-      chatID: string;
-      receiverID: string;
-    }[];
-  }[];
-  messages: {
-    userID: string;
-    id: string;
-    text: string;
-    state: MessageStates;
-    formattedDate: {
-      date: string;
-      time: string;
-    };
-    media: Medias;
-  }[];
 }
 
 export interface ModalsProps {

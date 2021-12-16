@@ -48,7 +48,7 @@ interface ListProps {
 export const List = styled.ul<ListProps>`
   position: absolute;
   top: calc(100vh - 75vh);
-  z-index: 30;
+  z-index: 31;
   left: 0;
   height: 50vh;
   border: 1px solid ${({ theme: { border } }) => border.primary};
