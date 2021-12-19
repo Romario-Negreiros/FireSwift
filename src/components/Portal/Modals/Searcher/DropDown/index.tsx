@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { useAppDispatch } from '../../../../../app/hooks';
 import { useHistory } from 'react-router-dom';
+import setChat from '../../../../../utils/setters/setChat';
 
 import { Container, Result, Options } from './styles';
 import { Exception } from '../../../..';
@@ -13,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { Result as ResultType, User } from '../../../../../global/types';
+import { toast } from 'react-toastify';
 
 interface Props {
   error: string;
@@ -22,6 +25,7 @@ interface Props {
 
 const DropDown: React.FC<Props> = ({ error, results, user }) => {
   const history = useHistory();
+  const dispatch = useAppDispatch();
 
   if (error) {
     return (
@@ -59,7 +63,10 @@ const DropDown: React.FC<Props> = ({ error, results, user }) => {
                 <FontAwesomeIcon size="2x" color="purple" icon={faUser} />
               </CustomIconBox>
               <CustomIconBox
-               
+                onClick={() => {
+                  if (user) setChat(item, user, dispatch, history);
+                  else toast.error('You need to be logged in to create a chat!');
+                }}
               >
                 <FontAwesomeIcon size="2x" color="purple" icon={faCommentDots} />
               </CustomIconBox>

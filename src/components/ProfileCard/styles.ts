@@ -17,6 +17,7 @@ export const Profile = styled.li<StyledProps>`
   background: ${({ theme: { bgs } }) => bgs.tertiary};
   div {
     width: 100%;
+    word-break: break-all;
     img {
       width: 100%;
       height: 100%;
