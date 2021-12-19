@@ -1,3 +1,5 @@
+import { Unsubscribe } from "firebase/firestore";
+
 export interface Props {
   toggleTheme: () => void;
 }
@@ -19,6 +21,10 @@ export interface User {
   hobbies: {
     name: string;
   }[];
+  chats: {
+    id: string;
+    receiverID: string;
+  }[];
 }
 
 type Reaction = {
@@ -33,7 +39,7 @@ interface Medias {
     url: string;
     name: string;
   }[];
-};
+}
 
 export interface Post {
   id: string;
@@ -72,7 +78,45 @@ export interface Result {
   id: string;
   name: string;
   picture: string;
+  chats: {
+    id: string;
+    receiverID: string;
+  }[];
   type: string;
+}
+
+export interface Message {
+  id: string;
+  user: {
+    id: string;
+    name: string;
+    picture: string;
+  };
+  text: string;
+  viewed: boolean;
+  sentDate: {
+    date: string;
+    time: string;
+  };
+}
+
+export interface Chat {
+  id: string;
+  users: {
+    id: string;
+    name: string;
+    picture: string;
+    chats: {
+      id: string;
+      receiverID: string;
+    }[];
+  }[];
+  messages: Message[];
+  creationDate: {
+    date: string;
+    time: string;
+  };
+  unsubscribe?: Unsubscribe
 }
 
 export interface ModalsProps {
