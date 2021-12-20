@@ -1,4 +1,4 @@
-import { Unsubscribe } from "firebase/firestore";
+import { Unsubscribe } from 'firebase/firestore';
 
 export interface Props {
   toggleTheme: () => void;
@@ -100,23 +100,25 @@ export interface Message {
   };
 }
 
+export interface ChatUser {
+  id: string;
+  name: string;
+  picture: string;
+  chats: {
+    id: string;
+    receiverID: string;
+  }[];
+}
+
 export interface Chat {
   id: string;
-  users: {
-    id: string;
-    name: string;
-    picture: string;
-    chats: {
-      id: string;
-      receiverID: string;
-    }[];
-  }[];
+  users: ChatUser[];
   messages: Message[];
   creationDate: {
     date: string;
     time: string;
   };
-  unsubscribe?: Unsubscribe
+  unsubscribe?: Unsubscribe;
 }
 
 export interface ModalsProps {
