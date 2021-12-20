@@ -7,7 +7,7 @@ import { faArrowDown, faCheck, faCheckCircle } from '@fortawesome/free-solid-svg
 
 import DefaultPicture from '../../assets/default-picture.png';
 
-import { Chat } from '../../global/types';
+import { Chat, ChatUser } from '../../global/types';
 
 interface Props {
   chats: Chat[];
@@ -28,34 +28,37 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
         {chats.map(chat => {
           if (chat.messages.length) {
             const l = chat.messages.length - 1;
-            return (
-              <li
-                key={chat.id}
-                onClick={() => setCurrentChat(chat.id)}
-              >
-                <User>
-                  <img
-                    src={
-                      chat.messages[l].user.picture ? chat.messages[l].user.picture : DefaultPicture
-                    }
-                    alt={chat.messages[l].user.name}
-                  />
-                  <span>{chat.messages[l].user.name}</span>
-                </User>
-                <Message>
-                  <span>{chat.messages[l].text}</span>
-                  <div className="status">
-                    <FontAwesomeIcon
-                      color="purple"
-                      size="1x"
-                      icon={chat.messages[l].viewed ? faCheckCircle : faCheck}
-                    />
-                  </div>
-                </Message>
-              </li>
+            const receiver: ChatUser | undefined = chat.users.find(
+              user => user.id !== currentUserID
             );
+            if (receiver) {
+              return (
+                <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                  <User>
+                    <img
+                      src={receiver.picture ? receiver.picture : DefaultPicture}
+                      alt={receiver.name}
+                    />
+                    <span>{receiver.name}</span>
+                  </User>
+                  <Message>
+                    <span>
+                      {chat.messages[l].user.id === receiver.id ? '' : 'You: '}
+                      {chat.messages[l].text}
+                    </span>
+                    <div className="status">
+                      <FontAwesomeIcon
+                        color="purple"
+                        size="1x"
+                        icon={chat.messages[l].viewed ? faCheckCircle : faCheck}
+                      />
+                    </div>
+                  </Message>
+                </li>
+              );
+            } else return null
           } else {
-            const receiver = chat.users.find(user => user.id !== currentUserID);
+            const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUserID);
             if (receiver) {
               return (
                 <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>

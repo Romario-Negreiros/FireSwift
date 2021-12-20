@@ -35,7 +35,7 @@ export const Message = styled(Reusable)<MessageProps>`
   border-radius: 5px;
   span {
     display: block;
-    margin-right: 1.5rem;
+    margin-right: 2rem;
     width: 80%;
   }
   .status {

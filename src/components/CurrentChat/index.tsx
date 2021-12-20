@@ -27,7 +27,7 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
         if (chat.id === currentChat) setChat(chat);
       });
     }
-  }, [chats, currentChat]);
+}, [chats, currentChat]);
 
   if (!chat) {
     return (
