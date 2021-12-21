@@ -142,6 +142,7 @@ export const CommentReactions = styled(PostReactions)`
     :nth-child(2) {
       margin-top: 0rem;
     }
+  }
 `;
 
 export const Replies = styled(Comments)`

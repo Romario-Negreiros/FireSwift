@@ -11,3 +11,4 @@ export { default as Portal } from './Portal';
 export { default as SocialOptions } from './SocialOptions';
 export { CreateGroup, CreatePost, CreateStory } from './Create';
 export { default as Searcher } from './Portal/Modals/Searcher';
+export { default as Contents } from './Contents';

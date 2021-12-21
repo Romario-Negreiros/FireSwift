@@ -20,7 +20,8 @@ import {
   ReplyReactions,
 } from './styles';
 import { Input, Author } from '../../global/styles';
-import { Reactions, Contents } from './break-components';
+import { Reactions } from './break-components';
+import { Contents } from '..';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -89,7 +90,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
         <p>{post.content}</p>
       </Text>
       <Media>
-        <Contents post={post} />
+        <Contents item={post} />
       </Media>
       <PostReactions>
         <Reactions reactions={post.reactions} handleClick={handleClick} type="POST_REACTIONS" />

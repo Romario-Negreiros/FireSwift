@@ -9,13 +9,15 @@ import {
   faFile,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Post } from '../../../../global/types';
+import { Medias } from '../../global/types';
 
 interface Props {
-  post: Post;
+  item: {
+    media: Medias;
+  };
 }
 
-const Contents: React.FC<Props> = ({ post }) => {
+const Contents: React.FC<Props> = ({ item }) => {
   const getIcon = (docName: string) => {
     if (docName.match('.pdf')) return faFilePdf;
     else if (docName.match('.docx') || docName.match('dot')) return faFileWord;
@@ -26,24 +28,24 @@ const Contents: React.FC<Props> = ({ post }) => {
 
   return (
     <>
-      {post.media.images.length ? (
+      {item.media.images && item.media.images.length ? (
         <ul className="mediaList">
-          {post.media.images.map((img, i) => (
+          {item.media.images.map((img, i) => (
             <li key={`img${i}`}>
               <img src={img} alt={`img${i}`} />
             </li>
           ))}
         </ul>
       ) : ''}
-      {post.media.videos.length ? (
+      {item.media.videos && item.media.videos.length ? (
         <video controls>
-          <source src={post.media.videos[0]} />
+          <source src={item.media.videos[0]} />
           Your browser doesn't support the video player!
         </video>
       ) : ''}
-      {post.media.docs.length ? (
+      {item.media.docs && item.media.docs.length ? (
         <ul className="mediaList">
-          {post.media.docs.map((img, i) => (
+          {item.media.docs.map((img, i) => (
             <li key={`doc${i}`}>
               <a download href={img.url} className="docView">
                 <FontAwesomeIcon icon={getIcon(img.name)} size="4x" />
