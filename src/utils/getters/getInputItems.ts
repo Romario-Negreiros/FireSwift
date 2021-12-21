@@ -18,8 +18,8 @@ const getInputItems = (inputsIDs: string[]): funcReturn => {
       if (files.length) {
         const filesArray = Array.from(files);
         filesArray.forEach(file => {
-          if (id === 'img') inputItems.images.push(file);
-          else if (id === 'doc') inputItems.docs.push(file);
+          if (id.includes('img')) inputItems.images.push(file);
+          else if (id.includes('doc')) inputItems.docs.push(file);
           else inputItems.videos.push(file);
         });
       }
