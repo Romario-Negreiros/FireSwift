@@ -32,7 +32,7 @@ type Reaction = {
   reaction: string;
 };
 
-interface Medias {
+export interface Medias {
   images: string[];
   videos: string[];
   docs: {
@@ -93,6 +93,7 @@ export interface Message {
     picture: string;
   };
   text: string;
+  media: Medias;
   viewed: boolean;
   sentDate: {
     date: string;
