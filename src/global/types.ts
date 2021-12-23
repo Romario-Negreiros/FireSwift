@@ -39,6 +39,7 @@ export interface Medias {
     url: string;
     name: string;
   }[];
+  audios?: string[];
 }
 
 export interface Post {
