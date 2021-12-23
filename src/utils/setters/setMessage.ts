@@ -42,7 +42,6 @@ const setMessage = async (
         audios: [],
       },
       text,
-      viewed: false,
       sentDate: getFormattedDate(),
     };
     if(audio) {
