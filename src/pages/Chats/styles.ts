@@ -6,7 +6,7 @@ export const Grid = styled.main`
   grid-template-rows: 50px auto;
   height: 84.7vh;
   @media screen and (min-width: 700px) {
-    height: calc(100vh - 111px);
+    height: calc(100vh - 102px);
     grid-template-columns: 350px auto;
     grid-template-rows: auto;
     gap: 1rem;
