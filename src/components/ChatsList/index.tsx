@@ -23,7 +23,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
       return 'an image.'
     } else if (media.videos) {
       return 'a video.'
-    } return 'a file.'
+    } else if(media.docs) {
+      return 'a file.'
+    } else return 'a voice message.'
   };
 
   return (
@@ -33,6 +35,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
         <FontAwesomeIcon color="white" size="1x" icon={faArrowDown} />
       </DropdownButton>
       <List isDropdownOpen={isDropdownOpen}>
+      <audio controls src="https://cdn.fbsbx.com/v/t59.3654-21/269952433_3097241207192994_6315987645806055682_n.mp4/audioclip-1640226835000-13782.mp4?_nc_cat=104&ccb=1-5&_nc_sid=7272a8&_nc_ohc=BBDGCoi-C3sAX8rahqL&_nc_ht=cdn.fbsbx.com&oh=03_AVI7xdZigyaDENMjwBLHnucrO6L22C_PMw5O7-K1vccNBQ&oe=61C5CEEC&dl=1">
+      
+      </audio>
         {chats.map(chat => {
           const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUserID);
           if (chat.messages.length) {

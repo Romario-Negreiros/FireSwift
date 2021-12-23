@@ -23,7 +23,8 @@ export const FileOptions = styled.ul`
 
 export const CustomLabelBox = styled.label`
   cursor: pointer;
-  padding: 1rem;
+  width: 5rem;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;

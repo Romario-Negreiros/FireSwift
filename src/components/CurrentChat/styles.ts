@@ -65,11 +65,11 @@ export const Input = styled(Reusable2)`
 `;
 
 export const Media = styled(Reusable3)`
-  margin-right: -0.5rem;
   width: 100% !important;
   ul.mediaList {
     overflow: unset;
     grid-template-columns: unset;
+    margin-bottom: 1rem;
     img {
       max-width: 100%;
       width: 500px;
@@ -79,6 +79,10 @@ export const Media = styled(Reusable3)`
   }
   video {
     height: fit-content;
+  }
+  audio {
+    height: 3rem;
+    margin-right: 1.5rem;
   }
 `;
 
@@ -115,7 +119,7 @@ export const FileOptions = styled(Reusable4)<FileOptionsProps>`
         font-size: 1.2rem;
         position: absolute;
         top: -3.5rem;
-        left: -0.8rem;
+        left: -0.2rem;
         width: fit-content;
       }
       :hover .ballon {
