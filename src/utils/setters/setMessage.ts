@@ -23,7 +23,9 @@ const setMessage = async (
   user: User,
   text: string,
   setValue: (value: string) => void,
-  files?: Files
+  files?: Files,
+  audio?: Blob,
+  setShowAudioRecorder?: (showAudioRecorder: boolean) => void,
 ) => {
   try {
     const message: Message = {
@@ -37,11 +39,20 @@ const setMessage = async (
         images: [],
         videos: [],
         docs: [],
+        audios: [],
       },
       text,
       viewed: false,
       sentDate: getFormattedDate(),
     };
+    if(audio) {
+      const storageRef = storage.ref(storage.storage, `chats/${chat.id}/${message.id}/audios/0`);
+      toast('Sending audio...');
+      await storage.uploadBytesResumable(storageRef, audio);
+      toast('Audio sent...')
+      const audioURL = await storage.getDownloadURL(storageRef);
+      message.media.audios?.push(audioURL);
+    }
     if (files) {
       if (files.images.length) {
         if (files.videos.length || files.docs.length) {
@@ -92,6 +103,7 @@ const setMessage = async (
     updates[`chats/${chat.id}/messages`] = [...chat.messages, message];
     await realtimedb.update(realtimedb.dbRef(realtimedb.db), updates);
     setValue('');
+    if(setShowAudioRecorder) setShowAudioRecorder(false);
   } catch (err) {
     if (err instanceof Error) toast.error('Unable to send the message ' + err.message);
   }
