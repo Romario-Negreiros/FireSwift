@@ -12,8 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAngleDoubleUp,
   faAngleDoubleDown,
-  faCheck,
-  faCheckCircle,
   faPaperPlane,
   faImage,
   faVideo,
@@ -76,9 +74,6 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
             ) : (
               ''
             )}
-            <div className="status">
-              <FontAwesomeIcon color="white" icon={msg.viewed ? faCheckCircle : faCheck} />
-            </div>
           </Message>
         ))}
       </ul>

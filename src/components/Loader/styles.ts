@@ -8,17 +8,21 @@ const spin = keyframes`
     }
 `;
 
-export const LoaderSpin = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    ::after {
-        content: '';
-        width: 5rem;
-        height: 5rem;
-        border-radius: 50%;
-        border: 10px solid #c1d5e4;
-        border-top: 10px solid #8e2de2;
-        animation: ${spin} 1s linear infinite;
-    }
+interface LoaderProps {
+  size?: string;
+}
+
+export const LoaderSpin = styled.div<LoaderProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ::after {
+    content: '';
+    width: ${({ size }) => size ? size : '5rem'};
+    height: ${({ size }) => size ? size : '5rem'};
+    border-radius: 50%;
+    border: 10px solid #c1d5e4;
+    border-top: 10px solid #8e2de2;
+    animation: ${spin} 1s linear infinite;
+  }
 `;

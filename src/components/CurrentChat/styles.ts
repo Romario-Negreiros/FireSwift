@@ -34,25 +34,19 @@ export const Message = styled(Reusable)<MessageProps>`
   position: relative;
   background: ${({ status }) =>
     status === 'owner'
-    ? 'linear-gradient(to right, #8e2de2, #4a00e0)'
-    : 'linear-gradient(to right, #ed213a, #93291e)'};
+      ? 'linear-gradient(to right, #8e2de2, #4a00e0)'
+      : 'linear-gradient(to right, #ed213a, #93291e)'};
   border-radius: 5px;
   display: flex;
   flex-flow: row wrap;
-  div:not(.status) {
+  div {
     word-break: break-all;
   }
   span {
     margin-right: 2rem;
     font-size: 1.4rem;
     word-wrap: wrap;
-  }
-  .status {
-    position: absolute;
-    bottom: 0.2rem;
-    right: 0.2rem;
-    width: 15px;
-    height: 15px;
+    color: ${({theme: { fonts }}) => fonts.primary};
   }
 `;
 
@@ -69,7 +63,6 @@ export const Media = styled(Reusable3)`
   ul.mediaList {
     overflow: unset;
     grid-template-columns: unset;
-    margin-bottom: 1rem;
     img {
       max-width: 100%;
       width: 500px;
@@ -81,8 +74,8 @@ export const Media = styled(Reusable3)`
     height: fit-content;
   }
   audio {
+    max-width: 100%;
     height: 3rem;
-    margin-right: 1.5rem;
   }
 `;
 

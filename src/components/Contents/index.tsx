@@ -57,7 +57,7 @@ const Contents: React.FC<Props> = ({ item }) => {
       ) : ''}
       {item.media.audios && item.media.audios.length ? (
         <audio controls>
-          <source src="gs://fireswift-26692.appspot.com/chats/ef11a981-65f1-4b21-bd6a-36eb82e99105/04d687f9-6acc-41a0-b5bd-025826eb7d12/audios/0" />
+          <source src={item.media.audios[0]} />
           Your browser doesn't support the audio player!
         </audio>
       ): ''}

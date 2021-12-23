@@ -8,13 +8,7 @@ import { InnerCenteredContainer } from '../../global/styles';
 import { Loader } from '..';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTimes,
-  faPlay,
-  faStop,
-  faGripLinesVertical,
-  faPause,
-} from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons';
 
 import { Chat, User } from '../../global/types';
 
@@ -32,7 +26,37 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
   const [isPaused, setIsPaused] = React.useState(false);
   const [mediaRecorder, setMediaRecorder] = React.useState<MediaRecorder | null>(null);
   const [audioChunks, setAudioChunks] = React.useState<Blob[]>([]);
-console.log(setTimer);
+  const [timerInterval, setTimerInterval] = React.useState<NodeJS.Timeout | null>();
+  const [width, setWidth] = React.useState(0);
+
+  const increaseTimer = () => {
+    setTimer(timer => (timer += 1));
+  };
+
+  const startTimer = () => {
+    const timerInterval = setInterval(increaseTimer, 1000);
+    setTimerInterval(timerInterval);
+  };
+
+  const stopTimer = React.useCallback(() => {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      setTimerInterval(null);
+    }
+  }, [timerInterval]);
+
+  const startProgress = () => {
+    const progressBar = document.querySelector('.progress-bar') as HTMLDivElement;
+    progressBar.classList.add('animate-bar');
+  };
+
+  const stopProgress = React.useCallback(() => {
+    const progressBar = document.querySelector('.progress-bar') as HTMLDivElement;
+    progressBar.classList.remove('animate-bar');
+    const width = 3.33 * timer;
+    setWidth(width);
+  }, [timer]);
+
   const start = () => {
     if (mediaRecorder?.state === 'inactive') {
       mediaRecorder?.start(1000);
@@ -43,6 +67,9 @@ console.log(setTimer);
 
       setIsRecording(true);
     }
+
+    startTimer();
+    startProgress();
   };
 
   const pause = () => {
@@ -50,6 +77,9 @@ console.log(setTimer);
       mediaRecorder?.pause();
       setIsPaused(true);
     }
+
+    stopTimer();
+    stopProgress();
   };
 
   const resume = () => {
@@ -57,16 +87,22 @@ console.log(setTimer);
       mediaRecorder?.resume();
       setIsPaused(false);
     }
+
+    startTimer();
+    startProgress();
   };
 
-  const stop = () => {
+  const stop = React.useCallback(() => {
     if (mediaRecorder?.state !== 'inactive') {
       mediaRecorder?.stop();
       const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
       setMessage(chat, user, text, setValue, undefined, audioBlob, setShowAudioRecorder);
       setIsRecording(false);
     }
-  };
+
+    stopTimer();
+    stopProgress();
+  }, [chat, user, text, setValue, setShowAudioRecorder, stopTimer, stopProgress, audioChunks, mediaRecorder]);
 
   React.useEffect(() => {
     (async () => {
@@ -82,18 +118,24 @@ console.log(setTimer);
     })();
   }, [setShowAudioRecorder]);
 
+  React.useEffect(() => {
+    if (timer === 30) {
+      stop();
+    }
+  }, [timer, stop]);
+
   if (!mediaRecorder) {
     return (
       <Container>
         <InnerCenteredContainer>
-          <Loader />
+          <Loader size="1rem" />
         </InnerCenteredContainer>
       </Container>
     );
   }
   return (
     <Container>
-      <Progress>
+      <Progress width={width}>
         <div className="progress">
           <div className="invisible">
             <div className="progress-bar"></div>
@@ -117,14 +159,18 @@ console.log(setTimer);
               isPaused ? resume() : pause();
             }}
           >
-            <FontAwesomeIcon
-              icon={isPaused ? faGripLinesVertical : faPause}
-              size="2x"
-              color="purple"
-            />
+            <FontAwesomeIcon icon={isPaused ? faPlay : faPause} size="2x" color="purple" />
           </div>
         )}
-        <div onClick={() => setShowAudioRecorder(false)}>
+        <div
+          onClick={() => {
+            if (timerInterval) {
+              clearInterval(timerInterval);
+              setTimerInterval(null);
+            }
+            setShowAudioRecorder(false);
+          }}
+        >
           <FontAwesomeIcon icon={faTimes} size="2x" color="red" />
         </div>
       </Options>

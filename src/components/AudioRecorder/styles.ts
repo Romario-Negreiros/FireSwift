@@ -1,4 +1,13 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fillBar = keyframes`
+  from {
+    width: current;
+  }
+  to {
+    width: 100%;
+  }
+`;
 
 export const Container = styled.ul`
   background: ${({ theme: { bgs } }) => bgs.secondary};
@@ -11,10 +20,15 @@ export const Container = styled.ul`
   align-items: center;
   @media screen and (min-width: 1026px) {
     padding: 0.2rem !important;
+    overflow: hidden !important;
   }
 `;
 
-export const Progress = styled.li`
+interface ProgressProps {
+  width?: number;
+}
+
+export const Progress = styled.li<ProgressProps>`
   width: 60%;
   height: 50%;
   display: flex;
@@ -37,26 +51,18 @@ export const Progress = styled.li`
   }
   .progress-bar {
     height: 100%;
-    width: 15%;
+    width: ${({ width }) => width ? `${width}%` : '0%'};
     background: ${({ theme: { gradients } }) => gradients.primary};
-    animation: fillBar 30s infinite;
+
   }
   .animate-bar {
+    animation: ${fillBar} 30s linear;
   }
   .timer {
     color: ${({theme: { fonts }}) => fonts.primary};
     font-size: 1.5rem;
   }
 `;
-
-// const fillBar = keyframes`
-//   from {
-//     width: initial;
-//   }
-//   to {
-//     width: 100%;
-//   }
-// `;
 
 export const Options = styled.li`
   display: flex;

@@ -3,7 +3,7 @@ import React from 'react';
 import { Container, DropdownButton, List, User, Message } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faCheck, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 
 import DefaultPicture from '../../assets/default-picture.png';
 
@@ -34,10 +34,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
         <span>Chats list</span>
         <FontAwesomeIcon color="white" size="1x" icon={faArrowDown} />
       </DropdownButton>
-      <List isDropdownOpen={isDropdownOpen}>
-      <audio controls src="https://cdn.fbsbx.com/v/t59.3654-21/269952433_3097241207192994_6315987645806055682_n.mp4/audioclip-1640226835000-13782.mp4?_nc_cat=104&ccb=1-5&_nc_sid=7272a8&_nc_ohc=BBDGCoi-C3sAX8rahqL&_nc_ht=cdn.fbsbx.com&oh=03_AVI7xdZigyaDENMjwBLHnucrO6L22C_PMw5O7-K1vccNBQ&oe=61C5CEEC&dl=1">
-      
-      </audio>
+      <List isDropdownOpen={isDropdownOpen}>      
         {chats.map(chat => {
           const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUserID);
           if (chat.messages.length) {
@@ -64,13 +61,6 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                         {msg.user.id === receiver.id ? receiver.name + ' sent ' + displaySpanText(msg.media) : 'You sent ' + displaySpanText(msg.media)}
                       </span>
                     )}
-                    <div className="status">
-                      <FontAwesomeIcon
-                        color="purple"
-                        size="1x"
-                        icon={msg.viewed ? faCheckCircle : faCheck}
-                      />
-                    </div>
                   </Message>
                 </li>
               );
@@ -92,13 +82,6 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                       You sent {displaySpanText(msg.media)}
                     </span>
                     )}
-                    <div className="status">
-                      <FontAwesomeIcon
-                        color="purple"
-                        size="1x"
-                        icon={msg.viewed ? faCheckCircle : faCheck}
-                      />
-                    </div>
                   </Message>
                 </li>
               );

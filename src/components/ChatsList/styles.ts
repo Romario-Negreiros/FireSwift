@@ -91,13 +91,4 @@ export const Message = styled.div`
     opacity: 0.8;
     color: ${({ theme: { fonts } }) => fonts.secondary};
   }
-  .status {
-    border-radius: 50%;
-    border: 1px solid ${({ theme: { border } }) => border.primary};
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 `;
