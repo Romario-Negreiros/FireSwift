@@ -95,7 +95,6 @@ export interface Message {
   };
   text: string;
   media: Medias;
-  viewed: boolean;
   sentDate: {
     date: string;
     time: string;
