@@ -75,7 +75,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
         - [x] Comments
         - [x] Comments' reactions
         - [x] Comments' replies
-    - [x] Create chat system
+    - [ ] Create chat system
     - [ ] Create group system
     - [ ] Create story system
 - [x] Integrations
