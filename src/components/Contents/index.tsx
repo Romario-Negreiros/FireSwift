@@ -36,13 +36,17 @@ const Contents: React.FC<Props> = ({ item }) => {
             </li>
           ))}
         </ul>
-      ) : ''}
+      ) : (
+        ''
+      )}
       {item.media.videos && item.media.videos.length ? (
         <video controls>
           <source src={item.media.videos[0]} />
           Your browser doesn't support the video player!
         </video>
-      ) : ''}
+      ) : (
+        ''
+      )}
       {item.media.docs && item.media.docs.length ? (
         <ul className="mediaList">
           {item.media.docs.map((img, i) => (
@@ -54,13 +58,17 @@ const Contents: React.FC<Props> = ({ item }) => {
             </li>
           ))}
         </ul>
-      ) : ''}
+      ) : (
+        ''
+      )}
       {item.media.audios && item.media.audios.length ? (
         <audio controls>
           <source src={item.media.audios[0]} />
           Your browser doesn't support the audio player!
         </audio>
-      ): ''}
+      ) : (
+        ''
+      )}
     </>
   );
 };

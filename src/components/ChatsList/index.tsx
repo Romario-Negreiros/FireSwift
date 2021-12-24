@@ -34,7 +34,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
         <span>Chats list</span>
         <FontAwesomeIcon color="white" size="1x" icon={faArrowDown} />
       </DropdownButton>
-      <List isDropdownOpen={isDropdownOpen}>      
+      <List isDropdownOpen={isDropdownOpen}>
         {chats.map(chat => {
           const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUserID);
           if (chat.messages.length) {

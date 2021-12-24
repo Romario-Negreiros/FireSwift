@@ -56,7 +56,7 @@ export const Progress = styled.li<ProgressProps>`
 
   }
   .animate-bar {
-    animation: ${fillBar} 30s linear;
+    animation: ${fillBar} 60s linear;
   }
   .timer {
     color: ${({theme: { fonts }}) => fonts.primary};

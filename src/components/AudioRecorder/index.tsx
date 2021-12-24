@@ -53,16 +53,15 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
   const stopProgress = React.useCallback(() => {
     const progressBar = document.querySelector('.progress-bar') as HTMLDivElement;
     progressBar.classList.remove('animate-bar');
-    const width = 3.33 * timer;
+    const width = 1.67 * timer;
     setWidth(width);
   }, [timer]);
 
   const start = () => {
     if (mediaRecorder?.state === 'inactive') {
       mediaRecorder?.start(1000);
-
       mediaRecorder?.addEventListener('dataavailable', event => {
-        setAudioChunks([...audioChunks, event.data]);
+        setAudioChunks(blobs => [...blobs, event.data]);
       });
 
       setIsRecording(true);
@@ -71,7 +70,7 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
     startTimer();
     startProgress();
   };
-
+console.log(audioChunks);
   const pause = () => {
     if (mediaRecorder?.state === 'recording') {
       mediaRecorder?.pause();
@@ -92,17 +91,33 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
     startProgress();
   };
 
-  const stop = React.useCallback(() => {
-    if (mediaRecorder?.state !== 'inactive') {
-      mediaRecorder?.stop();
-      const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-      setMessage(chat, user, text, setValue, undefined, audioBlob, setShowAudioRecorder);
-      setIsRecording(false);
-    }
-
-    stopTimer();
-    stopProgress();
-  }, [chat, user, text, setValue, setShowAudioRecorder, stopTimer, stopProgress, audioChunks, mediaRecorder]);
+  const stop = React.useCallback(
+    (control?: string) => {
+      if (control === 'not_send') {
+        return;
+      } else {
+        if (mediaRecorder?.state !== 'inactive') {
+          mediaRecorder?.stop();
+          const audioBlob = new Blob(audioChunks);
+          setMessage(chat, user, text, setValue, undefined, audioBlob, setShowAudioRecorder);
+          setIsRecording(false);
+        }
+      }
+      stopTimer();
+      stopProgress();
+    },
+    [
+      chat,
+      user,
+      text,
+      setValue,
+      setShowAudioRecorder,
+      stopTimer,
+      stopProgress,
+      audioChunks,
+      mediaRecorder,
+    ]
+  );
 
   React.useEffect(() => {
     (async () => {
@@ -119,7 +134,7 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
   }, [setShowAudioRecorder]);
 
   React.useEffect(() => {
-    if (timer === 30) {
+    if (timer === 80) {
       stop();
     }
   }, [timer, stop]);
@@ -142,7 +157,7 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
           </div>
         </div>
         <div className="timer">
-          <span>0:{timer < 10 ? '0' + timer : timer}</span>
+          <span>{timer > 59 ? '1:00' : `0:${timer < 10 ? '0' + timer : timer}`}</span>
         </div>
       </Progress>
       <Options>
@@ -168,6 +183,7 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
               clearInterval(timerInterval);
               setTimerInterval(null);
             }
+            stop();
             setShowAudioRecorder(false);
           }}
         >
