@@ -60,6 +60,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Exception
     - [x] Chat components 
     - [x] Modals
+    - [x] Audio Recorder
     - [ ] More soon...
 - [ ] Layouts    
     - [x] Header
@@ -74,15 +75,14 @@ Non-connected users will only be able to see the posts, no person's profile or c
         - [x] Comments
         - [x] Comments' reactions
         - [x] Comments' replies
-    - [ ] Create chat system
+    - [x] Create chat system
     - [ ] Create group system
     - [ ] Create story system
-- [ ] Integrations
+- [x] Integrations
     - [x] Firestore
     - [x] Firebase auth
     - [x] Firebase storage
-    - [ ] Firebase real-time database
-    - [ ] Firebase messaging
+    - [x] Firebase real-time database
     - [x] Redux 
 
 ---
