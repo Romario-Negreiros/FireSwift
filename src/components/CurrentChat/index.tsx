@@ -4,9 +4,10 @@ import getInputItems from '../../utils/getters/getInputItems';
 import setMessage from '../../utils/setters/setMessage';
 import { toast } from 'react-toastify';
 
-import { Container, Message, Input, Media, FileOptions, CustomLabelBox } from './styles';
+import { Container, Message, Options, Input, Media, FileOptions, CustomLabelBox } from './styles';
 import { CenteredContainer } from '../../global/styles';
-import { Exception, Contents, AudioRecorder } from '..';
+import { Exception, Contents, AudioRecorder, Portal } from '..';
+import { DeleteMessage } from '../Portal/Modals';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,6 +18,8 @@ import {
   faVideo,
   faFile,
   faMicrophone,
+  faTrash,
+  faShare,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Chat, User } from '../../global/types';
@@ -32,6 +35,8 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   const [chat, setChat] = React.useState<Chat | null>(null);
   const [optionsVisible, setOptionsVisible] = React.useState(false);
   const [showAudioRecorder, setShowAudioRecorder] = React.useState(false);
+  const [deleteMessageID, setDeleteMessageID] = React.useState('');
+  const inputRef = React.useRef(null);
 
   const handleSendMessage = (chat: Chat) => {
     const files = getInputItems(['chatimg', 'chatvid', 'chatdoc']);
@@ -74,12 +79,21 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
             ) : (
               ''
             )}
+            <Options className="options" status={msg.user.id === currentUser.id ? 'owner' : ''}>
+              <li onClick={() => setDeleteMessageID(msg.id)}>
+                <FontAwesomeIcon icon={faTrash} color="red" />
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faShare} color="purple" />
+              </li>
+            </Options>
           </Message>
         ))}
       </ul>
       {!showAudioRecorder ? (
         <Input>
           <input
+            ref={inputRef}
             name="comment"
             placeholder="Aa"
             value={value}
@@ -159,8 +173,15 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
           </FileOptions>
         </Input>
       ) : (
-        <AudioRecorder setShowAudioRecorder={setShowAudioRecorder} chat={chat} user={currentUser} text={value} setValue={setValue} />
+        <AudioRecorder
+          setShowAudioRecorder={setShowAudioRecorder}
+          chat={chat}
+          user={currentUser}
+          text={value}
+          setValue={setValue}
+        />
       )}
+      {deleteMessageID && <Portal><DeleteMessage chat={chat} msgID={deleteMessageID} setDeleteMessageID={setDeleteMessageID} /></Portal>}
     </Container>
   );
 };

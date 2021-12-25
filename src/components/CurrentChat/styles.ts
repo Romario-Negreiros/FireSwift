@@ -12,7 +12,7 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  ul {
+  ul:not(.options) {
     display: flex;
     flex-direction: column;
     max-height: 75.5vh;
@@ -43,10 +43,27 @@ export const Message = styled(Reusable)<MessageProps>`
     word-break: break-all;
   }
   span {
-    margin-right: 2rem;
     font-size: 1.4rem;
     word-wrap: wrap;
-    color: ${({theme: { fonts }}) => fonts.primary};
+    color: ${({ theme: { fonts } }) => fonts.primary};
+  }
+`;
+
+export const Options = styled.ul<MessageProps>`
+  display: flex;
+  position: absolute;
+  top: 25%;
+  ${({ status }) => (status === 'owner' ? 'left: -4.5rem;' : 'right: -4.5rem;')};
+  align-items: center;
+  gap: 1rem;
+  svg {
+    font-size: 1.5rem;
+  }
+  li {
+    cursor: pointer;
+  }
+  li:hover svg {
+    transform: scale(1.1);
   }
 `;
 
