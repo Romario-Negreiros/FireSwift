@@ -71,7 +71,7 @@ const Chats: React.FC = () => {
   }
   return (
     <Grid>
-      <ChatsList chats={chats} setCurrentChat={setCurrentChat} currentUserID={user?.id as string} />
+      <ChatsList chats={chats} setCurrentChat={setCurrentChat} currentUser={user as User} />
       <CurrentChat currentChat={currentChat} chats={chats} currentUser={user as User} />
     </Grid>
   );
