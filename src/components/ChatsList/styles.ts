@@ -43,6 +43,7 @@ export const List = styled.ul<ListProps>`
     visibility ${({ isDropdownOpen }) => (isDropdownOpen ? '.1s' : '.7s')} ease-in-out;
   border-radius: 5px;
   li {
+    position: relative;
     cursor: pointer;
     width: 100%;
     padding: 0.5rem;
@@ -59,6 +60,14 @@ export const List = styled.ul<ListProps>`
     visibility: visible;
     max-height: 82.3vh;
     max-width: 400px;
+  }
+  .delete {
+    position: absolute;
+    top: 30%;
+    right: 1rem;
+    :hover svg {
+      transform: scale(1.1);
+    }
   }
 `;
 

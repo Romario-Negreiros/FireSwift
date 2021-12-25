@@ -1,31 +1,35 @@
 import React from 'react';
 
+import { useAppDispatch } from '../../app/hooks';
+import deleteChat from '../../utils/general/deleteChat';
+
 import { Container, DropdownButton, List, User, Message } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import DefaultPicture from '../../assets/default-picture.png';
 
-import { Chat, ChatUser, Medias } from '../../global/types';
+import { Chat, User as UserType, ChatUser, Medias } from '../../global/types';
 
 interface Props {
   chats: Chat[];
   setCurrentChat: (currentChat: string) => void;
-  currentUserID: string;
+  currentUser: UserType;
 }
 
-const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) => {
+const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const displaySpanText = (media: Medias): string => {
-    if(media.images) {
-      return 'an image.'
+    if (media.images) {
+      return 'an image.';
     } else if (media.videos) {
-      return 'a video.'
-    } else if(media.docs) {
-      return 'a file.'
-    } else return 'a voice message.'
+      return 'a video.';
+    } else if (media.docs) {
+      return 'a file.';
+    } else return 'a voice message.';
   };
 
   return (
@@ -36,10 +40,10 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
       </DropdownButton>
       <List isDropdownOpen={isDropdownOpen}>
         {chats.map(chat => {
-          const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUserID);
+          const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUser.id);
           if (chat.messages.length) {
             const l = chat.messages.length - 1;
-            const msg = chat.messages[l]
+            const msg = chat.messages[l];
             if (receiver) {
               return (
                 <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
@@ -50,6 +54,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                     />
                     <span>{receiver.name}</span>
                   </User>
+                  <div className="delete" onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}>
+                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                  </div>
                   <Message>
                     {!msg.media ? (
                       <span>
@@ -58,7 +65,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                       </span>
                     ) : (
                       <span>
-                        {msg.user.id === receiver.id ? receiver.name + ' sent ' + displaySpanText(msg.media) : 'You sent ' + displaySpanText(msg.media)}
+                        {msg.user.id === receiver.id
+                          ? receiver.name + ' sent ' + displaySpanText(msg.media)
+                          : 'You sent ' + displaySpanText(msg.media)}
                       </span>
                     )}
                   </Message>
@@ -72,15 +81,14 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                     <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                     <span>{user.name}</span>
                   </User>
+                  <div className="delete" onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}>
+                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                  </div>
                   <Message>
                     {!msg.media ? (
-                      <span>
-                        You: {msg.text}
-                      </span>
+                      <span>You: {msg.text}</span>
                     ) : (
-                      <span>
-                      You sent {displaySpanText(msg.media)}
-                    </span>
+                      <span>You sent {displaySpanText(msg.media)}</span>
                     )}
                   </Message>
                 </li>
@@ -97,6 +105,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                     />
                     <span>{receiver.name}</span>
                   </User>
+                  <div className="delete" onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}>
+                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                  </div>
                 </li>
               );
             } else {
@@ -107,6 +118,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUserID }) =>
                     <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                     <span>{user.name}</span>
                   </User>
+                  <div className="delete" onClick={() => deleteChat(chat, currentUser, undefined, dispatch)}>
+                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                  </div>
                 </li>
               );
             }
