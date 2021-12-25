@@ -65,7 +65,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
 - [ ] Layouts    
     - [x] Header
     - [ ] Footer
-- [] User features
+- [ ] User features
     - [x] Login
     - [x] Account creation
     - [x] Add/remove friends mechanism
