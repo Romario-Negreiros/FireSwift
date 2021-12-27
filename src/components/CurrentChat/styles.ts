@@ -49,6 +49,14 @@ export const Message = styled(Reusable)<MessageProps>`
   }
 `;
 
+export const Reply = styled.div`
+  background: unset;
+  color: ${({ theme: { fonts } }) => fonts.primary};
+  backdrop-filter: grayscale(0.5);
+  width: 100%;
+  padding: 0.5rem;
+`;
+
 export const Options = styled.ul<MessageProps>`
   display: flex;
   position: absolute;
@@ -141,3 +149,41 @@ export const FileOptions = styled(Reusable4)<FileOptionsProps>`
 `;
 
 export const CustomLabelBox = styled(Reusable5)``;
+
+export const ResponseView = styled.div`
+  padding: 1rem;
+  position: absolute;
+  left: 0;
+  top: -6rem;
+  background: ${({ theme: { bgs } }) => bgs.secondary};
+  border: 1px solid ${({ theme: { border } }) => border.secondary};
+  color: ${({ theme: { fonts } }) => fonts.secondary};
+  border-bottom: none;
+  border-left: none;
+  border-top-left-radius: 0.6rem;
+  border-top-right-radius: 5rem;
+  width: 100% !important;
+  height: 6rem;
+  :hover {
+    cursor: default !important;
+    transform: none !important;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  p {
+    font-size: 1.4rem;
+  }
+  div.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    cursor: default;
+    transform: none;
+  }
+  .close {
+    width: fit-content;
+    margin-right: 3rem;
+  }
+`;

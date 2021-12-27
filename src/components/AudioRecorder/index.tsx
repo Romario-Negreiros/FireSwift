@@ -3,14 +3,14 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import setMessage from '../../utils/setters/setMessage';
 
-import { Container, Progress, Options } from './styles';
+import { Container, Progress, Options, ResponseView } from './styles';
 import { InnerCenteredContainer } from '../../global/styles';
 import { Loader } from '..';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons';
 
-import { Chat, User } from '../../global/types';
+import { Chat, Message, User } from '../../global/types';
 
 interface Props {
   setShowAudioRecorder: (showAudioRecorder: boolean) => void;
@@ -18,9 +18,19 @@ interface Props {
   user: User;
   text: string;
   setValue: (value: string) => void;
+  responseMsg: Message | null;
+  setResponseMsg: (responseMsg: Message | null) => void;
 }
 
-const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text, setValue }) => {
+const AudioRecorder: React.FC<Props> = ({
+  setShowAudioRecorder,
+  chat,
+  user,
+  text,
+  setValue,
+  responseMsg,
+  setResponseMsg,
+}) => {
   const [timer, setTimer] = React.useState(0);
   const [isRecording, setIsRecording] = React.useState(false);
   const [isPaused, setIsPaused] = React.useState(false);
@@ -70,7 +80,7 @@ const AudioRecorder: React.FC<Props> = ({ setShowAudioRecorder, chat, user, text
     startTimer();
     startProgress();
   };
-console.log(audioChunks);
+
   const pause = () => {
     if (mediaRecorder?.state === 'recording') {
       mediaRecorder?.pause();
@@ -99,7 +109,19 @@ console.log(audioChunks);
         if (mediaRecorder?.state !== 'inactive') {
           mediaRecorder?.stop();
           const audioBlob = new Blob(audioChunks);
-          setMessage(chat, user, text, setValue, undefined, audioBlob, setShowAudioRecorder);
+          responseMsg
+            ? setMessage(
+                chat,
+                user,
+                text,
+                setValue,
+                undefined,
+                audioBlob,
+                setShowAudioRecorder,
+                responseMsg,
+                setResponseMsg
+              )
+            : setMessage(chat, user, text, setValue, undefined, audioBlob, setShowAudioRecorder);
           setIsRecording(false);
         }
       }
@@ -116,6 +138,8 @@ console.log(audioChunks);
       stopProgress,
       audioChunks,
       mediaRecorder,
+      responseMsg,
+      setResponseMsg,
     ]
   );
 
@@ -150,6 +174,31 @@ console.log(audioChunks);
   }
   return (
     <Container>
+      {responseMsg && (
+        <ResponseView>
+          <div className="wrapper">
+            <h2>Responding to {responseMsg.id === user.id ? 'yourself' : responseMsg.user.name}</h2>
+            <div className="close" onClick={() => setResponseMsg(null)}>
+              <FontAwesomeIcon icon={faTimes} size="2x" color="purple" />
+            </div>
+          </div>
+          {responseMsg && (
+            <p>
+              {responseMsg.text.length > 50
+                ? responseMsg.text.substring(0, 25) + '...'
+                : responseMsg.text}
+            </p>
+          )}
+          {responseMsg.media && (
+            <p>
+              {(responseMsg.media.images && 'Image') ||
+                (responseMsg.media.videos && 'Video') ||
+                (responseMsg.media.docs && 'File') ||
+                (responseMsg.media.audios && 'Audio')}
+            </p>
+          )}
+        </ResponseView>
+      )}
       <Progress width={width}>
         <div className="progress">
           <div className="invisible">
