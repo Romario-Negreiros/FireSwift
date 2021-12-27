@@ -4,20 +4,11 @@ import getInputItems from '../../utils/getters/getInputItems';
 import setMessage from '../../utils/setters/setMessage';
 import { toast } from 'react-toastify';
 
-import {
-  Container,
-  Message,
-  Options,
-  Input,
-  Media,
-  FileOptions,
-  CustomLabelBox,
-  ResponseView,
-  Reply,
-} from './styles';
+import { Container, Input, FileOptions, CustomLabelBox, ResponseView } from './styles';
 import { CenteredContainer } from '../../global/styles';
-import { Exception, Contents, AudioRecorder, Portal } from '..';
+import { Exception, AudioRecorder, Portal } from '..';
 import { DeleteMessage } from '../Portal/Modals';
+import { Message } from './break-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -28,12 +19,10 @@ import {
   faVideo,
   faFile,
   faMicrophone,
-  faTrash,
-  faShare,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Chat, Message as MsgType, User } from '../../global/types';
+import { Chat, MsgReply, User } from '../../global/types';
 
 interface Props {
   currentChat: string;
@@ -47,7 +36,7 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   const [optionsVisible, setOptionsVisible] = React.useState(false);
   const [showAudioRecorder, setShowAudioRecorder] = React.useState(false);
   const [deleteMessageID, setDeleteMessageID] = React.useState('');
-  const [responseMsg, setResponseMsg] = React.useState<MsgType | null>(null);
+  const [responseMsg, setResponseMsg] = React.useState<MsgReply | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleSendMessage = (chat: Chat) => {
@@ -102,67 +91,15 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
     <Container>
       <ul>
         {chat.messages.map(msg => (
-          <Message key={msg.id} status={msg.user.id === currentUser.id ? 'owner' : ''}>
-            {msg.isReplyingTo && (
-              <Reply>
-                <h2>
-                  {msg.user.id === currentUser.id
-                    ? `You responded to ${
-                        msg.user.id === msg.isReplyingTo.user.id
-                          ? 'yourself'
-                          : msg.isReplyingTo.user.name
-                      }`
-                    : `${msg.user.name} responded to ${
-                        msg.user.id !== msg.isReplyingTo.user.id ? 'you' : msg.isReplyingTo.user.name
-                      }`}
-                </h2>
-                {msg.isReplyingTo && (
-                  <p>
-                    {msg.isReplyingTo.text.length > 50
-                      ? msg.isReplyingTo.text.substring(0, 25) + '...'
-                      : msg.isReplyingTo.text}
-                  </p>
-                )}
-                {msg.isReplyingTo.media && (
-                  <p>
-                    {(msg.isReplyingTo.media.images && 'Image') ||
-                      (msg.isReplyingTo.media.videos && 'Video') ||
-                      (msg.isReplyingTo.media.docs && 'File') ||
-                      (msg.isReplyingTo.media.audios && 'Audio')}
-                  </p>
-                )}
-              </Reply>
-            )}
-            {msg.media && (
-              <Media>
-                <Contents item={msg} />
-              </Media>
-            )}
-            {msg.text ? (
-              <div>
-                <span>{msg.text}</span>
-              </div>
-            ) : (
-              ''
-            )}
-            <Options className="options" status={msg.user.id === currentUser.id ? 'owner' : ''}>
-              <li onClick={() => setDeleteMessageID(msg.id)}>
-                <FontAwesomeIcon icon={faTrash} color="red" />
-              </li>
-              <li
-                onClick={() => {
-                  if (responseMsg && responseMsg.id === msg.id) {
-                    setResponseMsg(null);
-                  } else {
-                    setResponseMsg(msg);
-                    inputRef.current?.focus();
-                  }
-                }}
-              >
-                <FontAwesomeIcon icon={faShare} color="purple" />
-              </li>
-            </Options>
-          </Message>
+          <Message
+            key={msg.id}
+            msg={msg}
+            currentUser={currentUser}
+            inputRef={inputRef}
+            responseMsg={responseMsg}
+            setResponseMsg={setResponseMsg}
+            setDeleteMessageID={setDeleteMessageID}
+          />
         ))}
       </ul>
       {!showAudioRecorder ? (

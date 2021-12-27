@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
-import { Message as Reusable } from '../ChatsList/styles';
-import { Input as Reusable2 } from '../../global/styles';
-import { Media as Reusable3 } from '../Post/styles';
-import { FileOptions as Reusable4, CustomLabelBox as Reusable5 } from '../Create/Post/styles';
+import { Input as Reusable1 } from '../../global/styles';
+import { FileOptions as Reusable2, CustomLabelBox as Reusable3 } from '../Create/Post/styles';
 
 export const Container = styled.section`
   width: 100%;
@@ -22,60 +20,7 @@ export const Container = styled.section`
   }
 `;
 
-interface MessageProps {
-  status: string;
-}
-
-export const Message = styled(Reusable)<MessageProps>`
-  align-self: ${({ status }) => (status === 'owner' ? 'flex-end' : 'flex-start')};
-  width: fit-content;
-  max-width: 80%;
-  padding: 0.6rem;
-  position: relative;
-  background: ${({ status }) =>
-    status === 'owner'
-      ? 'linear-gradient(to right, #8e2de2, #4a00e0)'
-      : 'linear-gradient(to right, #ed213a, #93291e)'};
-  border-radius: 5px;
-  display: flex;
-  flex-flow: row wrap;
-  div {
-    word-break: break-all;
-  }
-  span {
-    font-size: 1.4rem;
-    word-wrap: wrap;
-    color: ${({ theme: { fonts } }) => fonts.primary};
-  }
-`;
-
-export const Reply = styled.div`
-  background: unset;
-  color: ${({ theme: { fonts } }) => fonts.primary};
-  backdrop-filter: grayscale(0.5);
-  width: 100%;
-  padding: 0.5rem;
-`;
-
-export const Options = styled.ul<MessageProps>`
-  display: flex;
-  position: absolute;
-  top: 25%;
-  ${({ status }) => (status === 'owner' ? 'left: -4.5rem;' : 'right: -4.5rem;')};
-  align-items: center;
-  gap: 1rem;
-  svg {
-    font-size: 1.5rem;
-  }
-  li {
-    cursor: pointer;
-  }
-  li:hover svg {
-    transform: scale(1.1);
-  }
-`;
-
-export const Input = styled(Reusable2)`
+export const Input = styled(Reusable1)`
   position: relative;
   background: ${({ theme: { bgs } }) => bgs.secondary};
   div {
@@ -83,32 +28,11 @@ export const Input = styled(Reusable2)`
   }
 `;
 
-export const Media = styled(Reusable3)`
-  width: 100% !important;
-  ul.mediaList {
-    overflow: unset;
-    grid-template-columns: unset;
-    img {
-      max-width: 100%;
-      width: 500px;
-      height: fit-content;
-      object-fit: contain;
-    }
-  }
-  video {
-    height: fit-content;
-  }
-  audio {
-    max-width: 100%;
-    height: 3rem;
-  }
-`;
-
 interface FileOptionsProps {
   optionsVisible: boolean;
 }
 
-export const FileOptions = styled(Reusable4)<FileOptionsProps>`
+export const FileOptions = styled(Reusable2)<FileOptionsProps>`
   position: absolute;
   z-index: 35;
   background: ${({ theme: { bgs } }) => bgs.secondary};
@@ -148,7 +72,7 @@ export const FileOptions = styled(Reusable4)<FileOptionsProps>`
   }
 `;
 
-export const CustomLabelBox = styled(Reusable5)``;
+export const CustomLabelBox = styled(Reusable3)``;
 
 export const ResponseView = styled.div`
   padding: 1rem;

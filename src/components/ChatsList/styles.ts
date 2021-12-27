@@ -63,7 +63,7 @@ export const List = styled.ul<ListProps>`
   }
   .delete {
     position: absolute;
-    top: 35%;
+    bottom: 1rem;
     right: 1rem;
     :hover svg {
       transform: scale(1.1);
