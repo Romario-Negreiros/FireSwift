@@ -3,7 +3,7 @@ import { realtimedb, storage } from '../../lib';
 import getFormattedDate from '../getters/getFormattedDate';
 import { toast } from 'react-toastify';
 
-import { Chat, Message, User } from '../../global/types';
+import { Chat, Message, MsgReply, User } from '../../global/types';
 
 interface Files {
   images: any[];
@@ -15,7 +15,7 @@ const clearInputs = (IDs: string[]) => {
   IDs.forEach(id => {
     const input = document.querySelector(`#${id}`) as HTMLInputElement;
     input.value = '';
-  })
+  });
 };
 
 const setMessage = async (
@@ -26,6 +26,8 @@ const setMessage = async (
   files?: Files,
   audio?: Blob,
   setShowAudioRecorder?: (showAudioRecorder: boolean) => void,
+  responseMsg?: MsgReply,
+  setResponseMsg?: (responseMsg: MsgReply | null) => void
 ) => {
   try {
     const message: Message = {
@@ -44,11 +46,14 @@ const setMessage = async (
       text,
       sentDate: getFormattedDate(),
     };
-    if(audio) {
+    if (responseMsg) {
+      message['isReplyingTo'] = responseMsg;
+    }
+    if (audio) {
       const storageRef = storage.ref(storage.storage, `chats/${chat.id}/${message.id}/audios/0`);
       toast('Sending audio...');
       await storage.uploadBytesResumable(storageRef, audio);
-      toast('Audio sent...')
+      toast('Audio sent...');
       const audioURL = await storage.getDownloadURL(storageRef);
       message.media.audios?.push(audioURL);
     }
@@ -102,7 +107,8 @@ const setMessage = async (
     updates[`chats/${chat.id}/messages`] = [...chat.messages, message];
     await realtimedb.update(realtimedb.dbRef(realtimedb.db), updates);
     setValue('');
-    if(setShowAudioRecorder) setShowAudioRecorder(false);
+    if (setShowAudioRecorder) setShowAudioRecorder(false);
+    if (setResponseMsg) setResponseMsg(null);
   } catch (err) {
     if (err instanceof Error) toast.error('Unable to send the message ' + err.message);
   }
