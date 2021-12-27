@@ -86,6 +86,21 @@ export interface Result {
   type: string;
 }
 
+export interface MsgReply {
+  id: string;
+  user: {
+    id: string;
+    name: string;
+    picture: string;
+  };
+  text: string;
+  media: Medias;
+  sentDate: {
+    date: string;
+    time: string;
+  };
+}
+
 export interface Message {
   id: string;
   user: {
@@ -99,6 +114,7 @@ export interface Message {
     date: string;
     time: string;
   };
+  isReplyingTo?: MsgReply; 
 }
 
 export interface ChatUser {
