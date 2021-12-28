@@ -1,15 +1,13 @@
 import React from 'react';
 
-import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { useAppSelector } from '../../app/hooks';
 import { useHistory } from 'react-router-dom';
-import { realtimedb } from '../../lib';
 
-import { ChatsList, CurrentChat, Exception, Loader } from '../../components';
+import { ChatsList, CurrentChat, Exception } from '../../components';
 import { Grid } from './styles';
 import { CenteredContainer } from '../../global/styles';
 
-import { Chat, User } from '../../global/types';
+import { User } from '../../global/types';
 
 interface State {
   chatID: string;

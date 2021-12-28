@@ -48,7 +48,7 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
       });
       setNewMessages(newMessages);
     }
-  });
+  }, [chats, user]);
 
   return (
     <Container>
