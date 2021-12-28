@@ -10,7 +10,7 @@ import { Loader } from '..';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faPlay, faStop, faPause } from '@fortawesome/free-solid-svg-icons';
 
-import { Chat, Message, User } from '../../global/types';
+import { Chat, MsgReply, User } from '../../global/types';
 
 interface Props {
   setShowAudioRecorder: (showAudioRecorder: boolean) => void;
@@ -18,8 +18,8 @@ interface Props {
   user: User;
   text: string;
   setValue: (value: string) => void;
-  responseMsg: Message | null;
-  setResponseMsg: (responseMsg: Message | null) => void;
+  responseMsg: MsgReply | null;
+  setResponseMsg: (responseMsg: MsgReply | null) => void;
 }
 
 const AudioRecorder: React.FC<Props> = ({
@@ -119,7 +119,7 @@ const AudioRecorder: React.FC<Props> = ({
                 audioBlob,
                 setShowAudioRecorder,
                 responseMsg,
-                setResponseMsg
+                setResponseMsg,
               )
             : setMessage(chat, user, text, setValue, undefined, audioBlob, setShowAudioRecorder);
           setIsRecording(false);

@@ -69,6 +69,20 @@ export const List = styled.ul<ListProps>`
       transform: scale(1.1);
     }
   }
+  .status {
+    position: absolute;
+    bottom: 1rem;
+    right: 4rem;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      color: ${({ theme: { fonts } }) => fonts.secondary};
+      font-size: 1.5rem;
+    }
+  }
 `;
 
 export const User = styled.div`

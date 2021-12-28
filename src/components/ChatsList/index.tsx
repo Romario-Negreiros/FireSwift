@@ -6,7 +6,7 @@ import deleteChat from '../../utils/general/deleteChat';
 import { Container, DropdownButton, List, User, Message } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown, faCheckCircle, faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 import DefaultPicture from '../../assets/default-picture.png';
 
@@ -40,7 +40,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
       </DropdownButton>
       <List isDropdownOpen={isDropdownOpen}>
         {chats.map(chat => {
-          const receiver: ChatUser | undefined = chat.users.find(user => user.id !== currentUser.id);
+          const receiver: ChatUser | undefined = chat.users.find(
+            user => user.id !== currentUser.id
+          );
           if (chat.messages.length) {
             const l = chat.messages.length - 1;
             const msg = chat.messages[l];
@@ -54,14 +56,17 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     />
                     <span>{receiver.name}</span>
                   </User>
-                  <div className="delete" onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}>
+                  <div
+                    className="delete"
+                    onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}
+                  >
                     <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                   </div>
                   <Message>
                     {!msg.media ? (
                       <span>
                         {msg.user.id === receiver.id ? '' : 'You: '}
-                        {msg.text}
+                        {msg.text.length > 20 ? msg.text.substring(0, 15) + '...' : msg.text}
                       </span>
                     ) : (
                       <span>
@@ -71,6 +76,11 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                       </span>
                     )}
                   </Message>
+                  {msg.user.id === currentUser.id && (
+                    <div className="status">
+                      <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
+                    </div>
+                  )}
                 </li>
               );
             } else {
@@ -81,16 +91,24 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                     <span>{user.name}</span>
                   </User>
-                  <div className="delete" onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}>
+                  <div
+                    className="delete"
+                    onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}
+                  >
                     <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                   </div>
                   <Message>
                     {!msg.media ? (
-                      <span>You: {msg.text}</span>
+                      <span>
+                        You: {msg.text.length > 20 ? msg.text.substring(0, 15) + '...' : msg.text}
+                      </span>
                     ) : (
                       <span>You sent {displaySpanText(msg.media)}</span>
                     )}
                   </Message>
+                  <div className="status">
+                    <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
+                  </div>
                 </li>
               );
             }
@@ -105,7 +123,10 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     />
                     <span>{receiver.name}</span>
                   </User>
-                  <div className="delete" onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}>
+                  <div
+                    className="delete"
+                    onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}
+                  >
                     <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                   </div>
                 </li>
@@ -118,7 +139,10 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                     <span>{user.name}</span>
                   </User>
-                  <div className="delete" onClick={() => deleteChat(chat, currentUser, undefined, dispatch)}>
+                  <div
+                    className="delete"
+                    onClick={() => deleteChat(chat, currentUser, undefined, dispatch)}
+                  >
                     <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                   </div>
                 </li>

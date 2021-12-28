@@ -59,7 +59,7 @@ export const Progress = styled.li<ProgressProps>`
     animation: ${fillBar} 60s linear;
   }
   .timer {
-    color: ${({ theme: { fonts } }) => fonts.primary};
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.5rem;
   }
 `;

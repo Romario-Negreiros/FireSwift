@@ -1,13 +1,19 @@
 import React from 'react';
 
+import handleError from '../../../../utils/general/handleError';
+import { realtimedb } from '../../../../lib';
+
 import { Container, Reply, Media, Options } from './styles';
 import { Contents } from '../../../';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faShare } from '@fortawesome/free-solid-svg-icons';
-import { Message as MsgType, MsgReply, User } from '../../../../global/types';
+import { faTrash, faShare, faCheckCircle, faCheck } from '@fortawesome/free-solid-svg-icons';
+
+import { Chat, Message as MsgType, MsgReply, User } from '../../../../global/types';
 
 interface Props {
+  chat: Chat;
+  index: number;
   msg: MsgType;
   currentUser: User;
   inputRef: React.RefObject<HTMLInputElement>;
@@ -17,6 +23,8 @@ interface Props {
 }
 
 const Message: React.FC<Props> = ({
+  chat,
+  index,
   msg,
   currentUser,
   inputRef,
@@ -24,6 +32,24 @@ const Message: React.FC<Props> = ({
   setResponseMsg,
   setDeleteMessageID,
 }) => {
+  React.useEffect(() => {
+    if (!msg.wasViewed && msg.user.id !== currentUser.id) {
+      (async () => {
+        try {
+          const msgCopy: MsgType = JSON.parse(JSON.stringify(msg));
+          msgCopy.wasViewed = true;
+          const chatCopy: Chat = JSON.parse(JSON.stringify(chat));
+          chatCopy.messages[index] = msgCopy;
+          const updates: any = {};
+          updates[`chats/${chat.id}/messages`] = chatCopy.messages;
+          await realtimedb.update(realtimedb.dbRef(realtimedb.db), updates);
+        } catch (err) {
+          handleError(err, 'setting message as viewed.');
+        }
+      })();
+    }
+  }, [chat, currentUser.id, msg, index]);
+
   return (
     <Container key={msg.id} status={msg.user.id === currentUser.id ? 'owner' : ''}>
       {msg.isReplyingTo && (
@@ -39,8 +65,8 @@ const Message: React.FC<Props> = ({
           </h2>
           {msg.isReplyingTo && (
             <p>
-              {msg.isReplyingTo.text.length > 50
-                ? msg.isReplyingTo.text.substring(0, 25) + '...'
+              {msg.isReplyingTo.text.length > 20
+                ? msg.isReplyingTo.text.substring(0, 15) + '...'
                 : msg.isReplyingTo.text}
             </p>
           )}
@@ -62,6 +88,16 @@ const Message: React.FC<Props> = ({
       {msg.text ? (
         <div>
           <span>{msg.text}</span>
+        </div>
+      ) : (
+        ''
+      )}
+      {chat.messages.length - 1 === index && msg.user.id === currentUser.id ? (
+        <div className="status">
+          <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
+          <div className="ballon">
+            <span>{msg.wasViewed  ? 'Visualized' : 'Sent'}</span>
+          </div>
         </div>
       ) : (
         ''

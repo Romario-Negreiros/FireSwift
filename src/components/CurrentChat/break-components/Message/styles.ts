@@ -20,6 +20,7 @@ export const Container = styled(Reusable)<ContainerProps>`
   border-radius: 5px;
   display: flex;
   flex-flow: row wrap;
+  margin-bottom: 3rem;
   div {
     word-break: break-all;
   }
@@ -27,6 +28,43 @@ export const Container = styled(Reusable)<ContainerProps>`
     font-size: 1.4rem;
     word-wrap: wrap;
     color: ${({ theme: { fonts } }) => fonts.primary};
+  }
+  .status {
+    position: absolute;
+    bottom: 0.1rem;
+    ${({ status }) => (status === 'owner' ? 'left: -2.4rem' : 'right: -2.4rem')};
+    width: 15px;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      color: ${({ theme: { fonts } }) => fonts.secondary};
+      font-size: 1.5rem;
+    }
+    div.ballon {
+      width: fit-content;
+      background: transparent;
+      transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+      border-radius: 5px;
+      padding: .5rem;
+      font-size: 1.2rem;
+      position: absolute;
+      word-break: normal;
+      display: none;
+      span {
+        color: transparent;
+      }
+      @media screen and (min-width: 420px) {
+        display: block;
+        ${({ status }) => (status === 'owner' ? 'right: 2rem' : 'left: 2rem')}; 
+        top: -1rem;
+      }
+    }
+    :hover .ballon, :hover .ballon span {
+      background: #333445;
+      color: ${({ theme: { fonts } }) => fonts.primary};
+    }
   }
 `;
 
@@ -41,8 +79,8 @@ export const Reply = styled.div`
 export const Options = styled.ul<ContainerProps>`
   display: flex;
   position: absolute;
-  bottom: 0;
-  ${({ status }) => (status === 'owner' ? 'left: -4.5rem;' : 'right: -4.5rem;')};
+  bottom: -2rem;
+  ${({ status }) => (status === 'owner' ? 'right: 0rem;' : 'left: 0rem;')};
   align-items: center;
   gap: 1rem;
   svg {

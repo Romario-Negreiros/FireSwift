@@ -90,9 +90,11 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   return (
     <Container>
       <ul>
-        {chat.messages.map(msg => (
+        {chat.messages.map((msg, i) => (
           <Message
             key={msg.id}
+            chat={chat}
+            index={i}
             msg={msg}
             currentUser={currentUser}
             inputRef={inputRef}
