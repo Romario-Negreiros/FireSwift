@@ -46,6 +46,7 @@ const setMessage = async (
       },
       text,
       sentDate: getFormattedDate(),
+      wasViewed: false,
     };
     if (responseMsg) {
       message['isReplyingTo'] = responseMsg;
