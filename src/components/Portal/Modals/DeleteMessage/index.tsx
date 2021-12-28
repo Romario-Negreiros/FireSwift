@@ -7,6 +7,7 @@ import { ModalBG } from '../../../../global/styles';
 import { Container, Message, Confirm, Cancel } from './styles';
 
 import { Chat } from '../../../../global/types';
+import handleError from '../../../../utils/general/handleError';
 
 interface Props {
   chat: Chat;
@@ -41,10 +42,7 @@ const DeleteMessage: React.FC<Props> = ({ chat, msgID, setDeleteMessageID }) => 
       toast('Message succesfully deleted!');
       setDeleteMessageID('');
     } catch (err) {
-      if (err instanceof Error) {
-        toast.error('Something went wrong! Please try again');
-        console.error('Deleting message went wrong => ' + err.message);
-      }
+      handleError(err, 'deleting message from chat.');
     }
   };
 

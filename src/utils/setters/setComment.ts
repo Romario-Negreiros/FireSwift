@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { firestoredb } from '../../lib';
 import getFormattedDate from '../getters/getFormattedDate';
-import { toast } from 'react-toastify';
-
+import handleError from '../general/handleError';
 import { Post, User } from '../../global/types';
 
 const setComment = async (
@@ -40,7 +39,7 @@ const setComment = async (
     })
     setPosts(postsCopy);
   } catch (err) {
-    if (err instanceof Error) toast.error('Something went wrong!' + err.message);
+    handleError(err, 'sending comment.');
   }
 };
 

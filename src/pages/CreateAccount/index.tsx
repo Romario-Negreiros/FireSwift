@@ -71,7 +71,7 @@ const CreateAccount: React.FC = () => {
           dispatch(userLogged({ id: uid, ...user }));
           toast('User succesfully created!');
           history.push('/home');
-        } else throw new Error("This email doesn't exist!");
+        } else setError("This email doesn't exist!");
       } catch (err) {
         handleFirebaseError(err, setError);
       } finally {

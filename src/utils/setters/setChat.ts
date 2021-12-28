@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { firestoredb, realtimedb } from '../../lib';
 import getFormattedDate from '../getters/getFormattedDate';
-import { toast } from 'react-toastify';
-
-import { Chat, User } from '../../global/types';
+import handleError from '../general/handleError';
 import { AppDispatch } from '../../app/store';
 import { updateUser } from '../../features/user/userSlice';
+import { Chat, User } from '../../global/types';
 
 interface ShortUser {
   id: string;
@@ -33,7 +32,7 @@ const setChat = async (
           });
         }
       });
-      return
+      return;
     }
     const chatID = uuidv4();
     const users = [
@@ -71,7 +70,7 @@ const setChat = async (
       state: { chatID: chat.id },
     });
   } catch (err) {
-    if (err instanceof Error) toast.error("We couldn't create the chat! " + err.message);
+    handleError(err, 'creating a new chat.');
   }
 };
 

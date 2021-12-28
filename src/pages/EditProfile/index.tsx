@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateUser } from '../../features/user/userSlice';
 import { firestoredb } from '../../lib';
 import getUserListData from '../../utils/getters/getUserListData';
-
+import handleError from '../../utils/general/handleError';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { toast } from 'react-toastify';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -103,7 +103,7 @@ const EditProfile: React.FC = () => {
           data['hobbies'] = hobbies;
           setData(data as Data);
         } catch (err) {
-          if (err instanceof Error) setError(err.message);
+          handleError(err, 'fetching countries for list.', setError);
         } finally {
           setValue('country', currentUser.country);
         }

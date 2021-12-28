@@ -1,5 +1,5 @@
 import { firestoredb } from '../../lib';
-import { toast } from 'react-toastify';
+import handleError from '../general/handleError';
 
 import { Post } from '../../global/types';
 
@@ -21,16 +21,18 @@ const setReplyReaction = async (
     const replyIndex = postsCopy[postIndex].comments[commentIndex].replies.findIndex(
       reply => reply.id === replyID
     );
-    const reactionIndex = postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions.findIndex(
-      reaction => reaction.id === userID
-    );
+    const reactionIndex = postsCopy[postIndex].comments[commentIndex].replies[
+      replyIndex
+    ].reactions.findIndex(reaction => reaction.id === userID);
     if (reactionIndex === -1) {
       postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions.push({
         id: userID,
         reaction: newReaction,
       });
     } else {
-      postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions[reactionIndex].reaction = newReaction;
+      postsCopy[postIndex].comments[commentIndex].replies[replyIndex].reactions[
+        reactionIndex
+      ].reaction = newReaction;
     }
     const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
     await firestoredb.updateDoc(postRef, {
@@ -38,7 +40,7 @@ const setReplyReaction = async (
     });
     setPosts(postsCopy);
   } catch (err) {
-    if (err instanceof Error) toast.error('Something unnexpected happened!');
+    handleError(err, "setting reaction in a post's reply");
   }
 };
 

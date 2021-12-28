@@ -4,6 +4,7 @@ import getFormattedDate from '../getters/getFormattedDate';
 import { toast } from 'react-toastify';
 
 import { Chat, Message, MsgReply, User } from '../../global/types';
+import handleError from '../general/handleError';
 
 interface Files {
   images: any[];
@@ -110,7 +111,7 @@ const setMessage = async (
     if (setShowAudioRecorder) setShowAudioRecorder(false);
     if (setResponseMsg) setResponseMsg(null);
   } catch (err) {
-    if (err instanceof Error) toast.error('Unable to send the message ' + err.message);
+    handleError(err, "sending message.")
   }
 };
 

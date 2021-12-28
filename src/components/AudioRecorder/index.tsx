@@ -150,8 +150,7 @@ const AudioRecorder: React.FC<Props> = ({
         const mediaRecorder = new MediaRecorder(stream);
         setMediaRecorder(mediaRecorder);
       } catch (err) {
-        if (err instanceof Error)
-          toast.error('You must allow the microphone access to record an audio!');
+        toast.error('You must allow the microphone access to record an audio!');
         setShowAudioRecorder(false);
       }
     })();

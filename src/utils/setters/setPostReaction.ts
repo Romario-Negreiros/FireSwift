@@ -1,5 +1,5 @@
 import { firestoredb } from '../../lib';
-import { toast } from 'react-toastify';
+import handleError from '../general/handleError';
 
 import { Post } from '../../global/types';
 
@@ -28,7 +28,7 @@ const setPostReaction = async (
     });
     setPosts(postsCopy);
   } catch (err) {
-    if (err instanceof Error) toast.error('Something unnexpected happened!');
+    handleError(err, 'setting reaction in a post.');
   }
 };
 

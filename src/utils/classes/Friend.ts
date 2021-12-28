@@ -1,6 +1,7 @@
 import { User } from '../../global/types';
 
 import { toast } from 'react-toastify';
+import handleError from '../general/handleError';
 
 import { firestoredb } from '../../lib';
 import { updateUser } from '../../features/user/userSlice';
@@ -26,7 +27,7 @@ class Friend {
         toast("User removed from your friend's list");
       } else toast.error("Looks like the user doesn't exist!");
     } catch (err) {
-      if (err instanceof Error) toast.error(err.message);
+      handleError(err, 'removing user from friends list.');
     }
   };
 
@@ -47,9 +48,9 @@ class Friend {
           toast("User added in your friend's list");
         } else toast.error("Looks like the user doesn't exist!");
       } catch (err) {
-        if (err instanceof Error) toast.error(err.message);
+        handleError(err, 'adding user to friends list.');
       }
-    } else toast.error('You cannot add yourself as friend!')
+    } else toast.error('You cannot add yourself as friend!');
   };
 }
 

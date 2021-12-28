@@ -43,7 +43,7 @@ const deleteChat = async (
   } catch (err) {
     if (err instanceof Error) {
       toast.error("We couldn't delete the chat, please try again!");
-      console.error(err.message);
+      console.error("Error on deleting chat => " + err.message);
     }
   }
 };
