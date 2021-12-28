@@ -17,10 +17,10 @@ interface State {
 
 const Chats: React.FC = () => {
   const [error, setError] = React.useState('');
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const [chats, setChats] = React.useState<Chat[]>([]);
   const [currentChat, setCurrentChat] = React.useState('');
   const user = useAppSelector(state => state.user.user);
+  const chats = useAppSelector(state => state.chats.chats);
+
   const {
     location: { state },
   } = useHistory<State>();
@@ -28,29 +28,6 @@ const Chats: React.FC = () => {
   React.useEffect(() => {
     if (user) {
       if (user.chats.length) {
-        (async () => {
-          try {
-            const chatsRef = realtimedb.dbRef(realtimedb.db, 'chats');
-            realtimedb.onValue(chatsRef, snapshot => {
-              if (snapshot.exists()) {
-                const allChats = Object.values(snapshot.val()) as Chat[];
-                const userChats: Chat[] = allChats.filter(chat => {
-                  if (user.chats.some(userChat => userChat.id === chat.id)) {
-                    return chat;
-                  } else return null;
-                });
-                userChats.forEach(userChat => {
-                  if (!userChat.messages) userChat['messages'] = [];
-                });
-                setChats(userChats);
-              }
-            });
-          } catch (err) {
-            handleFirebaseError(err, setError);
-          } finally {
-            setIsLoaded(true);
-          }
-        })();
         if (state) setCurrentChat(state.chatID);
       } else setError("You haven't created any chats yet!");
     } else setError('You need to be logged in to use chats!');
@@ -62,10 +39,10 @@ const Chats: React.FC = () => {
         <Exception message={error} />
       </CenteredContainer>
     );
-  } else if (!isLoaded) {
+  } else if (!chats) {
     return (
       <CenteredContainer>
-        <Loader />
+        <Exception message={"You haven't created any chats yet!"} />
       </CenteredContainer>
     );
   }

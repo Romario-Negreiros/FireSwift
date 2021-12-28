@@ -2,9 +2,9 @@ import React from 'react';
 
 import { useAppDispatch } from '../../app/hooks';
 import { userLogged } from '../../features/user/userSlice';
-
+import { loggedUserChats } from '../../features/userChats/userChatsSlice';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
-import { authentication, firestoredb } from '../../lib';
+import { authentication, firestoredb, realtimedb } from '../../lib';
 import { useHistory } from 'react-router';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -18,7 +18,7 @@ import { CenteredContainer } from '../../global/styles';
 import { Loader } from '../../components';
 
 import { User } from '@firebase/auth';
-import { User as UserStateType } from '../../global/types';
+import { User as UserStateType, Chat } from '../../global/types';
 
 interface Inputs {
   email: string;
@@ -49,8 +49,22 @@ const Login: React.FC = () => {
         const user = userSnap.data() as Omit<UserStateType, 'id'>;
         const id = userSnap.id;
         dispatch(userLogged({ id, ...user }));
+        const chatsRef = realtimedb.dbRef(realtimedb.db, 'chats');
+        realtimedb.onValue(chatsRef, snapshot => {
+          if (snapshot.exists()) {
+            const allChats = Object.values(snapshot.val()) as Chat[];
+            const userChats: Chat[] = allChats.filter(chat => {
+              if (user.chats.some(userChat => userChat.id === chat.id)) {
+                return chat;
+              } else return null;
+            });
+            userChats.forEach(userChat => {
+              if (!userChat.messages) userChat['messages'] = [];
+            });
+            if(userChats.length) dispatch(loggedUserChats(userChats));
+          }
+        });
       }
-
       history.push('/home');
     } catch (err) {
       handleFirebaseError(err, setError);
