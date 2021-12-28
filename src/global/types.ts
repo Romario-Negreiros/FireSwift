@@ -99,22 +99,11 @@ export interface MsgReply {
     date: string;
     time: string;
   };
+  wasViewed: boolean;
 }
 
-export interface Message {
-  id: string;
-  user: {
-    id: string;
-    name: string;
-    picture: string;
-  };
-  text: string;
-  media: Medias;
-  sentDate: {
-    date: string;
-    time: string;
-  };
-  isReplyingTo?: MsgReply; 
+export interface Message extends MsgReply {
+  isReplyingTo?: MsgReply;
 }
 
 export interface ChatUser {
