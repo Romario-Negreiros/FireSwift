@@ -19,8 +19,8 @@ export const usersSlice = createSlice({
     },
     clearUsers: (state, action: PayloadAction<null>) => {
       state.users = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { queryUsers, clearUsers } = usersSlice.actions;

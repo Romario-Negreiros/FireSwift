@@ -15,13 +15,13 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     userLogged: (state, action: PayloadAction<User>) => {
-      state.user = action.payload
+      state.user = action.payload;
     },
     userUnLogged: (state, action: PayloadAction<null>) => {
-      state.user = action.payload
+      state.user = action.payload;
     },
     updateUser: (state, action: PayloadAction<User>) => {
-      state.user = { ...action.payload }
+      state.user = { ...action.payload };
     },
   },
 });
