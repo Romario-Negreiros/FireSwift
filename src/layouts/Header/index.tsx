@@ -3,6 +3,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userUnLogged } from '../../features/user/userSlice';
+import { userLoggedOut } from '../../features/userChats/userChatsSlice';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -24,15 +25,30 @@ import { Props } from '../../global/types';
 import { authentication } from '../../lib';
 
 const Header: React.FC<Props> = ({ toggleTheme }) => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [newMessages, setNewMessages] = React.useState(0);
   const user = useAppSelector(state => state.user.user);
+  const chats = useAppSelector(state => state.chats.chats);
   const theme = React.useContext(ThemeContext);
   const dispatch = useAppDispatch();
   const signOut = () => {
     authentication.auth.signOut();
     dispatch(userUnLogged(null));
+    dispatch(userLoggedOut(null));
     toast('Succesfully unlogged');
   };
+
+  React.useEffect(() => {
+    if (chats && user) {
+      let newMessages = 0;
+      chats.forEach(chat => {
+        chat.messages.forEach(msg => {
+          if (!msg.wasViewed && msg.user.id !== user.id) newMessages++;
+        });
+      });
+      setNewMessages(newMessages);
+    }
+  });
 
   return (
     <Container>
@@ -42,10 +58,14 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
       <Nav>
         {user && (
           <User>
-            <Redirect to={{
-              pathname: `/${user.name}`,
-              state: { id: authentication.auth.currentUser?.uid },
-            }}><h2>{user.name}</h2></Redirect>
+            <Redirect
+              to={{
+                pathname: `/${user.name}`,
+                state: { id: authentication.auth.currentUser?.uid },
+              }}
+            >
+              <h2>{user.name}</h2>
+            </Redirect>
           </User>
         )}
         <Switch
@@ -79,9 +99,11 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
             }}
           >
             <Redirect to="/chats">
-              <Alert>
-                <span>99+</span>
-              </Alert>
+              {user && (
+                <Alert>
+                  <span>{newMessages}</span>
+                </Alert>
+              )}
               <FontAwesomeIcon icon={faCommentDots} />
             </Redirect>
             <div className="ballon">

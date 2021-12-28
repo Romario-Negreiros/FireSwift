@@ -159,7 +159,7 @@ export const Alert = styled.div`
   border-radius: 50%;
   background: red;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   span {
     color: ${({ theme: { fonts } }) => fonts.primary};
