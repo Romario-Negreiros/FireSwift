@@ -3,7 +3,14 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userUnLogged } from '../../features/user/userSlice';
+import { authentication } from '../../lib';
+import handleMobileMenu from '../../utils/general/handleMobileMenu';
 import { userLoggedOut } from '../../features/userChats/userChatsSlice';
+
+import { ThemeContext } from 'styled-components';
+import { Container, Nav, List, Burguer, Line, Redirect, User } from './styles';
+import { Alert } from '../../global/styles';
+import Switch from 'react-switch';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,14 +22,7 @@ import {
   faCommentDots,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { ThemeContext } from 'styled-components';
-import { Container, Nav, List, Burguer, Line, Alert, Redirect, User } from './styles';
-import Switch from 'react-switch';
-
-import handleMobileMenu from '../../utils/general/handleMobileMenu';
-
 import { Props } from '../../global/types';
-import { authentication } from '../../lib';
 
 const Header: React.FC<Props> = ({ toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -60,7 +60,7 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
           <User>
             <Redirect
               to={{
-                pathname: `/${user.name}`,
+                pathname: `/users/${user.name}`,
                 state: { id: authentication.auth.currentUser?.uid },
               }}
             >
