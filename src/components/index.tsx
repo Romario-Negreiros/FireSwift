@@ -13,3 +13,4 @@ export { CreateGroup, CreatePost, CreateStory } from './Create';
 export { default as Searcher } from './Portal/Modals/Searcher';
 export { default as Contents } from './Contents';
 export { default as AudioRecorder } from './AudioRecorder';
+export { About, Posts, Users } from './GroupComps';

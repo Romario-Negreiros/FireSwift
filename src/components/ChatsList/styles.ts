@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { Alert as Reusable } from '../../global/styles';
+
 export const Container = styled.section``;
 
 export const DropdownButton = styled.button`
@@ -114,4 +116,9 @@ export const Message = styled.div`
     opacity: 0.8;
     color: ${({ theme: { fonts } }) => fonts.secondary};
   }
+`;
+
+export const Alert = styled(Reusable)`
+  top: 1rem;
+  left: 92%;
 `;

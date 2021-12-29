@@ -3,7 +3,7 @@ import React from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import deleteChat from '../../utils/general/deleteChat';
 
-import { Container, DropdownButton, List, User, Message } from './styles';
+import { Container, DropdownButton, List, User, Message, Alert } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDown, faCheckCircle, faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -40,6 +40,8 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
       </DropdownButton>
       <List isDropdownOpen={isDropdownOpen}>
         {chats.map(chat => {
+          let newMessages = 0;
+          chat.messages.forEach(msg => (!msg.wasViewed && msg.user.id !== currentUser.id ? newMessages++ : ''));
           if (!chat.users) {
             return (
               <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
@@ -53,6 +55,11 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                 <Message>
                   <span>User you were chatting to has been deleted!</span>
                 </Message>
+                {newMessages > 0 && (
+                  <Alert>
+                    <span>{newMessages}</span>
+                  </Alert>
+                )}
                 <div
                   className="delete"
                   onClick={() => deleteChat(chat, currentUser, undefined, dispatch, setCurrentChat)}
@@ -100,6 +107,11 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                         </span>
                       )}
                     </Message>
+                    {newMessages > 0 && (
+                      <Alert>
+                        <span>{newMessages}</span>
+                      </Alert>
+                    )}
                     {msg.user.id === currentUser.id && (
                       <div className="status">
                         <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
@@ -132,6 +144,11 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                         <span>You sent {displaySpanText(msg.media)}</span>
                       )}
                     </Message>
+                    {newMessages > 0 && (
+                      <Alert>
+                        <span>{newMessages}</span>
+                      </Alert>
+                    )}
                     <div className="status">
                       <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
                     </div>

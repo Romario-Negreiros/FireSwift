@@ -29,7 +29,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
         className="image"
         onClick={() =>
           history.push({
-            pathname: `/${user.name}`,
+            pathname: `/users/${user.name}`,
             state: { id: user.id },
           })
         }
@@ -39,7 +39,7 @@ const ProfileCard: React.FC<Props> = ({ user }) => {
       <div
         onClick={() =>
           history.push({
-            pathname: `/${user.name}`,
+            pathname: `/users/${user.name}`,
             state: { id: user.id },
           })
         }

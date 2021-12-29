@@ -53,7 +53,7 @@ const DropDown: React.FC<Props> = ({ error, results, user }) => {
               <CustomIconBox
                 onClick={() =>
                   history.push({
-                    pathname: `/${item.name}`,
+                    pathname: `/users/${item.name}`,
                     state: {
                       id: item.id,
                     },
