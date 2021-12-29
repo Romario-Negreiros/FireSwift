@@ -33,9 +33,10 @@ interface Props {
   post: PostType;
   posts: PostType[];
   setPosts: (posts: PostType[]) => void;
+  pathSegment: string;
 }
 
-const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
+const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
   const [value, setValue] = React.useState('');
   const [willReply, setWillReply] = React.useState('');
   const [replyValue, setReplyValue] = React.useState('');
@@ -48,22 +49,39 @@ const Post: React.FC<Props> = ({ post, posts, setPosts }) => {
     if (user) {
       if (reaction) {
         if (type === 'COMMENT_REACTIONS') {
-          setCommentReaction(user.id, showCommentReactions, post, posts, setPosts, reaction);
+          setCommentReaction(
+            user.id,
+            showCommentReactions,
+            post,
+            posts,
+            setPosts,
+            reaction,
+            pathSegment
+          );
         } else if (type === 'POST_REACTIONS')
-          setPostReaction(user.id, post, posts, setPosts, reaction);
+          setPostReaction(user.id, post, posts, setPosts, reaction, pathSegment);
         else if (type === 'REPLY_REACTIONS' && commentID)
-          setReplyReaction(user.id, commentID, showReplyReactions, post, posts, setPosts, reaction);
+          setReplyReaction(
+            user.id,
+            commentID,
+            showReplyReactions,
+            post,
+            posts,
+            setPosts,
+            reaction,
+            pathSegment
+          );
       } else {
         if (type === 'NEW_COMMENT') {
           if (value) {
-            setComment(user, post, posts, setPosts, value);
+            setComment(user, post, posts, setPosts, value, pathSegment);
             setValue('');
           } else {
             toast.error('Comment cannot be empty!');
           }
         } else if (type === 'NEW_REPLY') {
           if (replyValue) {
-            setReply(willReply, user, post, posts, setPosts, replyValue);
+            setReply(willReply, user, post, posts, setPosts, replyValue, pathSegment);
             setReplyValue('');
             setWillReply('');
           } else {

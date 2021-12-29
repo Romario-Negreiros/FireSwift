@@ -63,7 +63,7 @@ const Feed: React.FC = () => {
     <Container>
       <ul>
         {posts.map(post => (
-          <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
+          <Post key={post.id} post={post} posts={posts} setPosts={setPosts} pathSegment="users" />
         ))}
       </ul>
     </Container>

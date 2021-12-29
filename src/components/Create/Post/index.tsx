@@ -26,13 +26,14 @@ import { Post, User } from '../../../global/types';
 
 interface Props {
   user: User;
+  pathSegment: string;
 }
 
 interface Inputs {
   postContent: string;
 }
 
-const CreatePost: React.FC<Props> = ({ user }) => {
+const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
   const {
     register,
     formState: { errors },
@@ -101,7 +102,7 @@ const CreatePost: React.FC<Props> = ({ user }) => {
           post.media.docs.push(docObj);
         }
       }
-      await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'media/posts/users', postID), post);
+      await firestoredb.setDoc(firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, postID), post);
       toast('Post succesfully created!');
       reset();
     } catch (err) {
