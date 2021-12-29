@@ -1,7 +1,6 @@
 import React from 'react';
 
 import usePersistedState from './utils/hooks/usePersistedState';
-
 import { Provider } from 'react-redux';
 import store from './app/store';
 
@@ -18,6 +17,7 @@ import Layout from './layouts';
 import Pages from './pages';
 import Reset from './styles/reset';
 
+
 const App: React.FC = () => {
   const [theme, setTheme] = usePersistedState<DefaultTheme>('theme', dark);
   const toggleTheme = () => {
@@ -25,9 +25,7 @@ const App: React.FC = () => {
   };
 
   const CloseButton: React.FC = () => {
-    return (
-      <FontAwesomeIcon color="#fff" icon={faTimes} />
-    );
+    return <FontAwesomeIcon color="#fff" icon={faTimes} />;
   };
 
   return (
