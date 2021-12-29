@@ -4,7 +4,6 @@ import { Input as Reusable1 } from '../../global/styles';
 import { FileOptions as Reusable2, CustomLabelBox as Reusable3 } from '../Create/Post/styles';
 
 export const Container = styled.section`
-  width: 100%;
   max-height: 100%;
   background: ${({ theme: { bgs } }) => bgs.tertiary};
   display: flex;
@@ -17,6 +16,9 @@ export const Container = styled.section`
     overflow: auto;
     padding: 0.5rem;
     gap: 1rem;
+  }
+  @media screen and (min-width: 450px) {
+    width: 97%;
   }
 `;
 

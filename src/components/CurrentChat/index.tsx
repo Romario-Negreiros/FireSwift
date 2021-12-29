@@ -5,7 +5,7 @@ import setMessage from '../../utils/setters/setMessage';
 import { toast } from 'react-toastify';
 
 import { Container, Input, FileOptions, CustomLabelBox, ResponseView } from './styles';
-import { CenteredContainer } from '../../global/styles';
+import { CenteredContainer, InnerCenteredContainer } from '../../global/styles';
 import { Exception, AudioRecorder, Portal } from '..';
 import { DeleteMessage } from '../Portal/Modals';
 import { Message } from './break-components';
@@ -38,6 +38,7 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   const [deleteMessageID, setDeleteMessageID] = React.useState('');
   const [responseMsg, setResponseMsg] = React.useState<MsgReply | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const messagesListRef = React.useRef<HTMLUListElement>(null);
 
   const handleSendMessage = (chat: Chat) => {
     const files = getInputItems(['chatimg', 'chatvid', 'chatdoc']);
@@ -76,8 +77,13 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
     if (currentChat) {
       chats.forEach(chat => {
         if (chat.id === currentChat) setChat(chat);
+        messagesListRef.current?.scrollTo({
+         behavior: 'smooth',
+         top: messagesListRef.current?.scrollHeight,
+        })
       });
     }
+
   }, [chats, currentChat]);
 
   if (!chat) {
@@ -89,7 +95,7 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   }
   return (
     <Container>
-      <ul>
+      <ul ref={messagesListRef}>
         {chat.messages.map((msg, i) => (
           <Message
             key={msg.id}
@@ -104,7 +110,15 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
           />
         ))}
       </ul>
-      {!showAudioRecorder ? (
+      {!chat.users ? (
+        <InnerCenteredContainer>
+          <Exception
+            message={
+              'User you have been chatting to has been deleted, you cannot send messages here anymore!'
+            }
+          />
+        </InnerCenteredContainer>
+      ) : !showAudioRecorder ? (
         <Input>
           {responseMsg && (
             <ResponseView>

@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { firestoredb, authentication } from '../../../../lib';
+import { firestoredb, authentication, realtimedb } from '../../../../lib';
 import { useHistory } from 'react-router';
 import { useAppDispatch } from '../../../../app/hooks';
 import { userUnLogged } from '../../../../features/user/userSlice';
+import { userLoggedOut } from '../../../../features/userChats/userChatsSlice';
 import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
 import authenticateUser from '../../../../utils/general/authenticateUser';
 
@@ -46,23 +47,28 @@ const DeleteProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ password, confirmPassword }) => {
-    if(password === confirmPassword) {
-    try {
-      setIsLoaded(false);
-      await authenticateUser(user.email, password);
-      await firestoredb.deleteDoc(firestoredb.doc(firestoredb.db, 'users', user.id));
-      const userRef = authentication.auth.currentUser;
-      if(userRef)
-      await authentication.deleteUser(userRef);
-      dispatch(userUnLogged(null));
-      toast('User succesfully deleted');
-      history.push('/login');
-    } catch (err) {
-      handleFirebaseError(err, setError);
-    } finally {
-      setIsLoaded(true);
-    }
-  } else setError('Password and confirm password fields must be equal!');
+    if (password === confirmPassword) {
+      try {
+        setIsLoaded(false);
+        await authenticateUser(user.email, password);
+        await firestoredb.deleteDoc(firestoredb.doc(firestoredb.db, 'users', user.id));
+        const userRef = authentication.auth.currentUser;
+        for (let chat of user.chats) {
+          const updates: any = {};
+          updates[`chats/${chat.id}/users`] = [];
+          await realtimedb.update(realtimedb.dbRef(realtimedb.db), updates);
+        }
+        if (userRef) await authentication.deleteUser(userRef);
+        dispatch(userUnLogged(null));
+        dispatch(userLoggedOut(null));
+        toast('User succesfully deleted');
+        history.push('/login');
+      } catch (err) {
+        handleFirebaseError(err, setError);
+      } finally {
+        setIsLoaded(true);
+      }
+    } else setError('Password and confirm password fields must be equal!');
   };
 
   if (!isLoaded) {

@@ -40,113 +40,136 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
       </DropdownButton>
       <List isDropdownOpen={isDropdownOpen}>
         {chats.map(chat => {
-          const receiver: ChatUser | undefined = chat.users.find(
-            user => user.id !== currentUser.id
-          );
-          if (chat.messages.length) {
-            const l = chat.messages.length - 1;
-            const msg = chat.messages[l];
-            if (receiver) {
-              return (
-                <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
-                  <User>
-                    <img
-                      src={receiver.picture ? receiver.picture : DefaultPicture}
-                      alt={receiver.name}
-                    />
-                    <span>{receiver.name}</span>
-                  </User>
-                  <div
-                    className="delete"
-                    onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
-                  </div>
-                  <Message>
-                    {!msg.media ? (
-                      <span>
-                        {msg.user.id === receiver.id ? '' : 'You: '}
-                        {msg.text.length > 20 ? msg.text.substring(0, 15) + '...' : msg.text}
-                      </span>
-                    ) : (
-                      <span>
-                        {msg.user.id === receiver.id
-                          ? receiver.name + ' sent ' + displaySpanText(msg.media)
-                          : 'You sent ' + displaySpanText(msg.media)}
-                      </span>
+          if (!chat.users) {
+            return (
+              <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                <User>
+                  <img
+                    src={currentUser.picture ? currentUser.picture : DefaultPicture}
+                    alt={currentUser.name}
+                  />
+                  <span>{currentUser.name}</span>
+                </User>
+                <Message>
+                  <span>User you were chatting to has been deleted!</span>
+                </Message>
+                <div
+                  className="delete"
+                  onClick={() => deleteChat(chat, chats, currentUser, undefined, dispatch, setCurrentChat)}
+                >
+                  <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                </div>
+              </li>
+            );
+          } else {
+            const receiver: ChatUser | undefined = chat.users.find(
+              user => user.id !== currentUser.id
+            );
+            if (chat.messages.length) {
+              const l = chat.messages.length - 1;
+              const msg = chat.messages[l];
+              if (receiver) {
+                return (
+                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                    <User>
+                      <img
+                        src={receiver.picture ? receiver.picture : DefaultPicture}
+                        alt={receiver.name}
+                      />
+                      <span>{receiver.name}</span>
+                    </User>
+                    <div
+                      className="delete"
+                      onClick={() => deleteChat(chat, chats, currentUser, receiver, dispatch, setCurrentChat)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                    <Message>
+                      {!msg.media ? (
+                        <span>
+                          {msg.user.id === receiver.id ? '' : 'You: '}
+                          {msg.text.length > 20 ? msg.text.substring(0, 15) + '...' : msg.text}
+                        </span>
+                      ) : (
+                        <span>
+                          {msg.user.id === receiver.id
+                            ? receiver.name + ' sent ' + displaySpanText(msg.media)
+                            : 'You sent ' + displaySpanText(msg.media)}
+                        </span>
+                      )}
+                    </Message>
+                    {msg.user.id === currentUser.id && (
+                      <div className="status">
+                        <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
+                      </div>
                     )}
-                  </Message>
-                  {msg.user.id === currentUser.id && (
+                  </li>
+                );
+              } else {
+                const user = chat.users[0];
+                return (
+                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                    <User>
+                      <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
+                      <span>{user.name}</span>
+                    </User>
+                    <div
+                      className="delete"
+                      onClick={() => deleteChat(chat, chats, currentUser, receiver, dispatch, setCurrentChat)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                    <Message>
+                      {!msg.media ? (
+                        <span>
+                          You: {msg.text.length > 20 ? msg.text.substring(0, 15) + '...' : msg.text}
+                        </span>
+                      ) : (
+                        <span>You sent {displaySpanText(msg.media)}</span>
+                      )}
+                    </Message>
                     <div className="status">
                       <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
                     </div>
-                  )}
-                </li>
-              );
+                  </li>
+                );
+              }
             } else {
-              const user = chat.users[0];
-              return (
-                <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
-                  <User>
-                    <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
-                    <span>{user.name}</span>
-                  </User>
-                  <div
-                    className="delete"
-                    onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
-                  </div>
-                  <Message>
-                    {!msg.media ? (
-                      <span>
-                        You: {msg.text.length > 20 ? msg.text.substring(0, 15) + '...' : msg.text}
-                      </span>
-                    ) : (
-                      <span>You sent {displaySpanText(msg.media)}</span>
-                    )}
-                  </Message>
-                  <div className="status">
-                    <FontAwesomeIcon icon={msg.wasViewed ? faCheckCircle : faCheck} />
-                  </div>
-                </li>
-              );
-            }
-          } else {
-            if (receiver) {
-              return (
-                <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
-                  <User>
-                    <img
-                      src={receiver.picture ? receiver.picture : DefaultPicture}
-                      alt={receiver.name}
-                    />
-                    <span>{receiver.name}</span>
-                  </User>
-                  <div
-                    className="delete"
-                    onClick={() => deleteChat(chat, currentUser, receiver, dispatch)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
-                  </div>
-                </li>
-              );
-            } else {
-              const user = chat.users[0];
-              return (
-                <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
-                  <User>
-                    <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
-                    <span>{user.name}</span>
-                  </User>
-                  <div
-                    className="delete"
-                    onClick={() => deleteChat(chat, currentUser, undefined, dispatch)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
-                  </div>
-                </li>
-              );
+              if (receiver) {
+                return (
+                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                    <User>
+                      <img
+                        src={receiver.picture ? receiver.picture : DefaultPicture}
+                        alt={receiver.name}
+                      />
+                      <span>{receiver.name}</span>
+                    </User>
+                    <div
+                      className="delete"
+                      onClick={() => deleteChat(chat, chats, currentUser, receiver, dispatch, setCurrentChat)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                  </li>
+                );
+              } else {
+                const user = chat.users[0];
+                return (
+                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                    <User>
+                      <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
+                      <span>{user.name}</span>
+                    </User>
+                    <div
+                      className="delete"
+                      onClick={() => deleteChat(chat, chats, currentUser, undefined, dispatch, setCurrentChat)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                  </li>
+                );
+              }
             }
           }
         })}

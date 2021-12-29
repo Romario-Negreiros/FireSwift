@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppSelector } from '../../../../../app/hooks';
 import { useHistory } from 'react-router-dom';
 import setChat from '../../../../../utils/setters/setChat';
 
@@ -25,6 +26,7 @@ interface Props {
 
 const DropDown: React.FC<Props> = ({ error, results, user }) => {
   const history = useHistory();
+  const chats = useAppSelector(state => state.chats.chats);
   const dispatch = useAppDispatch();
 
   if (error) {
@@ -64,7 +66,7 @@ const DropDown: React.FC<Props> = ({ error, results, user }) => {
               </CustomIconBox>
               <CustomIconBox
                 onClick={() => {
-                  if (user) setChat(item, user, dispatch, history);
+                  if (user) setChat(item, chats, user, dispatch, history);
                   else toast.error('You need to be logged in to create a chat!');
                 }}
               >
