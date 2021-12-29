@@ -55,7 +55,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                 </Message>
                 <div
                   className="delete"
-                  onClick={() => deleteChat(chat, chats, currentUser, undefined, dispatch, setCurrentChat)}
+                  onClick={() => deleteChat(chat, currentUser, undefined, dispatch, setCurrentChat)}
                 >
                   <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                 </div>
@@ -80,7 +80,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     </User>
                     <div
                       className="delete"
-                      onClick={() => deleteChat(chat, chats, currentUser, receiver, dispatch, setCurrentChat)}
+                      onClick={() =>
+                        deleteChat(chat, currentUser, receiver, dispatch, setCurrentChat)
+                      }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                     </div>
@@ -115,7 +117,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     </User>
                     <div
                       className="delete"
-                      onClick={() => deleteChat(chat, chats, currentUser, receiver, dispatch, setCurrentChat)}
+                      onClick={() =>
+                        deleteChat(chat, currentUser, receiver, dispatch, setCurrentChat)
+                      }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                     </div>
@@ -147,7 +151,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     </User>
                     <div
                       className="delete"
-                      onClick={() => deleteChat(chat, chats, currentUser, receiver, dispatch, setCurrentChat)}
+                      onClick={() =>
+                        deleteChat(chat, currentUser, receiver, dispatch, setCurrentChat)
+                      }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                     </div>
@@ -163,7 +169,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     </User>
                     <div
                       className="delete"
-                      onClick={() => deleteChat(chat, chats, currentUser, undefined, dispatch, setCurrentChat)}
+                      onClick={() =>
+                        deleteChat(chat, currentUser, undefined, dispatch, setCurrentChat)
+                      }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                     </div>
