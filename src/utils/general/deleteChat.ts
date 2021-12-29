@@ -2,17 +2,15 @@ import { AppDispatch } from '../../app/store';
 import { toast } from 'react-toastify';
 import { storage, realtimedb, firestoredb } from '../../lib';
 import { updateUser } from '../../features/user/userSlice';
-import { updateUserChats } from '../../features/userChats/userChatsSlice';
 
 import { Chat, User, ChatUser } from '../../global/types';
 
 const deleteChat = async (
   chat: Chat,
-  currentUserChats: Chat[],
   currentUser: User,
   receiver: ChatUser | undefined,
   dispatch: AppDispatch,
-  setCurrentChat: (currentChat: string) => void,
+  setCurrentChat: (currentChat: string) => void
 ) => {
   try {
     const storageRef = storage.ref(storage.storage, `chats/${chat.id}`);
@@ -41,17 +39,13 @@ const deleteChat = async (
         chats: receiverCopy.chats,
       });
     }
-    const userChatsCopy: Chat[] = JSON.parse(JSON.stringify(currentUserChats));
-    const chatIndexInAllChats = userChatsCopy.findIndex(chatCopy => chat.id === chatCopy.id);
-    userChatsCopy.splice(chatIndexInAllChats, 1);
-    dispatch(updateUserChats([...userChatsCopy]));
     dispatch(updateUser({ ...currentUserCopy }));
     toast('Chat succesfully deleted!');
     setCurrentChat('');
   } catch (err) {
     if (err instanceof Error) {
       toast.error("We couldn't delete the chat, please try again!");
-      console.error("Error on deleting chat => " + err.message);
+      console.error('Error on deleting chat => ' + err.message);
     }
   }
 };
