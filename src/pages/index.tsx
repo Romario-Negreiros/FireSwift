@@ -8,6 +8,7 @@ import CreateAccount from './CreateAccount';
 import UserProfile from './UserProfile';
 import EditProfile from './EditProfile';
 import Create from './Create';
+import Group from './Group';
 
 const Pages: React.FC = () => {
 
@@ -19,7 +20,8 @@ const Pages: React.FC = () => {
       <Route path="/createaccount" component={CreateAccount} />
       <Route path="/editprofile" component={EditProfile} />
       <Route path="/create" component={Create} />
-      <Route path="/:username" component={UserProfile} />
+      <Route path="/users/:username" component={UserProfile} />
+      <Route path="/groups/:groupname" component={Group} />
       <Redirect path="/" to="/home" />
     </Switch>
   );
