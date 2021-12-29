@@ -9,7 +9,7 @@ const setCommentReaction = async (
   post: Post,
   posts: Post[],
   setPosts: (posts: Post[]) => void,
-  newReaction: string
+  newReaction: string,
 ) => {
   try {
     const postsCopy = [...posts];
