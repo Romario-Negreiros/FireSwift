@@ -4,6 +4,7 @@ import getFormattedDate from '../getters/getFormattedDate';
 import handleError from '../general/handleError';
 import { AppDispatch } from '../../app/store';
 import { updateUser } from '../../features/user/userSlice';
+import { updateUserChats } from '../../features/userChats/userChatsSlice';
 import { Chat, User } from '../../global/types';
 
 interface ShortUser {
@@ -18,6 +19,7 @@ interface ShortUser {
 
 const setChat = async (
   desiredUser: ShortUser,
+  currentUserChats: Chat[] | null,
   currentUser: User,
   dispatch: AppDispatch,
   history: any
@@ -64,6 +66,13 @@ const setChat = async (
     await firestoredb.updateDoc(desiredUserRef, {
       chats: users[1].chats,
     });
+    if(!currentUserChats) {
+      dispatch(updateUserChats([chat]))
+    } else {      
+      const userChatsCopy: Chat[] = JSON.parse(JSON.stringify(currentUserChats));
+      userChatsCopy.push(chat);
+      dispatch(updateUserChats([...userChatsCopy]));
+    }
     dispatch(updateUser({ ...currentUser, chats: [...users[0].chats] }));
     history.push({
       pathname: 'chats',
