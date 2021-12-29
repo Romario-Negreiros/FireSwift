@@ -11,7 +11,8 @@ const setReply = async (
   post: Post,
   posts: Post[],
   setPosts: (posts: Post[]) => void,
-  newReply: string
+  newReply: string,
+  pathSegment: string,
 ) => {
   try {
     const postsCopy = [...posts];
@@ -38,7 +39,7 @@ const setReply = async (
       }
     });
     const postIndex = postsCopy.findIndex(postCopy => postCopy.id === post.id);
-    const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
+    const postRef = firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id);
     await firestoredb.updateDoc(postRef, {
       comments: postsCopy[postIndex].comments,
     });

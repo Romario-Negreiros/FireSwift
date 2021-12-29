@@ -10,7 +10,8 @@ const setReplyReaction = async (
   post: Post,
   posts: Post[],
   setPosts: (posts: Post[]) => void,
-  newReaction: string
+  newReaction: string,
+  pathSegment: string,
 ) => {
   try {
     const postsCopy = [...posts];
@@ -34,7 +35,7 @@ const setReplyReaction = async (
         reactionIndex
       ].reaction = newReaction;
     }
-    const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
+    const postRef = firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id);
     await firestoredb.updateDoc(postRef, {
       comments: postsCopy[postIndex].comments,
     });

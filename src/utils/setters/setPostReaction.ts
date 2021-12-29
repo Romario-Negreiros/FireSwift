@@ -8,7 +8,8 @@ const setPostReaction = async (
   post: Post,
   posts: Post[],
   setPosts: (posts: Post[]) => void,
-  newReaction: string
+  newReaction: string,
+  pathSegment: string,
 ) => {
   try {
     const postsCopy = [...posts];
@@ -22,7 +23,7 @@ const setPostReaction = async (
     } else {
       postsCopy[postIndex].reactions[reactionIndex].reaction = newReaction;
     }
-    const postRef = firestoredb.doc(firestoredb.db, 'media/posts/users', post.id);
+    const postRef = firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id);
     await firestoredb.updateDoc(postRef, {
       reactions: postsCopy[postIndex].reactions,
     });
