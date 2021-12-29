@@ -20,12 +20,9 @@ export const userChatsSlice = createSlice({
     userLoggedOut: (state, action: PayloadAction<null>) => {
       state.chats = action.payload;
     },
-    updateUserChats: (state, action: PayloadAction<Chat[]>) => {
-      state.chats = [...action.payload];
-    },
   },
 });
 
-export const { loggedUserChats, userLoggedOut, updateUserChats } = userChatsSlice.actions;
+export const { loggedUserChats, userLoggedOut } = userChatsSlice.actions;
 
 export default userChatsSlice.reducer;
