@@ -19,7 +19,7 @@ const Create: React.FC = () => {
         case 'New group':
           return <CreateGroup />;
         case 'New post':
-          return <CreatePost user={user} />;
+          return <CreatePost user={user} pathSegment="users" />;
         case 'New story':
           return <CreateStory />;
         default:

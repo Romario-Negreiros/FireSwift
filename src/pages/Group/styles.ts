@@ -2,6 +2,12 @@ import styled from 'styled-components';
 
 export const Container = styled.main`
   margin-top: -1.5rem;
+  h2 {
+    color: ${({theme: { fonts }}) => fonts.secondary};
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.8rem;
+  }
 `;
 
 export const Presentation = styled.ul`

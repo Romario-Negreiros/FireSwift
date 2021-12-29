@@ -16,6 +16,8 @@ const Group: React.FC = () => {
         return <About />;
       case 'Users':
         return <Users />;
+      default:
+        return <Posts />;
     }
   };
 
