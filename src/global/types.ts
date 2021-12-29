@@ -131,3 +131,16 @@ export interface ModalsProps {
   setIsModalVisible: (isModalVisible: boolean) => void;
   user: User;
 }
+
+export type GroupUser = Omit<ChatUser, 'chats'> 
+
+export interface Group {
+  id: string;
+  name: string;
+  desc: string;
+  creationDate: {
+    date: string;
+    time: string;
+  };
+  users: GroupUser[];
+}

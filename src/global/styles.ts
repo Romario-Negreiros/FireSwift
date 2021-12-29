@@ -281,3 +281,20 @@ export const Author = styled.div`
     }
   }
 `;
+
+export const Alert = styled.div`
+  position: absolute;
+  top: -11px;
+  left: 20px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    color: ${({ theme: { fonts } }) => fonts.primary};
+    font-size: 1rem;
+  }
+`;
