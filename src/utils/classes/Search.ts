@@ -4,7 +4,7 @@ class Search {
   static byUsers = (users: User[], value: string, setResults: (results: Result[]) => void) => {
     const results: Result[] = [];
     users.forEach(user => {
-      if(user.name.includes(value)) {
+      if(user.name.toLowerCase().includes(value.toLowerCase())) {
         results.push({
           id: user.id,
           name: user.name,
