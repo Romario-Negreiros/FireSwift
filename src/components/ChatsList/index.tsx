@@ -22,6 +22,11 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
 
+  const handleClick = (chatID: string) => {
+    setCurrentChat(chatID);
+    if(isDropdownOpen) setIsDropdownOpen(false);
+  };
+
   const displaySpanText = (media: Medias): string => {
     if (media.images) {
       return 'an image.';
@@ -41,10 +46,12 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
       <List isDropdownOpen={isDropdownOpen}>
         {chats.map(chat => {
           let newMessages = 0;
-          chat.messages.forEach(msg => (!msg.wasViewed && msg.user.id !== currentUser.id ? newMessages++ : ''));
+          chat.messages.forEach(msg =>
+            !msg.wasViewed && msg.user.id !== currentUser.id ? newMessages++ : ''
+          );
           if (!chat.users) {
             return (
-              <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+              <li key={chat.id} onClick={() => handleClick(chat.id)}>
                 <User>
                   <img
                     src={currentUser.picture ? currentUser.picture : DefaultPicture}
@@ -77,7 +84,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
               const msg = chat.messages[l];
               if (receiver) {
                 return (
-                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
                     <User>
                       <img
                         src={receiver.picture ? receiver.picture : DefaultPicture}
@@ -122,7 +129,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
               } else {
                 const user = chat.users[0];
                 return (
-                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
                     <User>
                       <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                       <span>{user.name}</span>
@@ -158,7 +165,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
             } else {
               if (receiver) {
                 return (
-                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
                     <User>
                       <img
                         src={receiver.picture ? receiver.picture : DefaultPicture}
@@ -179,7 +186,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
               } else {
                 const user = chat.users[0];
                 return (
-                  <li key={chat.id} onClick={() => setCurrentChat(chat.id)}>
+                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
                     <User>
                       <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                       <span>{user.name}</span>

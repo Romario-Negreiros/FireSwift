@@ -44,7 +44,23 @@ const About: React.FC = () => {
           </li>
         ))}
       </Admins>
-      <Statistics></Statistics>
+      <Statistics>
+        <li className="title">
+          <h3>Statistics</h3>
+        </li>
+        <li className="statistics">
+          <h4>Total posts</h4>
+          <p>45873</p>
+        </li>
+        <li className="statistics">
+          <h4>Total users</h4>
+          <p>645498</p>
+        </li>
+        <li className="statistics">
+          <h4>Total group's likes</h4>
+          <p>566898</p>
+        </li>
+      </Statistics>
     </Container>
   );
 };

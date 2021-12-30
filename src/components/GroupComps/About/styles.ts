@@ -4,12 +4,21 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   .title {
+    width: 100%;
     h3 {
       text-align: center;
       color: ${({ theme: { fonts } }) => fonts.secondary};
       font-size: 1.6rem;
       margin-bottom: 1rem;
     }
+  }
+  h4 {
+    font-size: 1.5rem;
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+  }
+  p {
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    font-size: 1.3rem;
   }
 `;
 
@@ -47,13 +56,6 @@ export const Creator = styled.article`
     .txtContainer {
       text-align: center;
       width: 100%;
-      color: ${({ theme: { fonts } }) => fonts.secondary};
-      h4 {
-        font-size: 1.5rem;
-      }
-      p {
-        font-size: 1.3rem;
-      }
     }
   }
   @media screen and (min-width: 600px) {
@@ -74,6 +76,7 @@ export const Creator = styled.article`
 
 export const Admins = styled.ul`
   padding: 0 1rem;
+  margin-top: 1rem;
   .admin {
     width: 100%;
     background: ${({ theme: { bgs } }) => bgs.tertiary};
@@ -83,10 +86,6 @@ export const Admins = styled.ul`
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
-    h4 {
-      font-size: 1.5rem;
-      color: ${({ theme: { fonts } }) => fonts.secondary};
-    }
   }
   @media screen and (min-width: 600px) {
     width: 450px;
@@ -106,6 +105,20 @@ export const Admins = styled.ul`
   }
 `;
 
-export const Statistics = styled.article`
-
+export const Statistics = styled.ul`
+  padding: 0 1rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  .statistics {
+    display: flex;
+    flex-direction: column;
+    padding: 0.2rem;
+  }
+  @media screen and (min-width: 600px) {
+    width: 400px;
+    margin: auto;
+  }
 `;
