@@ -4,9 +4,9 @@ import { useAppDispatch } from '../../../../../app/hooks';
 import { useHistory } from 'react-router-dom';
 import setChat from '../../../../../utils/setters/setChat';
 
-import { Container, Result, Options } from './styles';
+import { Container, Result } from './styles';
 import { Exception } from '../../../..';
-import { Author, CustomIconBox } from '../../../../../global/styles';
+import { Author, CustomIconBox, Options } from '../../../../../global/styles';
 import { InnerCenteredContainer } from '../../../../../global/styles';
 
 import DefaultPicture from '../../../../../assets/default-picture.png';

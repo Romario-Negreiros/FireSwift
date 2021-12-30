@@ -23,9 +23,3 @@ export const Result = styled.li`
   padding: 1rem;
 `;
 
-export const Options = styled.ul`
-  width: fit-content;
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-`;
