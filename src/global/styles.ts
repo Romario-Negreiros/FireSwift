@@ -298,3 +298,10 @@ export const Alert = styled.div`
     font-size: 1rem;
   }
 `;
+
+export const Options = styled.ul`
+  width: fit-content;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+`;
