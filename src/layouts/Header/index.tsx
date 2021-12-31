@@ -61,7 +61,7 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
             <Redirect
               to={{
                 pathname: `/users/${user.name}`,
-                state: { id: authentication.auth.currentUser?.uid },
+                state: { id: user.id },
               }}
             >
               <h2>{user.name}</h2>
