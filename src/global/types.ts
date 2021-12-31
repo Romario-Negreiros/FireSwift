@@ -25,6 +25,11 @@ export interface User {
     id: string;
     receiverID: string;
   }[];
+  groups: {
+    id: string;
+    name: string;
+    role: Roles
+  }[];
 }
 
 type Reaction = {
@@ -132,7 +137,19 @@ export interface ModalsProps {
   user: User;
 }
 
-export type GroupUser = Omit<ChatUser, 'chats'> 
+export enum Roles {
+  Creator = "CREATOR",
+  Admin = "ADMIN",
+  Member = "MEMBER",
+}
+
+export interface GroupUser extends Omit<ChatUser, 'chats'> {
+  entranceDate: {
+    date: string;
+    time: string;
+  }
+  role: Roles;
+}
 
 export interface Group {
   id: string;
@@ -142,5 +159,15 @@ export interface Group {
     date: string;
     time: string;
   };
+  creator: User;
   users: GroupUser[];
+  admins: GroupUser[];
+  posts: string[];
+  private: boolean;
+  requests: {
+    users: Pick<User, 'id' | 'name'>[];
+    posts: Post[];
+  }[];
+  likes: string[];
+  bgImg: string;
 }
