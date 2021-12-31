@@ -7,10 +7,10 @@ import { Container } from './styles';
 // import { Post } from '../../../global/types';
 
 interface Props {
-  // groupID: string;
+  groupID: string;
 }
 
-const Posts: React.FC<Props> = () => {
+const Posts: React.FC<Props> = ({ groupID }) => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [error, setError] = React.useState('');
   // const [posts, setPosts] = React.useState<Post[]>([]);

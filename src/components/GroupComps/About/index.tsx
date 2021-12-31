@@ -1,11 +1,18 @@
 import React from 'react';
 
 import { Container, Creator, Admins, Statistics } from './styles';
-import { Author } from '../../../global/styles';
+import { Author, InnerCenteredContainer } from '../../../global/styles';
 
-import MockUserPic from '../../../assets/default-picture.png';
+import DefaultPicture from '../../../assets/default-picture.png';
 
-const About: React.FC = () => {
+import { Group } from '../../../global/types';
+import { Exception } from '../..';
+
+interface Props {
+  group: Group;
+}
+
+const About: React.FC<Props> = ({ group }) => {
   return (
     <Container>
       <Creator>
@@ -15,11 +22,16 @@ const About: React.FC = () => {
           </li>
           <li className="content">
             <div className="imgContainer">
-              <img src={MockUserPic} alt="creator name" />
+              <img
+                src={group.creator.picture ? group.creator.picture : DefaultPicture}
+                alt={group.creator.name}
+              />
             </div>
             <div className="txtContainer">
-              <h4>creator name</h4>
-              <p>creation date</p>
+              <h4>{group.creator.name}</h4>
+              <p>
+                Created at: {group.creationDate.date} - {group.creationDate.time}
+              </p>
             </div>
           </li>
         </ul>
@@ -28,21 +40,31 @@ const About: React.FC = () => {
         <li className="title">
           <h3>Admins</h3>
         </li>
-        {new Array(5).fill(1).map((_, i) => (
-          <li key={i} className="admin">
-            <Author>
-              <div>
-                <img src={MockUserPic} alt="okokokok" />
+        {group.admins.length ? (
+          group.admins.map(admin => (
+            <li key={admin.id} className="admin">
+              <Author>
+                <div>
+                  <img src={admin.picture ? admin.picture : DefaultPicture} alt={admin.name} />
+                </div>
+                <div className="name">
+                  <h4>{admin.name}</h4>
+                </div>
+              </Author>
+              <div className="sinceDate">
+                <p>
+                  In the group since: {admin.entranceDate.date} - {admin.entranceDate.time}
+                </p>
               </div>
-              <div className="name">
-                <h4>admin name hey</h4>
-              </div>
-            </Author>
-            <div className="sinceDate">
-              <p>Admin since: 14/07/2000</p>
-            </div>
+            </li>
+          ))
+        ) : (
+          <li>
+            <InnerCenteredContainer>
+              <Exception message="This group has no admins so far!" />
+            </InnerCenteredContainer>
           </li>
-        ))}
+        )}
       </Admins>
       <Statistics>
         <li className="title">
@@ -50,15 +72,15 @@ const About: React.FC = () => {
         </li>
         <li className="statistics">
           <h4>Total posts</h4>
-          <p>45873</p>
+          <p>{group.posts.length}</p>
         </li>
         <li className="statistics">
           <h4>Total users</h4>
-          <p>645498</p>
+          <p>{group.users.length}</p>
         </li>
         <li className="statistics">
           <h4>Total group's likes</h4>
-          <p>566898</p>
+          <p>{group.likes.length}</p>
         </li>
       </Statistics>
     </Container>

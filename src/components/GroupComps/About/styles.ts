@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.section`
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   .title {
     width: 100%;
     h3 {
@@ -28,6 +29,7 @@ export const Creator = styled.article`
   align-items: center;
   width: 100%;
   padding: 1rem;
+  margin-top: 3rem;
   .creatorInfo {
     display: flex;
     flex-direction: column;
@@ -76,7 +78,6 @@ export const Creator = styled.article`
 
 export const Admins = styled.ul`
   padding: 0 1rem;
-  margin-top: 1rem;
   .admin {
     width: 100%;
     background: ${({ theme: { bgs } }) => bgs.tertiary};
@@ -107,7 +108,6 @@ export const Admins = styled.ul`
 
 export const Statistics = styled.ul`
   padding: 0 1rem;
-  margin-top: 2rem;
   display: flex;
   flex-flow: row wrap;
   align-items: center;

@@ -7,7 +7,13 @@ import MockUser from '../../../assets/default-picture.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faUser } from '@fortawesome/free-solid-svg-icons';
 
-const Users: React.FC = () => {
+import { Group } from '../../../global/types';
+
+interface Props {
+  users: Group['users'];
+}
+
+const Users: React.FC<Props> = ({ users }) => {
   return (
     <Container>
       <List>

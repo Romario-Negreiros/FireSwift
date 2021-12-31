@@ -24,9 +24,12 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
   const [error, setError] = React.useState<string>('');
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
 
+  console.log(friendsIds);
+
   React.useEffect(() => {
     (async () => {
       try {
+        console.log('aqui caralho');
         const usersSnapshot = await firestoredb.getDocs(
           firestoredb.collection(firestoredb.db, 'users')
         );
@@ -40,14 +43,18 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
             name: userData.name,
             picture: userData.picture,
           };
-          
+
           if (friendsIds) {
             if (friendsIds.some(friendId => friendId === userObj.id)) users.push(userObj);
           } else users.push(userObj);
         });
-      
-        if (!users.length) setError('Nothing to see here!');
-        setUsers(users);
+
+        if (!users.length) {
+          setError('Nothing to see here!');
+        } else {
+          setError('');
+          setUsers(users);
+        }
       } catch (err) {
         handleFirebaseError(err, setError);
       } finally {

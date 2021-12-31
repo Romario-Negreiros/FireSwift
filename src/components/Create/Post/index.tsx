@@ -116,7 +116,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
   const totalFilesLimiter = (event: React.FormEvent<HTMLInputElement>, type: string) => {
     if (event.currentTarget.files && event.currentTarget.files.length > 6) {
       event.preventDefault();
-      toast(`Maximum of five ${type}`);
+      toast.error(`Maximum of five ${type}`);
     }
   };
 
