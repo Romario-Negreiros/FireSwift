@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { Link } from 'react-router-dom';
+
 export const Container = styled.main`
   position: relative;
   z-index: 5;
@@ -15,9 +17,9 @@ export const Container = styled.main`
 
 export const Manage = styled.button`
   position: absolute;
-  right: 1rem;
-  top: 1rem;
   display: flex;
+  top: 13rem;
+  left: 1rem;
   flex-direction: column;
   align-items: center;
   font-size: 1.3rem;
@@ -25,9 +27,16 @@ export const Manage = styled.button`
   background: unset;
   border: 0 none;
   cursor: pointer;
-  @media screen and (min-width: 400px) {
-    flex-direction: row;
+  a {
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    display: flex;
+    flex-direction: column;
     gap: 0.5rem;
+  }
+  @media screen and (min-width: 400px) {
+    right: 1rem;
+    top: 1rem;
+    left: unset;
   }
   :hover {
     opacity: 0.5;
@@ -127,6 +136,53 @@ export const Friends = styled.div`
     color: ${({ theme: { fonts } }) => fonts.secondary};
     font-size: 1.8rem;
   }
+`;
+
+export const Groups = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: ${({ theme: { fonts } }) => fonts.secondary};
+  div {
+    border: 1px solid ${({ theme: { border } }) => border.primary};
+    width: 100%;
+    padding: 0.5rem;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 700px;
+    li {
+      padding: 1rem;
+      background: ${({ theme: { bgs } }) => bgs.tertiary};
+      border: 1px solid ${({ theme: { border } }) => border.primary};
+      h3 {
+        font-size: 1.6rem;
+      }
+      p {
+        font-size: 1.4rem;
+      }
+      :hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
+    }
+  }
+`;
+
+export const Redirect = styled(Link)`
+  color: ${({ theme: { fonts } }) => fonts.secondary};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;
 
 export const AccountOptions = styled.ul`

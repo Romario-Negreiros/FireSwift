@@ -5,10 +5,19 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { firestoredb } from '../../lib';
 import { useHistory } from 'react-router-dom';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
-import { toast } from 'react-toastify';
 
-import { CenteredContainer } from '../../global/styles';
-import { Container, Manage, Picture, UserBio, UserInfo, Friends, AccountOptions } from './styles';
+import { CenteredContainer, InnerCenteredContainer } from '../../global/styles';
+import {
+  Container,
+  Manage,
+  Picture,
+  UserBio,
+  UserInfo,
+  Friends,
+  AccountOptions,
+  Groups,
+  Redirect,
+} from './styles';
 import { FriendsList, Loader, Exception, Portal } from '../../components';
 import {
   ChangeAccountName,
@@ -31,7 +40,6 @@ interface State {
 
 const UserProfile: React.FC = () => {
   const {
-    push,
     location: { state },
   } = useHistory<State>();
   const [user, setUser] = React.useState<User | null>(null);
@@ -71,22 +79,26 @@ const UserProfile: React.FC = () => {
 
   React.useEffect(() => {
     if (state) {
-      (async () => {
-        try {
-          const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
-          const userSnap = await firestoredb.getDoc(userRef);
-          if (userSnap.exists()) {
-            const user = userSnap.data() as Omit<User, 'id'>;
-            setUser({ id: state.id, ...user });
-          } else setError('Nothing was found. The user might not exist!');
-        } catch (err) {
-          handleFirebaseError(err, setError);
-        } finally {
-          setIsLoaded(true);
-        }
-      })();
+      if (currentUser && state.id === currentUser.id) {
+        setUser(currentUser);
+        setIsLoaded(true);
+      } else {
+        (async () => {
+          try {
+            const userRef = firestoredb.doc(firestoredb.db, 'users', state.id);
+            const userSnap = await firestoredb.getDoc(userRef);
+            if (userSnap.exists()) {
+              const user = userSnap.data() as Omit<User, 'id'>;
+              setUser({ id: state.id, ...user });
+            } else setError('Nothing was found. The user might not exist!');
+          } catch (err) {
+            handleFirebaseError(err, setError);
+          } finally {
+            setIsLoaded(true);
+          }
+        })();
+      }
     } else {
-      toast.error("The user doesn't exist!");
       setError('Nothing was found. The user might not exist!');
     }
   }, [state, currentUser]);
@@ -118,23 +130,33 @@ const UserProfile: React.FC = () => {
           <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
           <h1>{user.name}</h1>
         </Picture>
-        {currentUser && currentUser.id !== user.id ? (
-          currentUser.friends.includes(user.id) ? (
-            <Manage onClick={() => Friend.remove(user.id, currentUser, dispatch)}>
-              <span>Remove friend</span>
-              <FontAwesomeIcon size="1x" color="purple" icon={faUserMinus} />
-            </Manage>
+        {currentUser ? (
+          currentUser.id !== user.id ? (
+            currentUser.friends.includes(user.id) ? (
+              <Manage onClick={() => Friend.remove(user.id, currentUser, dispatch)}>
+                <span>Remove friend</span>
+                <FontAwesomeIcon size="1x" color="purple" icon={faUserMinus} />
+              </Manage>
+            ) : (
+              <Manage onClick={() => Friend.add(user.id, currentUser, dispatch)}>
+                <span>Add friend</span>
+                <FontAwesomeIcon size="1x" color="purple" icon={faUserPlus} />
+              </Manage>
+            )
           ) : (
-            <Manage onClick={() => Friend.add(user.id, currentUser, dispatch)}>
-              <span>Add friend</span>
-              <FontAwesomeIcon size="1x" color="purple" icon={faUserPlus} />
+            <Manage>
+              <Redirect
+                to={{
+                  pathname: '/editprofile',
+                }}
+              >
+                <span>Edit profile</span>
+                <FontAwesomeIcon size="1x" color="purple" icon={faEdit} />
+              </Redirect>
             </Manage>
           )
         ) : (
-          <Manage onClick={() => push('editprofile')}>
-            <span>Edit profile</span>
-            <FontAwesomeIcon size="1x" color="purple" icon={faEdit} />
-          </Manage>
+          ''
         )}
         <UserBio>
           <p>{user.bio}</p>
@@ -173,6 +195,36 @@ const UserProfile: React.FC = () => {
           <h2>Friends</h2>
           <FriendsList friendsIds={user.friends} />
         </Friends>
+        <Groups>
+          <h2>Groups</h2>
+          {user.groups ? (
+            <ul>
+              {user.groups.map(group => (
+                <li
+                  key={group.id}
+                >
+                  <Redirect
+                    to={{
+                      pathname: `/groups/${group.name}`,
+                      state: {
+                        id: group.id,
+                      },
+                    }}
+                  >
+                    <h3>{group.name}</h3>
+                    <p>Role: {group.role}</p>
+                  </Redirect>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div>
+              <InnerCenteredContainer>
+                <Exception message="Nothing to see here!" />
+              </InnerCenteredContainer>
+            </div>
+          )}
+        </Groups>
         {currentUser && currentUser.id === user.id && (
           <AccountOptions>
             <li className="title">

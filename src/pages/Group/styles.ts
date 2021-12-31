@@ -3,10 +3,20 @@ import styled from 'styled-components';
 export const Container = styled.main`
   margin-top: -1.5rem;
   h2 {
-    color: ${({theme: { fonts }}) => fonts.secondary};
+    color: ${({ theme: { fonts } }) => fonts.secondary};
     text-align: center;
     margin-top: 1rem;
     font-size: 1.8rem;
+    :after {
+      display: block;
+      content: '';
+      background: ${({ theme: { gradients } }) => gradients.primary};
+      opacity: 0.8;
+      height: 2px;
+      width: 35%;
+      margin: auto;
+      margin-top: 0.5rem;
+    }
   }
 `;
 
@@ -64,6 +74,7 @@ export const Presentation = styled.ul`
       margin: auto;
       margin-bottom: 1rem;
       padding: 0 1.5rem;
+      word-break: break-all;
     }
     @media screen and (min-width: 750px) {
       h1 {
@@ -81,7 +92,7 @@ export const Presentation = styled.ul`
       width: 100%;
       margin: auto;
       li {
-        color: ${({theme: { fonts }}) => fonts.secondary};
+        color: ${({ theme: { fonts } }) => fonts.secondary};
         font-size: 1.4rem;
         padding: 1rem 2rem;
         cursor: pointer;

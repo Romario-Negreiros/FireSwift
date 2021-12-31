@@ -17,7 +17,7 @@ const Create: React.FC = () => {
     if (user) {
       switch (currentComponent) {
         case 'New group':
-          return <CreateGroup />;
+          return <CreateGroup user={user} />;
         case 'New post':
           return <CreatePost user={user} pathSegment="users" />;
         case 'New story':

@@ -20,7 +20,6 @@ const Home: React.FC = () => {
       const chatsRef = realtimedb.dbRef(realtimedb.db, 'chats');
       realtimedb.onValue(chatsRef, snapshot => {
         if (snapshot.exists()) {
-          console.log(user);
           const allChats = Object.values(snapshot.val()) as Chat[];
           const userChats: Chat[] = allChats.filter(chat => {
             if (user.chats.some(userChat => userChat.id === chat.id)) {
