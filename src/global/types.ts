@@ -51,6 +51,7 @@ export interface Post {
   id: string;
   author: string;
   authorID: string;
+  groupID?: string;
   formattedDate: {
     date: string;
     time: string;
@@ -143,7 +144,7 @@ export enum Roles {
   Member = "MEMBER",
 }
 
-export interface GroupUser extends Omit<ChatUser, 'chats'> {
+export interface GroupUser extends ChatUser {
   entranceDate: {
     date: string;
     time: string;
@@ -162,12 +163,12 @@ export interface Group {
   creator: User;
   users: GroupUser[];
   admins: GroupUser[];
-  posts: string[];
   private: boolean;
   requests: {
-    users: Pick<User, 'id' | 'name'>[];
-    posts: Post[];
-  }[];
+    usersToJoin: GroupUser[];
+    postsToPublish: Post[];
+  };
+  posts: string[];
   likes: string[];
   bgImg: string;
 }

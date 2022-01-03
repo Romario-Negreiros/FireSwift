@@ -145,6 +145,10 @@ export const Form = styled.form`
       display: inline;
     }
   }
+  h3 {
+    color: ${({ theme: { fonts } }) => fonts.secondary};
+    font-size: 1.6rem;
+  }
 `;
 
 export const ErrorBorder = styled.section`
