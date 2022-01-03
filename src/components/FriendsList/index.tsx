@@ -24,12 +24,9 @@ const FriendsList: React.FC<Props> = ({ friendsIds }) => {
   const [error, setError] = React.useState<string>('');
   const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
 
-  console.log(friendsIds);
-
   React.useEffect(() => {
     (async () => {
       try {
-        console.log('aqui caralho');
         const usersSnapshot = await firestoredb.getDocs(
           firestoredb.collection(firestoredb.db, 'users')
         );

@@ -52,7 +52,7 @@ const ChangeAccountName: React.FC<ModalsProps> = ({ setIsModalVisible, user }) =
       await authenticateUser(user.email, password);
       const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
       await firestoredb.updateDoc(userRef, {
-        newName,
+        name: newName,
       });
       dispatch(updateUser({ ...user, name: newName }));
       toast('Name succesfully updated');

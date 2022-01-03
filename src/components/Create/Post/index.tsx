@@ -22,18 +22,19 @@ import { Loader } from '../..';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile, faImage, faVideo } from '@fortawesome/free-solid-svg-icons';
 
-import { Post, User } from '../../../global/types';
+import { Post, User, Group } from '../../../global/types';
 
 interface Props {
   user: User;
   pathSegment: string;
+  group?: Group;
 }
 
 interface Inputs {
   postContent: string;
 }
 
-const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
+const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
   const {
     register,
     formState: { errors },
@@ -48,7 +49,8 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
     try {
       setIsLoaded(false);
       const currentDate = getFormattedDate();
-      const post: Omit<Post, 'id'> = {
+      const post: Post = {
+        id: uuidv4(),
         authorID: user.id,
         author: user.name,
         formattedDate: currentDate,
@@ -61,13 +63,12 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
         reactions: [],
         comments: [],
       };
-      const postID = uuidv4();
       if (files.images) {
         const { images } = files;
         for (let img of images) {
           const storageRef = storage.ref(
             storage.storage,
-            `posts/${user.id}/${postID}/images/${images.indexOf(img)}`
+            `posts/${user.id}/${post.id}/images/${images.indexOf(img)}`
           );
           await storage.uploadBytesResumable(storageRef, img);
           const imgURL = await storage.getDownloadURL(storageRef);
@@ -79,7 +80,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
         for (let vid of videos) {
           const storageRef = storage.ref(
             storage.storage,
-            `posts/${user.id}/${postID}/videos/${videos.indexOf(vid)}`
+            `posts/${user.id}/${post.id}/videos/${videos.indexOf(vid)}`
           );
           await storage.uploadBytesResumable(storageRef, vid);
           const vidURL = await storage.getDownloadURL(storageRef);
@@ -91,7 +92,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
         for (let doc of files.docs) {
           const storageRef = storage.ref(
             storage.storage,
-            `posts/${user.id}/${postID}/docs/${docs.indexOf(doc)}`
+            `posts/${user.id}/${post.id}/docs/${docs.indexOf(doc)}`
           );
           await storage.uploadBytesResumable(storageRef, doc);
           const docURL = await storage.getDownloadURL(storageRef);
@@ -102,8 +103,33 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment }) => {
           post.media.docs.push(docObj);
         }
       }
-      await firestoredb.setDoc(firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, postID), post);
-      toast('Post succesfully created!');
+      if (group) {
+        post['groupID'] = group.id;
+        const groupRef = firestoredb.doc(firestoredb.db, 'groups', group.id);
+        const groupCopy: Group = JSON.parse(JSON.stringify(group));
+        if (group.private) {
+          groupCopy.requests.postsToPublish.push(post);
+          await firestoredb.updateDoc(groupRef, {
+            requests: groupCopy.requests,
+          });
+        } else {
+          await firestoredb.setDoc(
+            firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id),
+            post
+          );
+          groupCopy.posts.push(post.id);
+          await firestoredb.updateDoc(groupRef, {
+            posts: groupCopy.posts,
+          });
+          toast('Post succesfully created!');
+        }
+      } else {
+        await firestoredb.setDoc(
+          firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id),
+          post
+        );
+        toast('Post succesfully created!');
+      }
       reset();
     } catch (err) {
       handleFirebaseError(err, setError);

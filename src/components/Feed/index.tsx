@@ -24,13 +24,8 @@ const Feed: React.FC = () => {
         if (!postsSnapshot.empty) {
           const posts: PostType[] = [];
           postsSnapshot.forEach(post => {
-            const { id } = post;
-            const postData = post.data() as Omit<PostType, 'id'>;
-            const postObj: PostType = {
-              ...postData,
-              id,
-            };
-            posts.push(postObj);
+            const postData = post.data() as PostType;
+            posts.push(postData);
           });
           setPosts(posts);
         } else setError('No posts were found!');

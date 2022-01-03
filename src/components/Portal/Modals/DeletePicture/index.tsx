@@ -27,7 +27,7 @@ interface Inputs {
   password: string;
 }
 
-const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
+const DeletePicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   const [error, setError] = React.useState('');
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
   const dispatch = useAppDispatch();
@@ -101,4 +101,4 @@ const DefaultPicture: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   );
 };
 
-export default DefaultPicture;
+export default DeletePicture;

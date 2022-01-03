@@ -24,7 +24,7 @@ import { Loader } from '../..';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 
-import { Group, User, Roles } from '../../../global/types';
+import { Group, User, Roles, GroupUser } from '../../../global/types';
 
 interface Inputs {
   name: string;
@@ -48,7 +48,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ desc, name, isPrivate }) => {
-    const files = getInputItems(['img']);
+    const files = getInputItems(['groupimg']);
     try {
       setIsLoaded(false);
       const group: Group = {
@@ -59,13 +59,25 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         creator: user,
         users: [],
         admins: [],
-        posts: [],
         private: Boolean(isPrivate),
-        requests: [],
+        requests: {
+          usersToJoin: [],
+          postsToPublish: [],
+        },
+        posts: [],
         likes: [],
         bgImg: '',
       };
-      if (files.images) {
+      const creatorUser: GroupUser = {
+        id: user.id,
+        name: user.name,
+        picture: user.picture,
+        chats: user.chats,
+        entranceDate: getFormattedDate(),
+        role: Roles.Creator,
+      };
+      group.users.push(creatorUser);
+      if (files.images.length) {
         const { images } = files;
         const storageRef = storage.ref(storage.storage, `groups/${group.id}/bgImg`);
         await storage.uploadBytesResumable(storageRef, images[0]);
@@ -83,7 +95,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
       await firestoredb.updateDoc(userRef, {
         groups: userCopy.groups,
       });
-      dispatch(updateUser({...userCopy}));
+      dispatch(updateUser({ ...userCopy }));
       toast('Group succesfully created, you can see your groups in your profile!');
       reset();
     } catch (err) {
@@ -123,6 +135,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
                 value: 5,
                 message: 'Minimum length of 5 characters!',
               },
+              required: "You can't create a group without name!",
             })}
           ></input>
           <p>{errors.name?.message}</p>
@@ -132,19 +145,24 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
                 value: 150,
                 message: 'Max length of 150 characters!',
               },
+              minLength: {
+                value: 30,
+                message: 'Min length of 30 characters!',
+              },
+              required: "You can't create a group without description!",
             })}
             placeholder="Put your group description here..."
           />
           <p>{errors.desc?.message}</p>
 
           <h3>Add image for group's page background</h3>
-          <CustomLabelBox htmlFor="img">
+          <CustomLabelBox htmlFor="grouppimg">
             <FontAwesomeIcon icon={faImage} color="purple" size="2x" />
             <input
               type="file"
               accept="image/*"
-              name="img"
-              id="img"
+              name="groupimg"
+              id="groupimg"
               style={{ display: 'none' }}
             ></input>
           </CustomLabelBox>
