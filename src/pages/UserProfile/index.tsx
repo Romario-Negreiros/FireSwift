@@ -197,7 +197,7 @@ const UserProfile: React.FC = () => {
         </Friends>
         <Groups>
           <h2>Groups</h2>
-          {user.groups ? (
+          {user.groups.length ? (
             <ul>
               {user.groups.map(group => (
                 <li

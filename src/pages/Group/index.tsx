@@ -3,14 +3,17 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { firestoredb } from '../../lib';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import GroupAccess from '../../utils/classes/GroupAccess';
 
 import { Container, Presentation } from './styles';
-import { Posts, About, Users, Loader, Exception } from '../../components';
+import { Posts, About, Users, Loader, Exception, CreatePost } from '../../components';
 import { CenteredContainer } from '../../global/styles';
 
 import DefaultBg from '../../assets/mock-post.jpg';
 
-import { Group as GroupType } from '../../global/types';
+import { Group as GroupType, User } from '../../global/types';
+import { toast } from 'react-toastify';
 
 interface State {
   id: string;
@@ -21,6 +24,8 @@ const Group: React.FC = () => {
   const [error, setError] = React.useState('');
   const [group, setGroup] = React.useState<GroupType | null>(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const user = useAppSelector(state => state.user.user);
+  const dispatch = useAppDispatch();
   const {
     location: { state },
   } = useHistory<State>();
@@ -31,13 +36,25 @@ const Group: React.FC = () => {
         case 'Posts':
           return <Posts groupID={group.id} />;
         case 'About':
-          return <About group={group} />;
+        return <About group={group} />;
         case 'Users':
           return <Users users={group.users} />;
-        default:
-          return <Posts groupID={group.id} />;
+        case 'Create post':
+          return <CreatePost user={user as User} pathSegment="groups" group={group} />;
       }
     }
+  };
+
+  const handleLeaveOrJoin = () => {
+    if (user) {
+      if (group) {
+        if (!user.groups.some(uGroup => uGroup.id === group.id)) {
+          GroupAccess.join(user, group, dispatch, setError, setGroup);
+        } else {
+          GroupAccess.leave(user, group, dispatch, setError, setGroup);
+        }
+      }
+    } else toast.error('You need to be logged in to complete this action!');
   };
 
   React.useEffect(() => {
@@ -87,7 +104,7 @@ const Group: React.FC = () => {
       <Container>
         <Presentation>
           <li className="bgImg">
-            <img src={group.bgImg ? group.bgImg : DefaultBg} alt={group.name} />
+            <img src={group.bgImg.length ? group.bgImg : DefaultBg} alt={group.name} />
           </li>
           <li className="info">
             <h1>{group.name}</h1>
@@ -98,10 +115,29 @@ const Group: React.FC = () => {
               <li onClick={() => setCurrentComponent('Posts')}>Posts</li>
               <li onClick={() => setCurrentComponent('About')}>About</li>
               <li onClick={() => setCurrentComponent('Users')}>Users</li>
+              {user && (
+                <li
+                  onClick={() => {
+                    if (!user?.groups.some(uGroup => uGroup.id === group.id)) {
+                      toast.error('You need to join the group in order to create posts!');
+                      return;
+                    }
+                    setCurrentComponent('Create post');
+                  }}
+                >
+                  Create post
+                </li>
+              )}
+              <li onClick={handleLeaveOrJoin}>
+                {!user?.groups.some(uGroup => uGroup.id === group.id)
+                  ? 'Join group'
+                  : 'Leave group'}
+              </li>
             </ul>
           </li>
         </Presentation>
         <h2>{currentComponent}</h2>
+        <br />
         {changeComponent()}
       </Container>
     </>

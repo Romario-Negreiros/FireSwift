@@ -160,7 +160,6 @@ export const Groups = styled.div`
     width: 100%;
     max-width: 700px;
     li {
-      padding: 1rem;
       background: ${({ theme: { bgs } }) => bgs.tertiary};
       border: 1px solid ${({ theme: { border } }) => border.primary};
       h3 {
@@ -175,7 +174,7 @@ export const Groups = styled.div`
       }
     }
   }
-`;
+  `;
 
 export const Redirect = styled(Link)`
   color: ${({ theme: { fonts } }) => fonts.secondary};
@@ -183,6 +182,7 @@ export const Redirect = styled(Link)`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 1rem;
 `;
 
 export const AccountOptions = styled.ul`

@@ -7,16 +7,6 @@ export const Container = styled.main`
     text-align: center;
     margin-top: 1rem;
     font-size: 1.8rem;
-    :after {
-      display: block;
-      content: '';
-      background: ${({ theme: { gradients } }) => gradients.primary};
-      opacity: 0.8;
-      height: 2px;
-      width: 35%;
-      margin: auto;
-      margin-top: 0.5rem;
-    }
   }
 `;
 
@@ -89,19 +79,22 @@ export const Presentation = styled.ul`
   .options {
     ul {
       display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
       width: 100%;
       margin: auto;
       li {
         color: ${({ theme: { fonts } }) => fonts.secondary};
         font-size: 1.4rem;
         padding: 1rem 2rem;
+        width: fit-content;
         cursor: pointer;
         :hover {
           backdrop-filter: brightness(135%);
         }
       }
-      @media screen and (min-width: 400px) {
-        width: 350px;
+      @media screen and (min-width: 500px) {
+        max-width: 650px;
       }
     }
   }
