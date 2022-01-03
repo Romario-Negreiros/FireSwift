@@ -157,7 +157,7 @@ export const Redirect = styled(Link)`
 
 export const User = styled.div`
   display: none !important;
-  @media screen and (min-width: 300px) {
+  @media screen and (min-width: 350px) {
     display: flex !important;
     gap: 1rem;
     align-items: center;
