@@ -77,6 +77,10 @@ Non-connected users will only be able to see the posts, no person's profile or c
         - [x] Comments' replies
     - [x] Create chat system
     - [ ] Create group system
+        - [ ] Requests
+        - [ ] Admins and creator panel
+        - [x] Group page
+        - [x] Group posts 
     - [ ] Create story system
 - [x] Integrations
     - [x] Firestore
