@@ -27,7 +27,7 @@ const setChat = async (
       currentUser.chats.forEach(chat => {
         if (chat.receiverID === desiredUser.id) {
           history.push({
-            pathname: 'chats',
+            pathname: '/chats',
             state: { chatID: chat.id },
           });
         }
