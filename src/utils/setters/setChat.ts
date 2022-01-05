@@ -66,7 +66,7 @@ const setChat = async (
     });
     dispatch(updateUser({ ...currentUser, chats: [...users[0].chats] }));
     history.push({
-      pathname: 'chats',
+      pathname: '/chats',
       state: { chatID: chat.id },
     });
   } catch (err) {
