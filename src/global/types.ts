@@ -28,7 +28,7 @@ export interface User {
   groups: {
     id: string;
     name: string;
-    role: Roles
+    role: Roles;
   }[];
 }
 
@@ -139,16 +139,16 @@ export interface ModalsProps {
 }
 
 export enum Roles {
-  Creator = "CREATOR",
-  Admin = "ADMIN",
-  Member = "MEMBER",
+  Owner = 'OWNER',
+  Admin = 'ADMIN',
+  Member = 'MEMBER',
 }
 
 export interface GroupUser extends ChatUser {
   entranceDate: {
     date: string;
     time: string;
-  }
+  };
   role: Roles;
 }
 
@@ -160,7 +160,7 @@ export interface Group {
     date: string;
     time: string;
   };
-  creator: User;
+  owner: User;
   users: GroupUser[];
   admins: GroupUser[];
   private: boolean;
@@ -170,5 +170,16 @@ export interface Group {
   };
   posts: string[];
   likes: string[];
-  bgImg: string;
+  picture: string;
+}
+
+export interface ContentConstraints {
+  id: string;
+  name: string;
+  picture: string;
+  chats?: {
+    id: string;
+    receiverID: string;
+  }[];
+  role?: Roles;
 }
