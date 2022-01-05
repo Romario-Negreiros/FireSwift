@@ -7,7 +7,8 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import GroupAccess from '../../utils/classes/GroupAccess';
 
 import { Container, Presentation } from './styles';
-import { Posts, About, Users, Loader, Exception, CreatePost } from '../../components';
+import { Posts, About, Users, Loader, Exception, CreatePost, Portal } from '../../components';
+import { ManageUsers } from '../../components/Portal/Modals';
 import { CenteredContainer } from '../../global/styles';
 
 import DefaultBg from '../../assets/mock-post.jpg';
@@ -24,6 +25,7 @@ const Group: React.FC = () => {
   const [error, setError] = React.useState('');
   const [group, setGroup] = React.useState<GroupType | null>(null);
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
   const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
   const {
@@ -36,7 +38,7 @@ const Group: React.FC = () => {
         case 'Posts':
           return <Posts groupID={group.id} />;
         case 'About':
-        return <About group={group} />;
+          return <About group={group} />;
         case 'Users':
           return <Users users={group.users} />;
         case 'Create post':
@@ -51,7 +53,11 @@ const Group: React.FC = () => {
         if (!user.groups.some(uGroup => uGroup.id === group.id)) {
           GroupAccess.join(user, group, dispatch, setError, setGroup);
         } else {
-          GroupAccess.leave(user, group, dispatch, setError, setGroup);
+          if (group.owner.id === user.id) {
+            setIsModalVisible(true);
+          } else {
+            GroupAccess.leave(user, group, dispatch, setError, setGroup);
+          }
         }
       }
     } else toast.error('You need to be logged in to complete this action!');
@@ -104,7 +110,7 @@ const Group: React.FC = () => {
       <Container>
         <Presentation>
           <li className="bgImg">
-            <img src={group.bgImg.length ? group.bgImg : DefaultBg} alt={group.name} />
+            <img src={group.picture ? group.picture : DefaultBg} alt={group.name} />
           </li>
           <li className="info">
             <h1>{group.name}</h1>
@@ -140,6 +146,11 @@ const Group: React.FC = () => {
         <br />
         {changeComponent()}
       </Container>
+      {isModalVisible && (
+        <Portal>
+          <ManageUsers setIsModalVisible={setIsModalVisible} user={user as User} group={group} />
+        </Portal>
+      )}
     </>
   );
 };
