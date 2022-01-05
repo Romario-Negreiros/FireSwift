@@ -17,9 +17,10 @@ import {
   CloseModal,
 } from '../../../../global/styles';
 
+import Logo from '../../../../assets/logo.png';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import Logo from '../../../../assets/logo.png';
 
 import { ModalsProps } from '../../../../global/types';
 

@@ -1,10 +1,6 @@
 import React from 'react';
 
-import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
-import { clearUsers, queryUsers } from '../../../../features/users/usersSlice';
-import { firestoredb } from '../../../../lib';
-import handleFirebaseError from '../../../../utils/general/handleFirebaseError';
-import Search from '../../../../utils/classes/Search';
+import { useAppSelector } from '../../../../app/hooks';
 
 import { Input } from '../../../../global/styles';
 import { Container } from './styles';
@@ -13,19 +9,20 @@ import DropDown from './DropDown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import { Result, User } from '../../../../global/types';
+import { ContentConstraints } from '../../../../global/types';
 
-interface Props {
+interface Props<T extends ContentConstraints> {
+  content: T[];
   setIsModalVisible?: (isModalVisible: boolean) => void;
 }
 
-const Searcher: React.FC<Props> = ({ setIsModalVisible }) => {
+const Searcher = <T extends ContentConstraints>(
+  props: React.PropsWithChildren<Props<T>>
+): React.ReactElement => {
   const user = useAppSelector(state => state.user.user);
-  const users = useAppSelector(state => state.users.users);
-  const dispatch = useAppDispatch();
   const [value, setValue] = React.useState('');
-  const [error, setError] = React.useState('');
-  const [results, setResults] = React.useState<Result[]>([]);
+  const [results, setResults] = React.useState<T[]>([]);
+  const { content, setIsModalVisible } = props;
 
   const handleClick = () => {
     if (setIsModalVisible) {
@@ -35,33 +32,21 @@ const Searcher: React.FC<Props> = ({ setIsModalVisible }) => {
     }
   };
 
+  const search = React.useCallback(() => {
+    const results: T[] = [];
+    content.forEach(item => {
+      if (item.name.toLowerCase().includes(value.toLowerCase())) {
+        results.push(item);
+      }
+      setResults(results);
+    });
+  }, [content, value]);
+
   React.useEffect(() => {
     if (value) {
-      setError('');
-      if (!users) {
-        (async () => {
-          try {
-            const usersSnapshot = await firestoredb.getDocs(
-              firestoredb.collection(firestoredb.db, 'users')
-            );
-            const usersList: User[] = [];
-            usersSnapshot.forEach(userDoc => {
-              if (userDoc.exists()) {
-                const userData = userDoc.data() as Omit<User, 'id'>;
-                const { id } = userDoc;
-                usersList.push({ id, ...userData });
-              }
-            });
-            dispatch(queryUsers(usersList));
-          } catch (err) {
-            handleFirebaseError(err, setError);
-          }
-        })();
-      } else {
-        Search.byBoth(users, value, setResults);
-      }
-    } else dispatch(clearUsers(null));
-  }, [value, users, dispatch]);
+      search();
+    }
+  }, [value, search]);
 
   return (
     <Container>
@@ -79,7 +64,7 @@ const Searcher: React.FC<Props> = ({ setIsModalVisible }) => {
           </div>
         </Input>
       </section>
-      {value && <DropDown error={error} results={results} user={user} />}
+      {value && <DropDown<T> results={results} user={user} />}
     </Container>
   );
 };

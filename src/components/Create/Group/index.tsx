@@ -56,7 +56,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         name,
         desc,
         creationDate: getFormattedDate(),
-        creator: user,
+        owner: user,
         users: [],
         admins: [],
         private: Boolean(isPrivate),
@@ -66,7 +66,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         },
         posts: [],
         likes: [],
-        bgImg: '',
+        picture: '',
       };
       const creatorUser: GroupUser = {
         id: user.id,
@@ -74,7 +74,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         picture: user.picture,
         chats: user.chats,
         entranceDate: getFormattedDate(),
-        role: Roles.Creator,
+        role: Roles.Owner,
       };
       group.users.push(creatorUser);
       if (files.images.length) {
@@ -82,13 +82,13 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         const storageRef = storage.ref(storage.storage, `groups/${group.id}/bgImg`);
         await storage.uploadBytesResumable(storageRef, images[0]);
         const imgURL = await storage.getDownloadURL(storageRef);
-        group.bgImg = imgURL;
+        group.picture = imgURL;
       }
       const userCopy: User = JSON.parse(JSON.stringify(user));
       userCopy.groups.push({
         id: group.id,
         name: group.name,
-        role: Roles.Creator,
+        role: Roles.Owner,
       });
       await firestoredb.setDoc(firestoredb.doc(firestoredb.db, `groups`, group.id), group);
       const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
@@ -156,7 +156,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
           <p>{errors.desc?.message}</p>
 
           <h3>Add image for group's page background</h3>
-          <CustomLabelBox htmlFor="grouppimg">
+          <CustomLabelBox htmlFor="groupimg">
             <FontAwesomeIcon icon={faImage} color="purple" size="2x" />
             <input
               type="file"

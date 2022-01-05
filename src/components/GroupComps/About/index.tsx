@@ -23,12 +23,12 @@ const About: React.FC<Props> = ({ group }) => {
           <li className="content">
             <div className="imgContainer">
               <img
-                src={group.creator.picture ? group.creator.picture : DefaultPicture}
-                alt={group.creator.name}
+                src={group.owner.picture ? group.owner.picture : DefaultPicture}
+                alt={group.owner.name}
               />
             </div>
             <div className="txtContainer">
-              <h4>{group.creator.name}</h4>
+              <h4>{group.owner.name}</h4>
               <p>
                 Created at: {group.creationDate.date} - {group.creationDate.time}
               </p>

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { Author, CustomIconBox, Options } from '../../../global/styles';
 import { Container, List } from './styles';
 
-import DefaultPiture from '../../../assets/default-picture.png';
+import DefaultPicture from '../../../assets/default-picture.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +31,7 @@ const Users: React.FC<Props> = ({ users }) => {
           <li key={user.id}>
             <Author>
               <div>
-                <img src={user.picture ? user.picture : DefaultPiture} alt={user.name} />
+                <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
               </div>
               <div className="name">
                 <h2>{user.name}</h2>
