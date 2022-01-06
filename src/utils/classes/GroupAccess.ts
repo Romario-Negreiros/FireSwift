@@ -12,8 +12,8 @@ class GroupAccess {
     user: User,
     group: GroupType,
     dispatch: AppDispatch,
-    setError: (error: string) => void,
-    setGroup: (group: GroupType | null) => void
+    setGroup: (group: GroupType | null) => void,
+    setError?: (error: string) => void
   ) => {
     try {
       const groupCopy: GroupType = JSON.parse(JSON.stringify(group));
@@ -60,8 +60,8 @@ class GroupAccess {
     user: User,
     group: GroupType,
     dispatch: AppDispatch,
-    setError: (error: string) => void,
-    setGroup: (group: GroupType | null) => void
+    setGroup: (group: GroupType | null) => void,
+    setError?: (error: string) => void
   ) => {
     try {
       const groupCopy: GroupType = JSON.parse(JSON.stringify(group));
@@ -76,15 +76,21 @@ class GroupAccess {
       }
       groupCopy.users.splice(userIndex, 1);
       userCopy.groups.splice(groupIndex, 1);
-      await firestoredb.updateDoc(groupRef, {
-        users: groupCopy.users,
-      });
       await firestoredb.updateDoc(userRef, {
-        groups: userCopy,
+        groups: userCopy.groups,
       });
       dispatch(updateUser({ ...userCopy }));
-      toast('You left the group!');
-      setGroup(groupCopy);
+      if (groupCopy.users.length) {
+        await firestoredb.updateDoc(groupRef, {
+          users: groupCopy.users,
+        });
+        toast('You left the group!');
+        setGroup(groupCopy);
+      } else {
+        await firestoredb.deleteDoc(groupRef);
+        toast('The group was deleted, you were the last user in it!');
+        setGroup(null);
+      }
     } catch (err) {
       handleFirebaseError(err, setError);
     }
