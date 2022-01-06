@@ -51,12 +51,16 @@ const Group: React.FC = () => {
     if (user) {
       if (group) {
         if (!user.groups.some(uGroup => uGroup.id === group.id)) {
-          GroupAccess.join(user, group, dispatch, setError, setGroup);
+          GroupAccess.join(user, group, dispatch, setGroup, setError);
         } else {
           if (group.owner.id === user.id) {
-            setIsModalVisible(true);
+            if (group.users.length > 1) {
+              setIsModalVisible(true);
+            } else {
+              GroupAccess.leave(user, group, dispatch, setGroup, setError);
+            }
           } else {
-            GroupAccess.leave(user, group, dispatch, setError, setGroup);
+            GroupAccess.leave(user, group, dispatch, setGroup, setError);
           }
         }
       }
@@ -148,7 +152,13 @@ const Group: React.FC = () => {
       </Container>
       {isModalVisible && (
         <Portal>
-          <ManageUsers setIsModalVisible={setIsModalVisible} user={user as User} group={group} />
+          <ManageUsers
+            setIsModalVisible={setIsModalVisible}
+            user={user as User}
+            group={group}
+            setGroup={setGroup}
+            message={'Before leaving, you need to chose another owner to the group!'}
+          />
         </Portal>
       )}
     </>
