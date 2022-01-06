@@ -9,6 +9,7 @@ import UserProfile from './UserProfile';
 import EditProfile from './EditProfile';
 import Create from './Create';
 import Group from './Group';
+import GroupAdmPanel from './GroupAdmPanel';
 
 const Pages: React.FC = () => {
 
@@ -21,7 +22,8 @@ const Pages: React.FC = () => {
       <Route path="/editprofile" component={EditProfile} />
       <Route path="/create" component={Create} />
       <Route path="/users/:username" component={UserProfile} />
-      <Route path="/groups/:groupname" component={Group} />
+      <Route exact path="/groups/:groupname" component={Group} />
+      <Route path="/groups/:groupname/admpanel" component={GroupAdmPanel} />
       <Redirect path="/" to="/home" />
     </Switch>
   );

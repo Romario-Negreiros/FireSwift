@@ -8,12 +8,12 @@ import GroupAccess from '../../utils/classes/GroupAccess';
 
 import { Container, Presentation } from './styles';
 import { Posts, About, Users, Loader, Exception, CreatePost, Portal } from '../../components';
-import { ManageUsers } from '../../components/Portal/Modals';
+import { ChooseNewOwner } from '../../components/Portal/Modals';
 import { CenteredContainer } from '../../global/styles';
 
 import DefaultBg from '../../assets/mock-post.jpg';
 
-import { Group as GroupType, User } from '../../global/types';
+import { Group as GroupType, Roles, User } from '../../global/types';
 import { toast } from 'react-toastify';
 
 interface State {
@@ -29,6 +29,7 @@ const Group: React.FC = () => {
   const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
   const {
+    push,
     location: { state },
   } = useHistory<State>();
 
@@ -86,6 +87,7 @@ const Group: React.FC = () => {
         }
       })();
     } else {
+      setIsLoaded(true);
       setError('Something went wrong!');
     }
   }, [state]);
@@ -143,6 +145,24 @@ const Group: React.FC = () => {
                   ? 'Join group'
                   : 'Leave group'}
               </li>
+              {user?.groups.some(
+                uGroup =>
+                  (uGroup.id === group.id && uGroup.role === Roles.Admin) ||
+                  uGroup.role === Roles.Owner
+              ) && (
+                <li
+                  onClick={() =>
+                    push({
+                      pathname: `/groups/${group.name}/admpanel`,
+                      state: {
+                        id: group.id
+                      }
+                    })
+                  }
+                >
+                  Adm panel
+                </li>
+              )}
             </ul>
           </li>
         </Presentation>
@@ -152,12 +172,11 @@ const Group: React.FC = () => {
       </Container>
       {isModalVisible && (
         <Portal>
-          <ManageUsers
+          <ChooseNewOwner
             setIsModalVisible={setIsModalVisible}
             user={user as User}
             group={group}
             setGroup={setGroup}
-            message={'Before leaving, you need to chose another owner to the group!'}
           />
         </Portal>
       )}
