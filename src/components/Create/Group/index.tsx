@@ -48,6 +48,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ desc, name, isPrivate }) => {
+    console.log('a')
     const files = getInputItems(['groupimg']);
     try {
       setIsLoaded(false);
@@ -98,14 +99,13 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
       dispatch(updateUser({ ...userCopy }));
       toast('Group succesfully created, you can see your groups in your profile!');
       reset();
+      setError('');
     } catch (err) {
       handleFirebaseError(err, setError);
     } finally {
       setIsLoaded(true);
-      setError('');
     }
   };
-
   if (!isLoaded) {
     return (
       <CenteredContainer>
@@ -179,7 +179,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
             <label htmlFor="privateProfile">Private group?</label>
           </div>
 
-          <button type="submit">Submit Post</button>
+          <button type="submit">Create</button>
         </Form>
       </FormBorder>
     </CreationContainer>

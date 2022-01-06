@@ -14,6 +14,7 @@ import { ContentConstraints } from '../../../../global/types';
 interface Props<T extends ContentConstraints> {
   content: T[];
   setIsModalVisible?: (isModalVisible: boolean) => void;
+  showAll?: boolean;
 }
 
 const Searcher = <T extends ContentConstraints>(
@@ -22,7 +23,7 @@ const Searcher = <T extends ContentConstraints>(
   const user = useAppSelector(state => state.user.user);
   const [value, setValue] = React.useState('');
   const [results, setResults] = React.useState<T[]>([]);
-  const { content, setIsModalVisible } = props;
+  const { content, setIsModalVisible, showAll } = props;
 
   const handleClick = () => {
     if (setIsModalVisible) {
@@ -45,8 +46,12 @@ const Searcher = <T extends ContentConstraints>(
   React.useEffect(() => {
     if (value) {
       search();
+    } else {
+      if(showAll) {
+        setResults(content);
+      }
     }
-  }, [value, search]);
+  }, [value, search, showAll, content]);
 
   return (
     <Container>
@@ -64,7 +69,7 @@ const Searcher = <T extends ContentConstraints>(
           </div>
         </Input>
       </section>
-      {value && <DropDown<T> results={results} user={user} />}
+      {(value || (!value && showAll)) && <DropDown<T> results={results} user={user} />}
     </Container>
   );
 };
