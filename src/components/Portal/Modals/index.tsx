@@ -6,4 +6,4 @@ export { default as ChangePicture } from './ChangePicture';
 export { default as DeletePicture } from './DeletePicture';
 export { default as DeleteMessage } from './DeleteMessage';
 export { default as Searcher } from './Searcher';
-export { default as ManageUsers } from './ManageUsers';
+export { default as ChooseNewOwner } from './ChooseNewOwner';

@@ -98,10 +98,10 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
     <Container>
       <Author>
         <div>
-          <img src={user && user.picture ? user.picture : DefaultPicture} alt={post.author} />
+          <img src={post.author.picture ? post.author.picture : DefaultPicture} alt={post.author.name} />
         </div>
         <div className="name">
-          <h2>{post.author}</h2>
+          <h2>{post.author.name}</h2>
         </div>
       </Author>
       <Text>

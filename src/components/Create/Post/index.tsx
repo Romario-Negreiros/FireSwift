@@ -51,8 +51,11 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
       const currentDate = getFormattedDate();
       const post: Post = {
         id: uuidv4(),
-        authorID: user.id,
-        author: user.name,
+        author: {
+          id: user.id,
+          name: user.name,
+          picture: user.picture,
+        },
         formattedDate: currentDate,
         content: postContent,
         media: {
@@ -68,7 +71,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
         for (let img of images) {
           const storageRef = storage.ref(
             storage.storage,
-            `posts/${user.id}/${post.id}/images/${images.indexOf(img)}`
+            `posts/${pathSegment}/${post.id}/images/${images.indexOf(img)}`
           );
           await storage.uploadBytesResumable(storageRef, img);
           const imgURL = await storage.getDownloadURL(storageRef);
@@ -80,7 +83,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
         for (let vid of videos) {
           const storageRef = storage.ref(
             storage.storage,
-            `posts/${user.id}/${post.id}/videos/${videos.indexOf(vid)}`
+            `posts/${pathSegment}/${post.id}/videos/${videos.indexOf(vid)}`
           );
           await storage.uploadBytesResumable(storageRef, vid);
           const vidURL = await storage.getDownloadURL(storageRef);
@@ -92,7 +95,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
         for (let doc of files.docs) {
           const storageRef = storage.ref(
             storage.storage,
-            `posts/${user.id}/${post.id}/docs/${docs.indexOf(doc)}`
+            `posts/${pathSegment}/${post.id}/docs/${docs.indexOf(doc)}`
           );
           await storage.uploadBytesResumable(storageRef, doc);
           const docURL = await storage.getDownloadURL(storageRef);
@@ -112,6 +115,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
           await firestoredb.updateDoc(groupRef, {
             requests: groupCopy.requests,
           });
+          toast('Post send to group requests, wait for an admin to approve your post!')
         } else {
           await firestoredb.setDoc(
             firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id),

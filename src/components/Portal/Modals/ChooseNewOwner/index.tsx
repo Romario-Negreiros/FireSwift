@@ -17,10 +17,9 @@ import GroupAccess from '../../../../utils/classes/GroupAccess';
 interface Props extends ModalsProps {
   group: Group;
   setGroup: (group: Group | null) => void;
-  message: string;
 }
 
-const ManageUsers: React.FC<Props> = ({ setIsModalVisible, user, group, setGroup, message }) => {
+const ChooseNewOwner: React.FC<Props> = ({ setIsModalVisible, user, group, setGroup }) => {
   const dispatch = useAppDispatch();
 
   const handleClick = async (newOwner: GroupUser) => {
@@ -34,7 +33,7 @@ const ManageUsers: React.FC<Props> = ({ setIsModalVisible, user, group, setGroup
         <CloseModal onClick={() => setIsModalVisible(false)}>
           <FontAwesomeIcon size="2x" color="purple" icon={faTimes} />
         </CloseModal>
-        <h1>{message}</h1>
+        <h1>Before leaving, you need to chose another owner to the group!</h1>
         <List>
           {group.users.map(gpUser => {
             if (gpUser.id !== user.id) {
@@ -62,4 +61,4 @@ const ManageUsers: React.FC<Props> = ({ setIsModalVisible, user, group, setGroup
   );
 };
 
-export default ManageUsers;
+export default ChooseNewOwner;

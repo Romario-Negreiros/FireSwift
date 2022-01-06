@@ -43,22 +43,22 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ privateProfile, password }) => {
-    if(Boolean(privateProfile) !== user.isPrivate) {
-    try {
-      setIsLoaded(false);
-      await authenticateUser(user.email, password);
-      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
-      await firestoredb.updateDoc(userRef, {
-        isPrivate: Boolean(privateProfile),
-      });
-      dispatch(updateUser({ ...user, isPrivate: Boolean(privateProfile) }));
-      toast('Changes succesfully saved!');
-    } catch (err) {
-      handleFirebaseError(err, setError);
-    } finally {
-      setIsLoaded(true);
-    }
-  } else setIsModalVisible(false);
+    if (Boolean(privateProfile) !== user.isPrivate) {
+      try {
+        setIsLoaded(false);
+        await authenticateUser(user.email, password);
+        const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+        await firestoredb.updateDoc(userRef, {
+          isPrivate: Boolean(privateProfile),
+        });
+        dispatch(updateUser({ ...user, isPrivate: Boolean(privateProfile) }));
+        toast('Changes succesfully saved!');
+      } catch (err) {
+        handleFirebaseError(err, setError);
+      } finally {
+        setIsLoaded(true);
+      }
+    } else setIsModalVisible(false);
   };
 
   if (!isLoaded) {
@@ -89,7 +89,14 @@ const PrivateProfile: React.FC<ModalsProps> = ({ setIsModalVisible, user }) => {
             <h1>Private profile</h1>
           </div>
           <div className="checkboxWrapper">
-            <input {...register('privateProfile')} className="checkbox" type="checkbox" id="privateProfile" name="privateProfile" value="Private" />
+            <input
+              {...register('privateProfile')}
+              className="checkbox"
+              type="checkbox"
+              id="privateProfile"
+              name="privateProfile"
+              value="Private"
+            />
             <label htmlFor="privateProfile">Private profile?</label>
           </div>
           <div>

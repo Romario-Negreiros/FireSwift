@@ -29,7 +29,7 @@ import { Group, User, Roles, GroupUser } from '../../../global/types';
 interface Inputs {
   name: string;
   desc: string;
-  isPrivate: string;
+  privateGroup: string;
 }
 
 interface Props {
@@ -47,8 +47,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
   const [error, setError] = React.useState('');
   const dispatch = useAppDispatch();
 
-  const onSubmit: SubmitHandler<Inputs> = async ({ desc, name, isPrivate }) => {
-    console.log('a')
+  const onSubmit: SubmitHandler<Inputs> = async ({ desc, name, privateGroup }) => {
     const files = getInputItems(['groupimg']);
     try {
       setIsLoaded(false);
@@ -60,7 +59,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         owner: user,
         users: [],
         admins: [],
-        private: Boolean(isPrivate),
+        private: Boolean(privateGroup),
         requests: {
           usersToJoin: [],
           postsToPublish: [],
@@ -169,14 +168,14 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
 
           <div className="checkboxWrapper">
             <input
-              {...register('isPrivate')}
+              {...register('privateGroup')}
               className="checkbox"
               type="checkbox"
-              id="privateProfile"
-              name="privateProfile"
-              value="Private"
+              id="privateGroup"
+              name="privateGroup"
+              value="PrivateGroup"
             />
-            <label htmlFor="privateProfile">Private group?</label>
+            <label htmlFor="privateGroup">Private group?</label>
           </div>
 
           <button type="submit">Create</button>
