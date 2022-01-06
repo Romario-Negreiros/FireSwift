@@ -69,9 +69,9 @@ export const Form = styled.form`
     border-radius: 50%;
     border: 1px solid ${({ theme: { border } }) => border.secondary};
     cursor: pointer;
-    :hover {
+    /* :hover {
       background: ${({ theme: { gradients } }) => gradients.primary};
-    }
+    } */
   }
   .checkbox:checked {
     background: ${({ theme: { gradients } }) => gradients.primary};
@@ -243,7 +243,7 @@ export const Input = styled.div`
     }
   }
   div {
-    width: 20%;
+    width: 20% !important;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -277,6 +277,7 @@ export const Author = styled.div`
     h2 {
       color: ${({ theme: { fonts } }) => fonts.secondary};
       font-size: 1.5rem;
+      width: fit-content;
     }
     small {
       color: ${({ theme: { fonts } }) => fonts.secondary};

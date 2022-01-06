@@ -49,8 +49,11 @@ export interface Medias {
 
 export interface Post {
   id: string;
-  author: string;
-  authorID: string;
+  author: {
+    id: string;
+    name: string;
+    picture: string;
+  };
   groupID?: string;
   formattedDate: {
     date: string;
