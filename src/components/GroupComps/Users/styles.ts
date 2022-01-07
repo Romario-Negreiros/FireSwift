@@ -22,8 +22,5 @@ export const List = styled.ul`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    h2 {
-      width: fit-content;
-    }
   }
 `;

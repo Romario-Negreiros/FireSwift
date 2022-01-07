@@ -73,6 +73,7 @@ const CreateGroup: React.FC<Props> = ({ user }) => {
         name: user.name,
         picture: user.picture,
         chats: user.chats,
+        groups: user.groups,
         entranceDate: getFormattedDate(),
         role: Roles.Owner,
       };
