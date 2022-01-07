@@ -18,14 +18,23 @@ class GroupAccess {
     try {
       const groupCopy: GroupType = JSON.parse(JSON.stringify(group));
       const groupRef = firestoredb.doc(firestoredb.db, 'groups', group.id);
+      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+      const userCopy: User = JSON.parse(JSON.stringify(user));
+      userCopy.groups.push({
+        id: group.id,
+        name: group.name,
+        role: Roles.Member,
+      });
       const groupUser: GroupUser = {
         id: user.id,
         name: user.name,
         picture: user.picture,
         chats: user.chats,
+        groups: user.groups,
         entranceDate: getFormattedDate(),
         role: Roles.Member,
       };
+      groupCopy.users.push(groupUser);
       if (group.private) {
         groupCopy.requests.usersToJoin.push(groupUser);
         await firestoredb.updateDoc(groupRef, {
@@ -33,14 +42,6 @@ class GroupAccess {
         });
         toast('You request to join the group was sent!');
       } else {
-        const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
-        const userCopy: User = JSON.parse(JSON.stringify(user));
-        groupCopy.users.push(groupUser);
-        userCopy.groups.push({
-          id: group.id,
-          name: group.name,
-          role: Roles.Member,
-        });
         await firestoredb.updateDoc(groupRef, {
           users: groupCopy.users,
         });
