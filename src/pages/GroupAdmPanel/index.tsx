@@ -6,9 +6,10 @@ import handleFirebaseError from '../../utils/general/handleFirebaseError';
 
 import { Grid, Title, View, ManagingOptions } from './styles';
 import { CenteredContainer } from '../../global/styles';
-import { Loader, Exception, PostRequests } from '../../components';
+import { Loader, Exception, PostRequests, ManageUsers } from '../../components';
 
-import { Group } from '../../global/types';
+import { Group, Roles } from '../../global/types';
+import { useAppSelector } from '../../app/hooks';
 
 interface State {
   id: string;
@@ -19,12 +20,15 @@ const GroupAdmPanel: React.FC = () => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [error, setError] = React.useState('');
   const [view, setView] = React.useState('');
+  const user = useAppSelector(state => state.user.user);
 
   const changeView = () => {
-    if (group) {
+    if (group && user) {
       switch (view) {
         case 'Post requests':
           return <PostRequests group={group} setGroup={setGroup} />;
+        case 'Manage users':
+          return <ManageUsers group={group} setGroup={setGroup} currentUser={user} />;
       }
     }
   };
@@ -75,6 +79,24 @@ const GroupAdmPanel: React.FC = () => {
         <Exception message="This group doesn't exist!" />
       </CenteredContainer>
     );
+  } else if (!user) {
+    return (
+      <CenteredContainer>
+        <Exception message="You need to be logged in to access this page!" />
+      </CenteredContainer>
+    );
+  } else if (!user?.groups.some(uGroup => uGroup.id === group.id)) {
+    return (
+      <CenteredContainer>
+        <Exception message="You can't access this page if you are not in the group!" />
+      </CenteredContainer>
+    );
+  } else if (user?.groups.some(uGroup => uGroup.id === group.id && uGroup.role === Roles.Member)) {
+    return (
+      <CenteredContainer>
+        <Exception message="You can't access thig page being a group's member!" />
+      </CenteredContainer>
+    );
   }
   return (
     <Grid>
@@ -88,7 +110,7 @@ const GroupAdmPanel: React.FC = () => {
           <p>User requests</p>
           <p className="total">{group.requests.usersToJoin.length} requests</p>
         </li>
-        <li>
+        <li onClick={() => setView('Manage users')}>
           <p>Manage users</p>
           <p className="total">{group.users.length} users</p>
         </li>
