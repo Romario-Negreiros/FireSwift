@@ -148,6 +148,11 @@ export enum Roles {
 }
 
 export interface GroupUser extends ChatUser {
+  groups: {
+    id: string;
+    name: string;
+    role: Roles;
+  }[];
   entranceDate: {
     date: string;
     time: string;

@@ -208,7 +208,11 @@ export const CreationContainer = styled.section`
   align-items: center;
 `;
 
-export const CustomIconBox = styled.li`
+interface CustomIconBoxProps {
+  position?: string;
+}
+
+export const CustomIconBox = styled.li<CustomIconBoxProps>`
   cursor: pointer;
   padding: 1rem;
   display: flex;
@@ -222,6 +226,28 @@ export const CustomIconBox = styled.li`
   }
   :hover svg {
     transform: scale(1.1);
+  }
+  .ballon {
+    display: none;
+  }
+  @media screen and (min-width: 700px) {
+    .ballon {
+      display: block;
+      background: transparent;
+      color: transparent;
+      transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+      border-radius: 5px;
+      padding: 1rem;
+      font-size: 1.2rem;
+      position: absolute;
+      bottom: -4rem;
+      right: ${({ position }) => position ? position : '-0.5rem'};
+    }
+    :hover .ballon {
+      filter: brightness(0.5);
+      background: #333445;
+      color: ${({ theme: { fonts } }) => fonts.primary};
+    }
   }
 `;
 
@@ -248,6 +274,17 @@ export const Input = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    :hover {
+      transform: scale(1.1);
+    }
+  }
+  .searchBtn {
+    width: fit-content;
+    margin-left: 5rem;
+    background: transparent;
+    cursor: pointer;
+    border: 0 none;
+    outline: 0;
     :hover {
       transform: scale(1.1);
     }
