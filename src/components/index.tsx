@@ -12,4 +12,4 @@ export { default as SocialOptions } from './SocialOptions';
 export { CreateGroup, CreatePost, CreateStory } from './Create';
 export { default as Contents } from './Contents';
 export { default as AudioRecorder } from './AudioRecorder';
-export { About, Posts, Users, PostRequests, ManageUsers } from './GroupComps';
+export { About, Posts, Users, PostRequests, ManageUsers, UserRequests } from './GroupComps';

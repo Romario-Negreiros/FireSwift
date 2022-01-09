@@ -128,8 +128,8 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
         </form>
       </li>
       {results.length ? (
-        results.map(user => (
-          <User key={user.id}>
+        results.map((user, i) => (
+          <User key={user.id} className={i === 0 ? 'first' : ''}>
             <Author>
               <div>
                 <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />

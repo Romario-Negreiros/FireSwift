@@ -5,6 +5,9 @@ export const Container = styled.ul`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  .first {
+    margin-top: 0;
+  }
 `;
 
 export const Options = styled.div`
