@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../../../app/hooks';
 import handleFirebaseError from '../../../utils/general/handleFirebaseError';
 import setChat from '../../../utils/setters/setChat';
+import setUserAsAdmin from '../../../utils/setters/setUserAsAdmin';
+import setUserAsMember from '../../../utils/setters/setUserAsMember';
 import { toast } from 'react-toastify';
 import { firestoredb } from '../../../lib';
 
@@ -23,7 +25,8 @@ import DefaultPicture from '../../../assets/default-picture.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCertificate,
+  faArrowUp,
+  faArrowDown,
   faCommentDots,
   faDoorOpen,
   faSearch,
@@ -53,12 +56,20 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
       const usersCopy: Group['users'] = JSON.parse(JSON.stringify(group.users));
       const ownerIndex = usersCopy.findIndex(user => user.role === Roles.Owner);
       usersCopy.splice(ownerIndex, 1);
-      setResults(usersCopy);
+      const results: GroupUser[] = [];
+      if (
+        currentUser.groups.some(uGroup => uGroup.id === group.id && uGroup.role === Roles.Admin)
+      ) {
+        usersCopy.forEach(user => (user.role !== Roles.Admin ? results.push(user) : null));
+        setResults(results);
+      } else setResults(usersCopy);
     } else {
       const results: Group['users'] = [];
       group.users.forEach(user => {
         if (user.name.toLowerCase().includes(filter.toLowerCase()) && user.role !== Roles.Owner) {
-          results.push(user);
+          if(user.id === currentUser.id && currentUser.groups.some(uGroup => uGroup.id === group.id && uGroup.role === Roles.Admin)) {
+            return
+          } else results.push(user);
         }
       });
       setResults(results);
@@ -97,8 +108,12 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
     const usersCopy: Group['users'] = JSON.parse(JSON.stringify(group.users));
     const ownerIndex = usersCopy.findIndex(user => user.role === Roles.Owner);
     usersCopy.splice(ownerIndex, 1);
-    setResults(usersCopy);
-  }, [group.users]);
+    const results: GroupUser[] = [];
+    if (currentUser.groups.some(uGroup => uGroup.id === group.id && uGroup.role === Roles.Admin)) {
+      usersCopy.forEach(user => (user.role !== Roles.Admin ? results.push(user) : null));
+      setResults(results);
+    } else setResults(usersCopy);
+  }, [group.users, currentUser.groups, group.id]);
 
   return (
     <Container>
@@ -158,10 +173,22 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
                   <span>Oust</span>
                 </div>
               </CustomIconBox>
-              <CustomIconBox position="-0.1rem">
-                <FontAwesomeIcon icon={faCertificate} color="purple" size="2x" />
+              <CustomIconBox
+                position="-1rem"
+                onClick={() => {
+                  if (user.role === Roles.Member) setUserAsAdmin(user, group, setGroup);
+                  else if (user.role === Roles.Admin) setUserAsMember(user, group, setGroup);
+                }}
+              >
+                {user.role === Roles.Member && (
+                  <FontAwesomeIcon icon={faArrowUp} color="purple" size="2x" />
+                )}
+                {user.role === Roles.Admin && (
+                  <FontAwesomeIcon icon={faArrowDown} color="purple" size="2x" />
+                )}
                 <div className="ballon">
-                  <span>Role</span>
+                  {user.role === Roles.Member && <span>Promote</span>}
+                  {user.role === Roles.Admin && <span>Demote</span>}
                 </div>
               </CustomIconBox>
             </Options>

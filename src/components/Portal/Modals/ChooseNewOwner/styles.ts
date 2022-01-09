@@ -18,7 +18,7 @@ export const Container = styled.section`
   
   h1 {
     font-size: 2rem;
-    color: ${({theme: { fonts }}) => fonts.primary};
+    color: ${({theme: { fonts }}) => fonts.secondary};
     text-align: center;
   }
 `;
