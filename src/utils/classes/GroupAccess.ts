@@ -30,7 +30,7 @@ class GroupAccess {
         name: user.name,
         picture: user.picture,
         chats: user.chats,
-        groups: user.groups,
+        groups: userCopy.groups,
         entranceDate: getFormattedDate(),
         role: Roles.Member,
       };
