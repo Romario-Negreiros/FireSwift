@@ -240,9 +240,8 @@ export const CustomIconBox = styled.li<CustomIconBoxProps>`
       padding: 1rem;
       font-size: 1.2rem;
       position: absolute;
-      bottom: -4rem;
+      bottom: -3.6rem;
       right: ${({ position }) => position ? position : '-0.5rem'};
-      z-index: 40;
     }
     :hover .ballon {
       filter: brightness(0.5);

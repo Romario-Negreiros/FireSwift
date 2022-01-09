@@ -6,7 +6,7 @@ import handleFirebaseError from '../../utils/general/handleFirebaseError';
 
 import { Grid, Title, View, ManagingOptions } from './styles';
 import { CenteredContainer } from '../../global/styles';
-import { Loader, Exception, PostRequests, ManageUsers } from '../../components';
+import { Loader, Exception, PostRequests, ManageUsers, UserRequests } from '../../components';
 
 import { Group, Roles } from '../../global/types';
 import { useAppSelector } from '../../app/hooks';
@@ -27,6 +27,8 @@ const GroupAdmPanel: React.FC = () => {
       switch (view) {
         case 'Post requests':
           return <PostRequests group={group} setGroup={setGroup} />;
+        case 'User requests':
+          return <UserRequests group={group} setGroup={setGroup} />;
         case 'Manage users':
           return <ManageUsers group={group} setGroup={setGroup} currentUser={user} />;
       }
@@ -106,7 +108,7 @@ const GroupAdmPanel: React.FC = () => {
           <p>Post requests</p>
           <p className="total">{group.requests.postsToPublish.length} requests</p>
         </li>
-        <li>
+        <li onClick={() => setView('User requests')}>
           <p>User requests</p>
           <p className="total">{group.requests.usersToJoin.length} requests</p>
         </li>
