@@ -2,14 +2,14 @@ import React from 'react';
 
 import { useHistory } from 'react-router-dom';
 import { firestoredb } from '../../lib';
+import { useAppSelector } from '../../app/hooks';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
 
 import { Grid, Title, View, ManagingOptions } from './styles';
 import { CenteredContainer } from '../../global/styles';
-import { Loader, Exception, PostRequests, ManageUsers, UserRequests } from '../../components';
+import { Loader, Exception, PostRequests, ManageUsers, UserRequests, PrivateGroup } from '../../components';
 
 import { Group, Roles } from '../../global/types';
-import { useAppSelector } from '../../app/hooks';
 
 interface State {
   id: string;
@@ -31,6 +31,8 @@ const GroupAdmPanel: React.FC = () => {
           return <UserRequests group={group} setGroup={setGroup} />;
         case 'Manage users':
           return <ManageUsers group={group} setGroup={setGroup} currentUser={user} />;
+        case 'Group access':
+          return <PrivateGroup group={group} setGroup={setGroup} />
       }
     }
   };
@@ -116,9 +118,9 @@ const GroupAdmPanel: React.FC = () => {
           <p>Manage users</p>
           <p className="total">{group.users.length} users</p>
         </li>
-        <li>
+        <li onClick={() => setView('Group access')}>
           <p>Change group access</p>
-          <p className="total">Group is currently {group.private ? 'private' : 'not private'}</p>
+          <p className="total">Group is currently {group.private ? 'private' : 'opened'}</p>
         </li>
       </ManagingOptions>
       <View>
