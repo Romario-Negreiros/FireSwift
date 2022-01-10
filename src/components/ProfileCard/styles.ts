@@ -26,9 +26,6 @@ export const Profile = styled.li<StyledProps>`
         opacity: 0.5;
       }
     }
-    :nth-child(2) {
-      padding: 0.5rem 0 0 0.5rem;
-    }
     span {
       color: ${({theme: { fonts }}) => fonts.secondary};
       font-size: 1.2rem;

@@ -2,7 +2,8 @@ import React from 'react';
 
 import { useHistory } from 'react-router-dom';
 import handleFirebaseError from '../../../utils/general/handleFirebaseError';
-// import { firestoredb } from '../../../lib';
+import { firestoredb } from '../../../lib';
+import { toast } from 'react-toastify';
 
 import { Container, Options as ButtonsWrapper } from '../PostRequests/styles';
 import { Author, Options, CustomIconBox, InnerCenteredContainer } from '../../../global/styles';
@@ -26,6 +27,16 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
 
   const refuseUser = async (user: GroupUser) => {
     try {
+      const groupCopy: Group = JSON.parse(JSON.stringify(group));
+      const groupRef = firestoredb.doc(firestoredb.db, 'groups', group.id);
+      const userIndex = groupCopy.requests.usersToJoin.findIndex(userReq => userReq.id === user.id);
+      groupCopy.requests.usersToJoin.splice(userIndex, 1);
+
+      await firestoredb.updateDoc(groupRef, {
+        requests: groupCopy.requests,
+      });
+      setGroup(groupCopy);
+      toast('User refused!');
     } catch (err) {
       handleFirebaseError(err);
     }
@@ -33,6 +44,22 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
 
   const acceptUser = async (user: GroupUser) => {
     try {
+      const groupCopy: Group = JSON.parse(JSON.stringify(group));
+      const groupRef = firestoredb.doc(firestoredb.db, 'groups', group.id);
+      const userRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+      const userIndex = groupCopy.requests.usersToJoin.findIndex(userReq => userReq.id === user.id);
+      groupCopy.requests.usersToJoin.splice(userIndex, 1);
+      groupCopy.users.push(user);
+
+      await firestoredb.updateDoc(groupRef, {
+        users: groupCopy.users,
+        requests: groupCopy.requests,
+      });
+      await firestoredb.updateDoc(userRef, {
+        groups: user.groups,
+      });
+      setGroup(groupCopy);
+      toast('User accepted!');
     } catch (err) {
       handleFirebaseError(err);
     }
@@ -75,10 +102,10 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
           </div>
           <ButtonsWrapper>
             <button className="refuse" onClick={() => refuseUser(user)}>
-              Refuse post
+              Refuse user
             </button>
             <button className="accept" onClick={() => acceptUser(user)}>
-              Accept post
+              Accept user
             </button>
           </ButtonsWrapper>
         </User>
