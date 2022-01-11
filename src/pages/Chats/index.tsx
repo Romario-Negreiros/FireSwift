@@ -37,7 +37,7 @@ const Chats: React.FC = () => {
         <Exception message={error} />
       </CenteredContainer>
     );
-  } else if (!chats) {
+  } else if (!chats?.length || !chats) {
     return (
       <CenteredContainer>
         <Exception message={"You haven't created any chats yet!"} />
