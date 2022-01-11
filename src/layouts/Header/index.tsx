@@ -7,6 +7,7 @@ import { authentication } from '../../lib';
 import handleMobileMenu from '../../utils/general/handleMobileMenu';
 import { userLoggedOut } from '../../features/userChats/userChatsSlice';
 
+import Notifications from '../../components/Notifications';
 import { ThemeContext } from 'styled-components';
 import { Container, Nav, List, Burguer, Line, Redirect, User } from './styles';
 import { Alert } from '../../global/styles';
@@ -20,13 +21,16 @@ import {
   faSignInAlt,
   faSignOutAlt,
   faCommentDots,
+  faBell,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Props } from '../../global/types';
+import { Props, User as UserType } from '../../global/types';
 
 const Header: React.FC<Props> = ({ toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [newMessages, setNewMessages] = React.useState(0);
+  const [newNotis, setNewNotis] = React.useState(0);
+  const [showNotis, setShowNotis] = React.useState(false);
   const user = useAppSelector(state => state.user.user);
   const chats = useAppSelector(state => state.chats.chats);
   const theme = React.useContext(ThemeContext);
@@ -39,19 +43,33 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
   };
 
   React.useEffect(() => {
-    if (chats && user) {
+    if (user) {
       let newMessages = 0;
-      chats.forEach(chat => {
-        chat.messages.forEach(msg => {
-          if (!msg.wasViewed && msg.user.id !== user.id) newMessages++;
+      let newNotis = 0;
+      if (chats) {
+        chats.forEach(chat => {
+          chat.messages.forEach(msg => {
+            if (!msg.wasViewed && msg.user.id !== user.id) newMessages++;
+          });
         });
+      }
+      user.notifications.forEach(not => {
+        if (!not.wasViewed) newNotis++;
       });
       setNewMessages(newMessages);
+      setNewNotis(newNotis);
     }
   }, [chats, user]);
 
   return (
     <Container>
+      {showNotis && (
+        <Notifications
+          setShowNotis={setShowNotis}
+          notifications={user?.notifications as UserType['notifications']}
+          user={user as UserType}
+        />
+      )}
       <div>
         <h2>FireSwift</h2>
       </div>
@@ -129,6 +147,23 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
               </div>
             )}
           </li>
+          {user && (
+            <li
+              className="noti"
+              onClick={() => {
+                handleMobileMenu(setIsMenuOpen);
+                setShowNotis(!showNotis);
+              }}
+            >
+              <Alert position="10px">
+                <span>{newNotis}</span>
+              </Alert>
+              <FontAwesomeIcon icon={faBell} />
+              <div className="ballon">
+                <span>Notifications</span>
+              </div>
+            </li>
+          )}
         </List>
         <Burguer
           onClick={() => {

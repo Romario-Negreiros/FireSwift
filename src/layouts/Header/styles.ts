@@ -66,6 +66,7 @@ export const List = styled.ul<ListProps>`
   background: ${({ theme: { bgs } }) => bgs.primary};
   overflow: hidden;
   li {
+    cursor: pointer;
     position: relative;
     .ballon {
       display: none;
@@ -88,6 +89,12 @@ export const List = styled.ul<ListProps>`
     width: unset;
     padding: unset;
     gap: 1rem;
+    .noti {
+      padding: 0 1rem;
+      .ballon {
+        right: -2.9rem;
+      }
+    }
     li {
       .ballon {
         display: block;
