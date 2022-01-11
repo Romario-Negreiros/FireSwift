@@ -324,10 +324,14 @@ export const Author = styled.div`
   }
 `;
 
-export const Alert = styled.div`
+interface AlertProps {
+  position?: string;
+}
+
+export const Alert = styled.div<AlertProps>`
   position: absolute;
   top: -11px;
-  left: 20px;
+  left: ${({ position }) => position ? position: '20px'};
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -338,6 +342,9 @@ export const Alert = styled.div`
   span {
     color: ${({ theme: { fonts } }) => fonts.primary};
     font-size: 1rem;
+  }
+  @media screen and (min-width: 700px) {
+    left: 20px;
   }
 `;
 

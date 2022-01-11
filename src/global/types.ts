@@ -4,6 +4,17 @@ export interface Props {
   toggleTheme: () => void;
 }
 
+export type Notification = {
+  id: string;
+  sentBy: {
+    id: string;
+    name: string;
+    picture: string;
+  };
+  wasViewed: boolean;
+  message: string;
+};
+
 export interface User {
   id: string;
   name: string;
@@ -30,6 +41,7 @@ export interface User {
     name: string;
     role: Roles;
   }[];
+  notifications: Notification[];
 }
 
 type Reaction = {
@@ -84,17 +96,6 @@ export interface Post {
   }[];
 }
 
-export interface Result {
-  id: string;
-  name: string;
-  picture: string;
-  chats: {
-    id: string;
-    receiverID: string;
-  }[];
-  type: string;
-}
-
 export interface MsgReply {
   id: string;
   user: {
@@ -123,6 +124,7 @@ export interface ChatUser {
     id: string;
     receiverID: string;
   }[];
+  notifications: Notification[];
 }
 
 export interface Chat {
@@ -189,5 +191,6 @@ export interface ContentConstraints {
     id: string;
     receiverID: string;
   }[];
+  notifications?: Notification[];
   role?: Roles;
 }
