@@ -13,7 +13,7 @@ import DefaultPicture from '../../../../../assets/default-picture.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots, faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { ContentConstraints, User } from '../../../../../global/types';
+import { ContentConstraints, Notification, User } from '../../../../../global/types';
 
 interface Props<T extends ContentConstraints> {
   results: T[];
@@ -25,6 +25,7 @@ interface ForceChat extends Omit<ContentConstraints, 'chats' | 'role'> {
     id: string;
     receiverID: string;
   }[];
+  notifications: Notification[];
 }
 
 const DropDown = <T extends ContentConstraints>(
