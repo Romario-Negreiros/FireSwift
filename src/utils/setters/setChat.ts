@@ -4,7 +4,7 @@ import getFormattedDate from '../getters/getFormattedDate';
 import handleError from '../general/handleError';
 import { AppDispatch } from '../../app/store';
 import { updateUser } from '../../features/user/userSlice';
-import { Chat, User } from '../../global/types';
+import { Chat, User, Notification } from '../../global/types';
 
 interface ShortUser {
   id: string;
@@ -14,6 +14,7 @@ interface ShortUser {
     id: string;
     receiverID: string;
   }[];
+  notifications: Notification[];
 }
 
 const setChat = async (
@@ -35,18 +36,30 @@ const setChat = async (
       return;
     }
     const chatID = uuidv4();
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: {
+        id: currentUser.id,
+        name: currentUser.name,
+        picture: currentUser.picture,
+      },
+      wasViewed: false,
+      message: `${currentUser.name} started a chat with you!`
+    }
     const users = [
       {
         id: currentUser.id,
         name: currentUser.name,
         picture: currentUser.picture,
         chats: [...currentUser.chats, { id: chatID, receiverID: desiredUser.id }],
+        notifications: [...currentUser.notifications],
       },
       {
         id: desiredUser.id,
         name: desiredUser.name,
         picture: desiredUser.picture,
         chats: [...desiredUser.chats, { id: chatID, receiverID: currentUser.id }],
+        notifications: [...desiredUser.notifications, newNotification],
       },
     ];
     const chat: Chat = {
@@ -63,6 +76,7 @@ const setChat = async (
     });
     await firestoredb.updateDoc(desiredUserRef, {
       chats: users[1].chats,
+      notifications: users[1].notifications,
     });
     dispatch(updateUser({ ...currentUser, chats: [...users[0].chats] }));
     history.push({
