@@ -50,7 +50,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
       if (reaction) {
         if (type === 'COMMENT_REACTIONS') {
           setCommentReaction(
-            user.id,
+            user,
             showCommentReactions,
             post,
             posts,
