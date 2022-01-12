@@ -13,6 +13,10 @@ export type Notification = {
   };
   wasViewed: boolean;
   message: string;
+  sentAt: {
+    date: string;
+    time: string;
+  }
 };
 
 export interface User {
