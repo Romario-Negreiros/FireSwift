@@ -66,7 +66,6 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
       {showNotis && (
         <Notifications
           setShowNotis={setShowNotis}
-          notifications={user?.notifications as UserType['notifications']}
           user={user as UserType}
         />
       )}
