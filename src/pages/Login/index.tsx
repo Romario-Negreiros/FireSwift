@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAppDispatch } from '../../app/hooks';
-import { userLogged } from '../../features/user/userSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { updateUser, userLogged } from '../../features/user/userSlice';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import { authentication, firestoredb } from '../../lib';
 import { useHistory } from 'react-router';
@@ -29,6 +29,7 @@ const Login: React.FC = () => {
   const [error, setError] = React.useState<string>('');
   const [isLoaded, setIsLoaded] = React.useState<boolean>(true);
   const dispatch = useAppDispatch();
+  const userConnected = useAppSelector(state => state.user.user);
 
   const {
     register,
@@ -38,6 +39,7 @@ const Login: React.FC = () => {
   const history = useHistory();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
+
     try {
       setIsLoaded(false);
       await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
@@ -48,6 +50,15 @@ const Login: React.FC = () => {
         const user = userSnap.data() as Omit<UserStateType, 'id'>;
         const id = userSnap.id;
         dispatch(userLogged({ id, ...user }));
+        firestoredb.onSnapshot(userRef, doc => {
+          const docData = doc.data() as Omit<UserStateType, 'id'>;
+          if (
+            docData.chats.length !== userConnected?.chats.length ||
+            docData.notifications.length !== userConnected?.chats.length
+          ) {
+            dispatch(updateUser({ id: doc.id, ...docData }));
+          }
+        });
       }
       history.push('/home');
     } catch (err) {
