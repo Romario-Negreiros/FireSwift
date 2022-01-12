@@ -37,10 +37,11 @@ export const Notification = styled.li`
   p {
     font-size: 1.4rem;
   }
-  .new {
+  .delete {
+    cursor: pointer;
     position: absolute;
     top: 5px;
-    right: 5px;
+    right: 20px;
   }
 `;
 
