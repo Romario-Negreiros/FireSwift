@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { firestoredb } from '../../lib';
 import getFormattedDate from '../getters/getFormattedDate';
 import handleError from '../general/handleError';
-import { Post, User } from '../../global/types';
+import { Post, User, Notification } from '../../global/types';
 
 const setComment = async (
   user: User,
@@ -10,7 +10,7 @@ const setComment = async (
   posts: Post[],
   setPosts: (posts: Post[]) => void,
   newComment: string,
-  pathSegment: string,
+  pathSegment: string
 ) => {
   try {
     const postsCopy = [...posts];
@@ -18,6 +18,13 @@ const setComment = async (
       id: user.id,
       name: user.name,
       picture: user.picture,
+    };
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: author,
+      wasViewed: false,
+      message: `${author.name} commented in your post: ${newComment}`,
+      sentAt: getFormattedDate(),
     };
     const formattedDate = getFormattedDate();
     const comment = {
@@ -29,15 +36,24 @@ const setComment = async (
       formattedDate,
     };
     postsCopy.forEach(postCopy => {
-      if(postCopy.id === post.id) {
+      if (postCopy.id === post.id) {
         postCopy.comments.push(comment);
       }
-    })
+    });
+    const postAuthorRef = firestoredb.doc(firestoredb.db, 'users', post.author.id);
+    const postAutSnap = await firestoredb.getDoc(postAuthorRef);
+    if (postAutSnap.exists()) {
+      const authorData = postAutSnap.data() as Omit<User, 'id'>;
+      authorData.notifications.unshift(newNotification);
+      await firestoredb.updateDoc(postAuthorRef, {
+        notifications: authorData.notifications,
+      });
+    }
     const postIndex = postsCopy.findIndex(postCopy => postCopy.id === post.id);
     const postRef = firestoredb.doc(firestoredb.db, `media/posts/${pathSegment}`, post.id);
     await firestoredb.updateDoc(postRef, {
-      comments: postsCopy[postIndex].comments
-    })
+      comments: postsCopy[postIndex].comments,
+    });
     setPosts(postsCopy);
   } catch (err) {
     handleError(err, 'sending comment.');
