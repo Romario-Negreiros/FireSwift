@@ -16,7 +16,7 @@ export type Notification = {
   sentAt: {
     date: string;
     time: string;
-  }
+  };
 };
 
 export interface User {
@@ -63,6 +63,27 @@ export interface Medias {
   audios?: string[];
 }
 
+export type Comment = {
+  id: string;
+  author: Pick<User, 'id' | 'name' | 'picture'>;
+  content: string;
+  reactions: Reaction[];
+  formattedDate: {
+    date: string;
+    time: string;
+  };
+  replies: {
+    id: string;
+    author: Pick<User, 'id' | 'name' | 'picture'>;
+    content: string;
+    reactions: Reaction[];
+    formattedDate: {
+      date: string;
+      time: string;
+    };
+  }[];
+};
+
 export interface Post {
   id: string;
   author: {
@@ -78,26 +99,7 @@ export interface Post {
   content: string;
   reactions: Reaction[];
   media: Medias;
-  comments: {
-    id: string;
-    author: Pick<User, 'id' | 'name' | 'picture'>;
-    content: string;
-    reactions: Reaction[];
-    formattedDate: {
-      date: string;
-      time: string;
-    };
-    replies: {
-      id: string;
-      author: Pick<User, 'id' | 'name' | 'picture'>;
-      content: string;
-      reactions: Reaction[];
-      formattedDate: {
-        date: string;
-        time: string;
-      };
-    }[];
-  }[];
+  comments: Comment[];
 }
 
 export interface MsgReply {
