@@ -44,8 +44,11 @@ const setChat = async (
         picture: currentUser.picture,
       },
       wasViewed: false,
-      message: `${currentUser.name} started a chat with you!`
+      message: `${currentUser.name} started a chat with you!`,
+      sentAt: getFormattedDate(),
     }
+    const desiredUserNotisCopy: Notification[] = JSON.parse(JSON.stringify(desiredUser.notifications));
+    desiredUserNotisCopy.unshift(newNotification);
     const users = [
       {
         id: currentUser.id,
@@ -59,7 +62,7 @@ const setChat = async (
         name: desiredUser.name,
         picture: desiredUser.picture,
         chats: [...desiredUser.chats, { id: chatID, receiverID: currentUser.id }],
-        notifications: [...desiredUser.notifications, newNotification],
+        notifications: desiredUserNotisCopy,
       },
     ];
     const chat: Chat = {

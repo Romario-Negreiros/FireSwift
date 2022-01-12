@@ -2,8 +2,10 @@ import { AppDispatch } from '../../app/store';
 import { toast } from 'react-toastify';
 import { storage, realtimedb, firestoredb } from '../../lib';
 import { updateUser } from '../../features/user/userSlice';
+import { v4 as uuidv4 } from 'uuid';
+import getFormattedDate from '../getters/getFormattedDate';
 
-import { Chat, User, ChatUser } from '../../global/types';
+import { Chat, User, ChatUser, Notification } from '../../global/types';
 
 const deleteChat = async (
   chat: Chat,
@@ -19,6 +21,17 @@ const deleteChat = async (
     const currentUserCopy: User = JSON.parse(JSON.stringify(currentUser));
     const chatIndex = currentUserCopy.chats.findIndex(chatObj => chat.id === chatObj.id);
     currentUserCopy.chats.splice(chatIndex, 1);
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: {
+        id: currentUser.id,
+        name: currentUser.name,
+        picture: currentUser.picture,
+      },
+      wasViewed: false,
+      message: `${currentUser.name} deleted the chat with you!`,
+      sentAt: getFormattedDate(),
+    }
     await (async () => {
       try {
         await storage.deleteObject(storageRef);
@@ -35,8 +48,10 @@ const deleteChat = async (
       const receiverCopy: ChatUser = JSON.parse(JSON.stringify(receiver));
       const chatIndex = receiverCopy.chats.findIndex(chatObj => chat.id === chatObj.id);
       receiverCopy.chats.splice(chatIndex, 1);
+      receiverCopy.notifications.unshift(newNotification);
       await firestoredb.updateDoc(receiverRef, {
         chats: receiverCopy.chats,
+        notifications: receiverCopy.notifications,
       });
     }
     dispatch(updateUser({ ...currentUserCopy }));
