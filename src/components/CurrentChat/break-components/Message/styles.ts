@@ -103,6 +103,7 @@ export const Media = styled(Reusable2)`
       max-width: 100%;
       width: 500px;
       height: fit-content;
+      max-height: 400px;
       object-fit: contain;
     }
   }

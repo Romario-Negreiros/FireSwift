@@ -64,7 +64,7 @@ export const FileOptions = styled(Reusable2)<FileOptionsProps>`
         position: absolute;
         top: -3.5rem;
         left: -0.2rem;
-        width: 100px;
+        width: fit-content !important;
       }
       :hover .ballon {
         background: #333445;
