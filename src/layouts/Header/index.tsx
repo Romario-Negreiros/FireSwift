@@ -128,6 +128,23 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
               <span>Chats</span>
             </div>
           </li>
+          {user && (
+            <li
+              className="noti"
+              onClick={() => {
+                handleMobileMenu(setIsMenuOpen);
+                setShowNotis(!showNotis);
+              }}
+            >
+              <Alert position="10px">
+                <span>{newNotis}</span>
+              </Alert>
+              <FontAwesomeIcon icon={faBell} />
+              <div className="ballon">
+                <span>Notifications</span>
+              </div>
+            </li>
+          )}
           <li
             onClick={() => {
               handleMobileMenu(setIsMenuOpen);
@@ -147,23 +164,6 @@ const Header: React.FC<Props> = ({ toggleTheme }) => {
               </div>
             )}
           </li>
-          {user && (
-            <li
-              className="noti"
-              onClick={() => {
-                handleMobileMenu(setIsMenuOpen);
-                setShowNotis(!showNotis);
-              }}
-            >
-              <Alert position="10px">
-                <span>{newNotis}</span>
-              </Alert>
-              <FontAwesomeIcon icon={faBell} />
-              <div className="ballon">
-                <span>Notifications</span>
-              </div>
-            </li>
-          )}
         </List>
         <Burguer
           onClick={() => {
