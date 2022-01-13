@@ -3,6 +3,8 @@ import React from 'react';
 import { firestoredb, storage } from '../../../lib';
 import handleFirebaseError from '../../../utils/general/handleFirebaseError';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
+import getFormattedDate from '../../../utils/getters/getFormattedDate';
 
 import { Container, Options } from './styles';
 import { Container as PostContainer, Text, Media } from '../../Post/styles';
@@ -11,7 +13,7 @@ import { Author, InnerCenteredContainer } from '../../../global/styles';
 
 import DefaultPicture from '../../../assets/default-picture.png';
 
-import { Group, Post } from '../../../global/types';
+import { Group, Post, User, Notification } from '../../../global/types';
 
 interface Props {
   group: Group;
@@ -19,7 +21,6 @@ interface Props {
 }
 
 const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
-  
   const refusePost = async (post: Post) => {
     try {
       const groupCopy: Group = JSON.parse(JSON.stringify(group));
@@ -29,8 +30,19 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
         reqPost => reqPost.id === post.id
       );
       groupCopy.requests.postsToPublish.splice(postIndex, 1);
-      
-      if(post.media.images.length) {
+      const newNotification: Notification = {
+        id: uuidv4(),
+        sentBy: {
+          id: post.author.id,
+          name: post.author.name,
+          picture: post.author.picture,
+        },
+        wasViewed: false,
+        message: `Your request to create a post in ${group.name} was refused!`,
+        sentAt: getFormattedDate(),
+      };
+
+      if (post.media.images.length) {
         for (let imgIndex in post.media.images) {
           const storageRef = storage.ref(
             storage.storage,
@@ -39,7 +51,7 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
           await storage.deleteObject(storageRef);
         }
       }
-      if(post.media.videos.length) {
+      if (post.media.videos.length) {
         for (let vidIndex in post.media.videos) {
           const storageRef = storage.ref(
             storage.storage,
@@ -58,6 +70,15 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
         }
       }
 
+      const postAuthorRef = firestoredb.doc(firestoredb.db, 'users', post.author.id);
+      const postAutSnap = await firestoredb.getDoc(postAuthorRef);
+      if (postAutSnap.exists()) {
+        const authorData = postAutSnap.data() as Omit<User, 'id'>;
+        authorData.notifications.unshift(newNotification);
+        await firestoredb.updateDoc(postAuthorRef, {
+          notifications: authorData.notifications,
+        });
+      }
       await firestoredb.updateDoc(groupRef, {
         requests: groupCopy.requests,
       });
@@ -78,7 +99,27 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
       );
       groupCopy.requests.postsToPublish.splice(postIndex, 1);
       groupCopy.posts.push(post.id);
+      const newNotification: Notification = {
+        id: uuidv4(),
+        sentBy: {
+          id: post.author.id,
+          name: post.author.name,
+          picture: post.author.picture,
+        },
+        wasViewed: false,
+        message: `Your request to create a post in ${group.name} was accepted!`,
+        sentAt: getFormattedDate(),
+      };
 
+      const postAuthorRef = firestoredb.doc(firestoredb.db, 'users', post.author.id);
+      const postAutSnap = await firestoredb.getDoc(postAuthorRef);
+      if (postAutSnap.exists()) {
+        const authorData = postAutSnap.data() as Omit<User, 'id'>;
+        authorData.notifications.unshift(newNotification);
+        await firestoredb.updateDoc(postAuthorRef, {
+          notifications: authorData.notifications,
+        });
+      }
       await firestoredb.setDoc(
         firestoredb.doc(firestoredb.db, `media/posts/groups`, post.id),
         post

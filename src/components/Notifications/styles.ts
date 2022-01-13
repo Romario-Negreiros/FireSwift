@@ -10,6 +10,7 @@ export const Container = styled.section`
   z-index: 50;
   background: ${({ theme: { bgs } }) => bgs.tertiary};
   @media screen and (min-width: 500px) {
+    position: absolute;
     height: fit-content;
     max-height: 450px;
     max-width: 400px;
