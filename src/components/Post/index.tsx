@@ -59,10 +59,10 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
             pathSegment
           );
         } else if (type === 'POST_REACTIONS')
-          setPostReaction(user.id, post, posts, setPosts, reaction, pathSegment);
+          setPostReaction(user, post, posts, setPosts, reaction, pathSegment);
         else if (type === 'REPLY_REACTIONS' && commentID)
           setReplyReaction(
-            user.id,
+            user,
             commentID,
             showReplyReactions,
             post,
