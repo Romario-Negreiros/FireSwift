@@ -4,6 +4,8 @@ import { useHistory } from 'react-router-dom';
 import handleFirebaseError from '../../../utils/general/handleFirebaseError';
 import { firestoredb } from '../../../lib';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
+import getFormattedDate from '../../../utils/getters/getFormattedDate';
 
 import { Container, Options as ButtonsWrapper } from '../PostRequests/styles';
 import { Author, Options, CustomIconBox, InnerCenteredContainer } from '../../../global/styles';
@@ -15,7 +17,7 @@ import DefaultPicture from '../../../assets/default-picture.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
-import { Group, GroupUser } from '../../../global/types';
+import { Group, GroupUser, Notification, User as UserType } from '../../../global/types';
 
 interface Props {
   group: Group;
@@ -31,6 +33,26 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
       const groupRef = firestoredb.doc(firestoredb.db, 'groups', group.id);
       const userIndex = groupCopy.requests.usersToJoin.findIndex(userReq => userReq.id === user.id);
       groupCopy.requests.usersToJoin.splice(userIndex, 1);
+      const newNotification: Notification = {
+        id: uuidv4(),
+        sentBy: {
+          id: user.id,
+          name: user.name,
+          picture: user.picture,
+        },
+        wasViewed: false,
+        message: `Your request to join ${group.name} was refused!`,
+        sentAt: getFormattedDate(),
+      };
+      const refusedUserRef = firestoredb.doc(firestoredb.db, 'users', user.id);
+      const refUserSnap = await firestoredb.getDoc(refusedUserRef);
+      if (refUserSnap.exists()) {
+        const userData = refUserSnap.data() as Omit<UserType, 'id'>;
+        userData.notifications.unshift(newNotification);
+        await firestoredb.updateDoc(refusedUserRef, {
+          notifications: userData.notifications,
+        });
+      }
 
       await firestoredb.updateDoc(groupRef, {
         requests: groupCopy.requests,
@@ -50,7 +72,25 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
       const userIndex = groupCopy.requests.usersToJoin.findIndex(userReq => userReq.id === user.id);
       groupCopy.requests.usersToJoin.splice(userIndex, 1);
       groupCopy.users.push(user);
-
+      const newNotification: Notification = {
+        id: uuidv4(),
+        sentBy: {
+          id: user.id,
+          name: user.name,
+          picture: user.picture,
+        },
+        wasViewed: false,
+        message: `Your request to join ${group.name} was accepted!`,
+        sentAt: getFormattedDate(),
+      };
+      const userSnap = await firestoredb.getDoc(userRef);
+      if (userSnap.exists()) {
+        const userData = userSnap.data() as Omit<UserType, 'id'>;
+        userData.notifications.unshift(newNotification);
+        await firestoredb.updateDoc(userRef, {
+          notifications: userData.notifications,
+        });
+      }
       await firestoredb.updateDoc(groupRef, {
         users: groupCopy.users,
         requests: groupCopy.requests,
