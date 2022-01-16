@@ -17,6 +17,19 @@ export type Notification = {
     date: string;
     time: string;
   };
+  post?: {
+    id: string;
+    pathSegment: string;
+    groupID?: string;
+    groupName?: string;
+    commentID?: string;
+    replyID?: string;
+  }
+  group?: {
+    id: string;
+    name: string;
+  }
+  chatID?: string;
 };
 
 export interface User {
@@ -92,6 +105,7 @@ export interface Post {
     picture: string;
   };
   groupID?: string;
+  groupName?: string;
   formattedDate: {
     date: string;
     time: string;
