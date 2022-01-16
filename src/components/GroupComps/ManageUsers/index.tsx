@@ -9,6 +9,8 @@ import setUserAsAdmin from '../../../utils/setters/setUserAsAdmin';
 import setUserAsMember from '../../../utils/setters/setUserAsMember';
 import { toast } from 'react-toastify';
 import { firestoredb } from '../../../lib';
+import { v4 as uuidv4 } from 'uuid';
+import getFormattedDate from '../../../utils/getters/getFormattedDate';
 
 import { Container } from '../PostRequests/styles';
 import { Exception } from '../..';
@@ -33,7 +35,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Group, GroupUser, Roles, User as UserType } from '../../../global/types';
+import { Group, GroupUser, Roles, User as UserType, Notification } from '../../../global/types';
 
 interface Props {
   group: Group;
@@ -67,8 +69,11 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
       const results: Group['users'] = [];
       group.users.forEach(user => {
         if (user.name.toLowerCase().includes(filter.toLowerCase()) && user.role !== Roles.Owner) {
-          if(user.id === currentUser.id && currentUser.groups.some(uGroup => uGroup.id === group.id && uGroup.role === Roles.Admin)) {
-            return
+          if (
+            user.id === currentUser.id &&
+            currentUser.groups.some(uGroup => uGroup.id === group.id && uGroup.role === Roles.Admin)
+          ) {
+            return;
           } else results.push(user);
         }
       });
@@ -90,15 +95,36 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
       }
       groupCopy.users.splice(userIndex, 1);
       userCopy.groups.splice(groupIndex, 1);
-      await firestoredb.updateDoc(groupRef, {
-        admins: groupCopy.admins,
-        users: groupCopy.users,
-      });
-      await firestoredb.updateDoc(userRef, {
-        groups: userCopy.groups,
-      });
-      setGroup(groupCopy);
-      toast('User deleted');
+      const newNotification: Notification = {
+        id: uuidv4(),
+        sentBy: {
+          id: currentUser.id,
+          name: currentUser.name,
+          picture: currentUser.picture,
+        },
+        wasViewed: false,
+        message: `${currentUser.name} kicked you from ${group.name}!`,
+        sentAt: getFormattedDate(),
+        group: {
+          id: group.id,
+          name: group.name,
+        },
+      };
+      const userSnap = await firestoredb.getDoc(userRef);
+      if (userSnap.exists()) {
+        const userData = userSnap.data() as Omit<UserType, 'id'>;
+        userData.notifications.unshift(newNotification);
+        await firestoredb.updateDoc(groupRef, {
+          admins: groupCopy.admins,
+          users: groupCopy.users,
+        });
+        await firestoredb.updateDoc(userRef, {
+          groups: userCopy.groups,
+          notifications: userData.notifications,
+        });
+        setGroup(groupCopy);
+        toast('User deleted');
+      }
     } catch (err) {
       handleFirebaseError(err);
     }
@@ -176,8 +202,8 @@ const ManageUsers: React.FC<Props> = ({ group, setGroup, currentUser }) => {
               <CustomIconBox
                 position="-1rem"
                 onClick={() => {
-                  if (user.role === Roles.Member) setUserAsAdmin(user, group, setGroup);
-                  else if (user.role === Roles.Admin) setUserAsMember(user, group, setGroup);
+                  if (user.role === Roles.Member) setUserAsAdmin(currentUser, user, group, setGroup);
+                  else if (user.role === Roles.Admin) setUserAsMember(currentUser, user, group, setGroup);
                 }}
               >
                 {user.role === Roles.Member && (

@@ -1,41 +1,34 @@
 import React from 'react';
 
-import { firestoredb } from '../../lib';
+import { useAppSelector } from '../../app/hooks';
+import getPostsForNonConnectedUser from '../../utils/getters/getPostsForNonConnectedUser';
+import getPostsForConnectedUser from '../../utils/getters/getPostsForConnectedUser';
 
 import { Container } from './styles';
 import { InnerCenteredContainer } from '../../global/styles';
 import { Post, Loader, Exception } from '..';
 
 import { Post as PostType } from '../../global/types';
-import handleFirebaseError from '../../utils/general/handleFirebaseError';
 
-const Feed: React.FC = () => {
+interface Props {
+  postFromNotification?: {
+    id: string;
+    pathSegment: string;
+    commentID?: string;
+    replyID?: string;
+  };
+}
+const Feed: React.FC<Props> = ({ postFromNotification }) => {
   const [posts, setPosts] = React.useState<PostType[]>([]);
   const [error, setError] = React.useState('');
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const user = useAppSelector(state => state.user.user);
 
   React.useEffect(() => {
-    (async () => {
-      try {
-        const postsSnapshot = await firestoredb.getDocs(
-          firestoredb.collection(firestoredb.db, 'media/posts/users')
-        );
-
-        if (!postsSnapshot.empty) {
-          const posts: PostType[] = [];
-          postsSnapshot.forEach(post => {
-            const postData = post.data() as PostType;
-            posts.push(postData);
-          });
-          setPosts(posts);
-        } else setError('No posts were found!');
-      } catch (err) {
-        handleFirebaseError(err, setError);
-      } finally {
-        setIsLoaded(true);
-      }
-    })();
-  }, []);
+    if (!user) {
+      getPostsForNonConnectedUser(setPosts, setError, setIsLoaded);
+    } else getPostsForConnectedUser(setPosts, setError, setIsLoaded, user, postFromNotification);
+  }, [user, postFromNotification]);
 
   if (!isLoaded) {
     return (

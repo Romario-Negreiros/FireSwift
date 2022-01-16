@@ -40,6 +40,10 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
         wasViewed: false,
         message: `Your request to create a post in ${group.name} was refused!`,
         sentAt: getFormattedDate(),
+        group: {
+          id: group.id,
+          name: group.name,
+        },
       };
 
       if (post.media.images.length) {
@@ -98,7 +102,7 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
         reqPost => reqPost.id === post.id
       );
       groupCopy.requests.postsToPublish.splice(postIndex, 1);
-      groupCopy.posts.push(post.id);
+      groupCopy.posts.unshift(post.id);
       const newNotification: Notification = {
         id: uuidv4(),
         sentBy: {
@@ -109,6 +113,10 @@ const PostRequests: React.FC<Props> = ({ group, setGroup }) => {
         wasViewed: false,
         message: `Your request to create a post in ${group.name} was accepted!`,
         sentAt: getFormattedDate(),
+        group: {
+          id: group.id,
+          name: group.name,
+        },
       };
 
       const postAuthorRef = firestoredb.doc(firestoredb.db, 'users', post.author.id);

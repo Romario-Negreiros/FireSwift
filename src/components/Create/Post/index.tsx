@@ -108,6 +108,7 @@ const CreatePost: React.FC<Props> = ({ user, pathSegment, group }) => {
       }
       if (group) {
         post['groupID'] = group.id;
+        post['groupName'] = group.name;
         const groupRef = firestoredb.doc(firestoredb.db, 'groups', group.id);
         const groupCopy: Group = JSON.parse(JSON.stringify(group));
         if (group.private) {

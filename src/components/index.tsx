@@ -9,7 +9,7 @@ export { default as Exception } from './Exception';
 export { default as DraggableList } from './DraggableList';
 export { default as Portal } from './Portal';
 export { default as SocialOptions } from './SocialOptions';
-export { CreateGroup, CreatePost, CreateStory } from './Create';
+export { CreateGroup, CreatePost } from './Create';
 export { default as Contents } from './Contents';
 export { default as AudioRecorder } from './AudioRecorder';
 export { About, Posts, Users, PostRequests, ManageUsers, UserRequests, PrivateGroup } from './GroupComps';

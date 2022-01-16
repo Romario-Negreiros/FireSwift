@@ -43,6 +43,10 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
         wasViewed: false,
         message: `Your request to join ${group.name} was refused!`,
         sentAt: getFormattedDate(),
+        group: {
+          id: group.id,
+          name: group.name,
+        },
       };
       const refusedUserRef = firestoredb.doc(firestoredb.db, 'users', user.id);
       const refUserSnap = await firestoredb.getDoc(refusedUserRef);
@@ -82,6 +86,10 @@ const UserRequests: React.FC<Props> = ({ group, setGroup }) => {
         wasViewed: false,
         message: `Your request to join ${group.name} was accepted!`,
         sentAt: getFormattedDate(),
+        group: {
+          id: group.id,
+          name: group.name,
+        },
       };
       const userSnap = await firestoredb.getDoc(userRef);
       if (userSnap.exists()) {

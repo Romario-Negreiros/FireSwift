@@ -3,6 +3,7 @@ import React from 'react';
 import handleFirebaseError from '../../utils/general/handleFirebaseError';
 import checkTime from '../../utils/general/checkTime';
 import { firestoredb } from '../../lib';
+import { useHistory } from 'react-router-dom';
 
 import { Author, InnerCenteredContainer } from '../../global/styles';
 import { Container, Notification, CloseNotis } from './styles';
@@ -21,16 +22,8 @@ interface Props {
 }
 
 const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
-  React.useEffect(() => {
-    const userCopy: User = JSON.parse(JSON.stringify(user));
-    userCopy.notifications.forEach(not => {
-      if (!not.wasViewed) not.wasViewed = true;
-    });
-    firestoredb.updateDoc(firestoredb.doc(firestoredb.db, 'users', user.id), {
-      notifications: userCopy.notifications,
-    });
-  });
-  
+  const history = useHistory();
+
   const deleteNotification = async (notification: NotiType) => {
     try {
       const userCopy: User = JSON.parse(JSON.stringify(user));
@@ -44,6 +37,61 @@ const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
     }
   };
 
+  const handleClick = (notification: NotiType) => {
+    if (notification.post) {
+      if (history.location.pathname === '/home') {
+        history.push('/fallback');
+        setTimeout(() => {
+          history.push({
+            pathname: '/home',
+            state: {
+              post: notification.post,
+            },
+          });
+        }, 100);
+      } else {
+        history.push({
+          pathname: '/home',
+          state: {
+            post: notification.post,
+          },
+        });
+      }
+    } else if (notification.group) {
+      history.push({
+        pathname: `/groups/${notification.group.name}`,
+        state: {
+          id: notification.id,
+        },
+      });
+    } else if (notification.chatID) {
+      history.push({
+        pathname: '/chats',
+        state: {
+          chatID: notification.chatID,
+        },
+      });
+    } else {
+      history.push({
+        pathname: `/username/${notification.sentBy.name}`,
+        state: {
+          id: notification.sentBy.id,
+        },
+      });
+    }
+    setShowNotis(false);
+  };
+
+  React.useEffect(() => {
+    const userCopy: User = JSON.parse(JSON.stringify(user));
+    userCopy.notifications.forEach(not => {
+      if (!not.wasViewed) not.wasViewed = true;
+    });
+    firestoredb.updateDoc(firestoredb.doc(firestoredb.db, 'users', user.id), {
+      notifications: userCopy.notifications,
+    });
+  });
+
   return (
     <Container>
       <CloseNotis onClick={() => setShowNotis(false)}>
@@ -52,7 +100,7 @@ const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
       <ul>
         {user.notifications.length ? (
           user.notifications.map(not => (
-            <Notification key={not.id}>
+            <Notification key={not.id} onClick={() => handleClick(not)}>
               <Author>
                 <div>
                   <img

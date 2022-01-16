@@ -32,6 +32,7 @@ export const Notification = styled.li`
   flex-direction: column;
   gap: 1rem;
   position: relative;
+  cursor: pointer;
   :hover {
     backdrop-filter: brightness(115%);
   }
@@ -39,10 +40,12 @@ export const Notification = styled.li`
     font-size: 1.4rem;
   }
   .delete {
-    cursor: pointer;
     position: absolute;
     top: 5px;
     right: 20px;
+    :hover {
+      transform: scale(1.2);
+    }
   }
 `;
 
