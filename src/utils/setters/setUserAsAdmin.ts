@@ -1,10 +1,13 @@
 import { firestoredb } from '../../lib';
 import { toast } from 'react-toastify';
 import handleFirebaseError from '../general/handleFirebaseError';
+import { v4 as uuidv4 } from 'uuid';
+import getFormattedDate from '../getters/getFormattedDate';
 
-import { GroupUser, Group, Roles } from '../../global/types';
+import { GroupUser, User, Group, Roles, Notification } from '../../global/types';
 
 const setUserAsAdmin = async (
+  currentUser: User,
   user: GroupUser,
   group: Group,
   setGroup: (group: Group | null) => void
@@ -20,7 +23,30 @@ const setUserAsAdmin = async (
     userCopy.role = Roles.Admin;
     groupCopy.users.splice(userIndex, 1, userCopy);
     groupCopy.admins.push(userCopy);
-    
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: {
+        id: currentUser.id,
+        name: currentUser.name,
+        picture: currentUser.picture,
+      },
+      wasViewed: false,
+      message: `${currentUser.name} promoted you to admin of ${group.name}!`,
+      sentAt: getFormattedDate(),
+      group: {
+        id: group.id,
+        name: group.name,
+      },
+    };
+    const userSnap = await firestoredb.getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data() as Omit<User, 'id'>;
+      userData.notifications.unshift(newNotification);
+      await firestoredb.updateDoc(userRef, {
+        notifications: userData.notifications,
+      });
+    }
+
     await firestoredb.updateDoc(userRef, {
       groups: userCopy.groups,
     });

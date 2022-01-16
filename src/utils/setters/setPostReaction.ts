@@ -24,6 +24,10 @@ const setPostReaction = async (
       wasViewed: false,
       message: `${user.name} reacted to your post!`,
       sentAt: getFormattedDate(),
+      post: {
+        id: post.id,
+        pathSegment,
+      }
     };
     const postsCopy = [...posts];
     const postIndex = postsCopy.findIndex(postCopy => postCopy.id === post.id);

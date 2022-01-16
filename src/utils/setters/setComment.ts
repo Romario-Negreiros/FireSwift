@@ -19,13 +19,6 @@ const setComment = async (
       name: user.name,
       picture: user.picture,
     };
-    const newNotification: Notification = {
-      id: uuidv4(),
-      sentBy: author,
-      wasViewed: false,
-      message: `${author.name} commented in your post: ${newComment}`,
-      sentAt: getFormattedDate(),
-    };
     const formattedDate = getFormattedDate();
     const comment = {
       id: uuidv4(),
@@ -35,6 +28,19 @@ const setComment = async (
       replies: [],
       formattedDate,
     };
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: author,
+      wasViewed: false,
+      message: `${author.name} commented in your post: ${newComment}`,
+      sentAt: getFormattedDate(),
+      post: {
+        id: post.id,
+        pathSegment,
+        commentID: comment.id,
+      }
+    };
+    
     postsCopy.forEach(postCopy => {
       if (postCopy.id === post.id) {
         postCopy.comments.push(comment);

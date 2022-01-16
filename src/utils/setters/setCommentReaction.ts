@@ -25,6 +25,11 @@ const setCommentReaction = async (
       wasViewed: false,
       message: `${user.name} reacted with a ${newReaction} in your comment!`,
       sentAt: getFormattedDate(),
+      post: {
+        id: post.id,
+        pathSegment,
+        commentID,
+      }
     };
     const postsCopy = [...posts];
     const postIndex = postsCopy.findIndex(postCopy => postCopy.id === post.id);

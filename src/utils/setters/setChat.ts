@@ -46,6 +46,7 @@ const setChat = async (
       wasViewed: false,
       message: `${currentUser.name} started a chat with you!`,
       sentAt: getFormattedDate(),
+      chatID,
     }
     const desiredUserNotisCopy: Notification[] = JSON.parse(JSON.stringify(desiredUser.notifications));
     desiredUserNotisCopy.unshift(newNotification);

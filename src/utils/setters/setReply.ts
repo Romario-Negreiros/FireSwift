@@ -21,13 +21,6 @@ const setReply = async (
       name: user.name,
       picture: user.picture,
     };
-    const newNotification: Notification = {
-      id: uuidv4(),
-      sentBy: author,
-      wasViewed: false,
-      message: `${author.name} replied to you in a post: ${newReply}!`,
-      sentAt: getFormattedDate(),
-    };
     const formattedDate = getFormattedDate();
     const reply = {
       id: uuidv4(),
@@ -35,6 +28,19 @@ const setReply = async (
       content: newReply,
       reactions: [],
       formattedDate,
+    };
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: author,
+      wasViewed: false,
+      message: `${author.name} replied to you in a post: ${newReply}!`,
+      sentAt: getFormattedDate(),
+      post: {
+        id: post.id,
+        pathSegment,
+        commentID,
+        replyID: reply.id,
+      }
     };
     postsCopy.forEach(postCopy => {
       if (postCopy.id === post.id) {

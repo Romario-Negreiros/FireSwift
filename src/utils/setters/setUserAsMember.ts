@@ -1,10 +1,17 @@
 import { firestoredb } from '../../lib';
 import { toast } from 'react-toastify';
 import handleFirebaseError from '../general/handleFirebaseError';
+import getFormattedDate from '../getters/getFormattedDate';
+import { v4 as uuidv4 } from 'uuid';
 
-import { GroupUser, Group, Roles } from '../../global/types';
+import { GroupUser, Group, User, Roles, Notification } from '../../global/types';
 
-const setUserAsMember = async (user: GroupUser, group: Group, setGroup: (group: Group | null) => void) => {
+const setUserAsMember = async (
+  currentUser: User,
+  user: GroupUser,
+  group: Group,
+  setGroup: (group: Group | null) => void
+) => {
   try {
     const userCopy: GroupUser = JSON.parse(JSON.stringify(user));
     const groupCopy: Group = JSON.parse(JSON.stringify(group));
@@ -17,7 +24,29 @@ const setUserAsMember = async (user: GroupUser, group: Group, setGroup: (group: 
     userCopy.role = Roles.Member;
     groupCopy.users.splice(userIndex, 1, userCopy);
     groupCopy.admins.splice(adminIndex, 1);
-    
+    const newNotification: Notification = {
+      id: uuidv4(),
+      sentBy: {
+        id: currentUser.id,
+        name: currentUser.name,
+        picture: currentUser.picture,
+      },
+      wasViewed: false,
+      message: `${currentUser.name} demoted you to member of ${group.name}!`,
+      sentAt: getFormattedDate(),
+      group: {
+        id: group.id,
+        name: group.name,
+      },
+    };
+    const userSnap = await firestoredb.getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data() as Omit<User, 'id'>;
+      userData.notifications.unshift(newNotification);
+      await firestoredb.updateDoc(userRef, {
+        notifications: userData.notifications,
+      });
+    }
     await firestoredb.updateDoc(userRef, {
       groups: userCopy.groups,
     });
@@ -31,6 +60,6 @@ const setUserAsMember = async (user: GroupUser, group: Group, setGroup: (group: 
   } catch (err) {
     handleFirebaseError(err);
   }
-}
+};
 
 export default setUserAsMember;
