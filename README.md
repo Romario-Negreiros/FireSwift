@@ -12,7 +12,7 @@ A social media created with firebase and redux.
 Connected users will be able to share their posts, have a real-time conversation, add friends, react and comment to posts.
 Non-connected users will only be able to see the posts, no person's profile or chat.
 
--- Email api is not working so far --
+-- Email api is currently not working, limit use reached --
 
 ---
 
@@ -51,8 +51,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Page for chats
     - [x] Page for user profile
     - [x] Page for content creation
-    - [ ] More soon...
-- [ ] Components
+- [x] Components
     - [x] Draggable list
     - [x] Friends' list
     - [x] Feed
@@ -63,7 +62,6 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Chat components 
     - [x] Modals
     - [x] Audio Recorder
-    - [ ] More soon...
 - [ ] Layouts    
     - [x] Header
     - [ ] Footer
@@ -83,7 +81,6 @@ Non-connected users will only be able to see the posts, no person's profile or c
         - [x] Admins and creator panel
         - [x] Group page
         - [x] Group posts 
-    - [ ] Create story system
     - [ ] Notifications
 - [x] Integrations
     - [x] Firestore
