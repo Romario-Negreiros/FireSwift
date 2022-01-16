@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 // import { getAnalytics } from 'firebase/analytics';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword, deleteUser } from 'firebase/auth';
-import { collection, query, where, getDocs, addDoc, getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, limit } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, deleteObject, getDownloadURL  } from "firebase/storage";
 import { getDatabase, ref as dbRef, set, onValue, update, remove } from "firebase/database";
 
@@ -39,6 +39,7 @@ export const firestoredb = {
   query,
   where,
   onSnapshot,
+  limit,
 }
 
 export const realtimedb = {
