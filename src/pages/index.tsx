@@ -10,6 +10,7 @@ import EditProfile from './EditProfile';
 import Create from './Create';
 import Group from './Group';
 import GroupAdmPanel from './GroupAdmPanel';
+import Fallback from './Fallback';
 
 const Pages: React.FC = () => {
 
@@ -21,6 +22,7 @@ const Pages: React.FC = () => {
       <Route path="/createaccount" component={CreateAccount} />
       <Route path="/editprofile" component={EditProfile} />
       <Route path="/create" component={Create} />
+      <Route path="/fallback" component={Fallback} />
       <Route path="/users/:username" component={UserProfile} />
       <Route exact path="/groups/:groupname" component={Group} />
       <Route path="/groups/:groupname/admpanel" component={GroupAdmPanel} />

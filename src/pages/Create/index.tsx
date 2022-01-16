@@ -3,10 +3,10 @@ import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 
 import { Container, Options, View, DefaultView } from './styles';
-import { CreateGroup, CreatePost, CreateStory, Exception } from '../../components';
+import { CreateGroup, CreatePost, Exception } from '../../components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlassCheers, faPaw, faTable } from '@fortawesome/free-solid-svg-icons';
+import { faPaw, faTable } from '@fortawesome/free-solid-svg-icons';
 import { CenteredContainer } from '../../global/styles';
 
 const Create: React.FC = () => {
@@ -20,8 +20,6 @@ const Create: React.FC = () => {
           return <CreateGroup user={user} />;
         case 'New post':
           return <CreatePost user={user} pathSegment="users" />;
-        case 'New story':
-          return <CreateStory />;
         default:
           return <DefaultView />;
       }
@@ -48,12 +46,6 @@ const Create: React.FC = () => {
           <p>New post</p>
           <div>
             <FontAwesomeIcon size="2x" icon={faTable} color="purple" />
-          </div>
-        </section>
-        <section onClick={() => setCurrentComponent('New story')}>
-          <p>New story</p>
-          <div>
-            <FontAwesomeIcon size="2x" icon={faGlassCheers} color="purple" />
           </div>
         </section>
       </Options>
