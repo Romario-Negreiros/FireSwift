@@ -82,7 +82,9 @@ const setChat = async (
       chats: users[1].chats,
       notifications: users[1].notifications,
     });
-    dispatch(updateUser({ ...currentUser, chats: [...users[0].chats] }));
+    const currentUserCopy: User = JSON.parse(JSON.stringify(currentUser));
+    currentUserCopy.chats = users[0].chats
+    dispatch(updateUser({ ...currentUserCopy }));
     history.push({
       pathname: '/chats',
       state: { chatID: chat.id },

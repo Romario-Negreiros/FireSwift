@@ -46,7 +46,7 @@ const setReply = async (
       if (postCopy.id === post.id) {
         postCopy.comments.forEach(async comment => {
           if (comment.id === commentID) {
-            comment.replies.push(reply);
+            comment.replies.unshift(reply);
             const authorRef = firestoredb.doc(firestoredb.db, 'users', comment.author.id);
             const authorSnapshot = await firestoredb.getDoc(authorRef);
             if (authorSnapshot.exists()) {

@@ -43,7 +43,7 @@ const setComment = async (
     
     postsCopy.forEach(postCopy => {
       if (postCopy.id === post.id) {
-        postCopy.comments.push(comment);
+        postCopy.comments.unshift(comment);
       }
     });
     const postAuthorRef = firestoredb.doc(firestoredb.db, 'users', post.author.id);
