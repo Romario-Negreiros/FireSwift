@@ -11,14 +11,15 @@ import { Post, Loader, Exception } from '..';
 import { Post as PostType } from '../../global/types';
 
 interface Props {
-  postFromNotification?: {
+  statePost?: {
     id: string;
     pathSegment: string;
     commentID?: string;
     replyID?: string;
   };
 }
-const Feed: React.FC<Props> = ({ postFromNotification }) => {
+
+const Feed: React.FC<Props> = ({ statePost }) => {
   const [posts, setPosts] = React.useState<PostType[]>([]);
   const [error, setError] = React.useState('');
   const [isLoaded, setIsLoaded] = React.useState(false);
@@ -27,8 +28,8 @@ const Feed: React.FC<Props> = ({ postFromNotification }) => {
   React.useEffect(() => {
     if (!user) {
       getPostsForNonConnectedUser(setPosts, setError, setIsLoaded);
-    } else getPostsForConnectedUser(setPosts, setError, setIsLoaded, user, postFromNotification);
-  }, [user, postFromNotification]);
+    } else getPostsForConnectedUser(setPosts, setError, setIsLoaded, user, statePost);
+  }, [user, statePost]);
 
   if (!isLoaded) {
     return (
@@ -50,9 +51,30 @@ const Feed: React.FC<Props> = ({ postFromNotification }) => {
   return (
     <Container>
       <ul>
-        {posts.map(post => (
-          <Post key={post.id} post={post} posts={posts} setPosts={setPosts} pathSegment="users" />
-        ))}
+        {posts.map(post => {
+          if (statePost && statePost.id === post.id) {
+            return (
+              <Post
+                key={post.id}
+                post={post}
+                posts={posts}
+                setPosts={setPosts}
+                pathSegment="users"
+                statePost={statePost}
+              />
+            );
+          } else {
+            return (
+              <Post
+                key={post.id}
+                post={post}
+                posts={posts}
+                setPosts={setPosts}
+                pathSegment="users"
+              />
+            );
+          }
+        })}
       </ul>
     </Container>
   );

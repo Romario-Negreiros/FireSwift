@@ -61,7 +61,7 @@ const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
       history.push({
         pathname: `/groups/${notification.group.name}`,
         state: {
-          id: notification.id,
+          id: notification.group.id,
         },
       });
     } else if (notification.chatID) {
@@ -92,49 +92,65 @@ const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
     });
   });
 
-  return (
-    <Container>
-      <CloseNotis onClick={() => setShowNotis(false)}>
-        <FontAwesomeIcon icon={faTimes} color="purple" size="2x" />
-      </CloseNotis>
-      <ul>
-        {user.notifications.length ? (
-          user.notifications.map(not => (
-            <Notification key={not.id} onClick={() => handleClick(not)}>
-              <Author>
-                <div>
-                  <img
-                    src={not.sentBy.picture ? not.sentBy.picture : DefaultPicture}
-                    alt={not.sentBy.name}
-                  />
+  if (user) {
+    return (
+      <Container>
+        <CloseNotis onClick={() => setShowNotis(false)}>
+          <FontAwesomeIcon icon={faTimes} color="purple" size="2x" />
+        </CloseNotis>
+        <ul>
+          {user.notifications.length ? (
+            user.notifications.map(not => (
+              <Notification key={not.id} onClick={() => handleClick(not)}>
+                <Author>
+                  <div>
+                    <img
+                      src={not.sentBy.picture ? not.sentBy.picture : DefaultPicture}
+                      alt={not.sentBy.name}
+                    />
+                  </div>
+                  <div className="name">
+                    <h2>{not.sentBy.name}</h2>
+                  </div>
+                </Author>
+
+                <p>{not.message}</p>
+
+                <div className="delete" onClick={() => deleteNotification(not)}>
+                  <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                 </div>
-                <div className="name">
-                  <h2>{not.sentBy.name}</h2>
+
+                <div className="time">
+                  <span>{checkTime(not.sentAt)}</span>
                 </div>
-              </Author>
-
-              <p>{not.message}</p>
-
-              <div className="delete" onClick={() => deleteNotification(not)}>
-                <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
-              </div>
-
-              <div className="time">
-                <span>{checkTime(not.sentAt)}</span>
-              </div>
-            </Notification>
-          ))
-        ) : (
+              </Notification>
+            ))
+          ) : (
+            <li>
+              <InnerCenteredContainer>
+                <Exception message="No notifications to see" />
+              </InnerCenteredContainer>
+              <br />
+            </li>
+          )}
+        </ul>
+      </Container>
+    );
+  } else
+    return (
+      <Container>
+        <CloseNotis onClick={() => setShowNotis(false)}>
+          <FontAwesomeIcon icon={faTimes} color="purple" size="2x" />
+        </CloseNotis>
+        <ul>
           <li>
             <InnerCenteredContainer>
-              <Exception message="No notifications to see" />
+              <Exception message="No user connected" />
             </InnerCenteredContainer>
-            <br />
           </li>
-        )}
-      </ul>
-    </Container>
-  );
+        </ul>
+      </Container>
+    );
 };
 
 export default Notifications;

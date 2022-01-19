@@ -34,9 +34,15 @@ interface Props {
   posts: PostType[];
   setPosts: (posts: PostType[]) => void;
   pathSegment: string;
+  statePost?: {
+    id: string;
+    pathSegment: string;
+    commentID?: string;
+    replyID?: string;
+  };
 }
 
-const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
+const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment, statePost }) => {
   const [value, setValue] = React.useState('');
   const [willReply, setWillReply] = React.useState('');
   const [replyValue, setReplyValue] = React.useState('');
@@ -44,6 +50,13 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
   const [showRepliesList, setShowRepliesList] = React.useState('');
   const [showReplyReactions, setShowReplyReactions] = React.useState('');
   const user = useAppSelector(state => state.user.user);
+
+  const setShowReplies = React.useCallback(
+    (id: string) => {
+      showRepliesList === id ? setShowRepliesList('') : setShowRepliesList(id);
+    },
+    [showRepliesList]
+  );
 
   const handleClick = (reaction?: string, type?: string, commentID?: string) => {
     if (user) {
@@ -90,15 +103,55 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
         }
       }
     } else {
-      toast('You need to be logged in to complete this action!');
+      toast.error('You need to be logged in to complete this action!');
     }
   };
 
+  React.useEffect(() => {
+    if (statePost) {
+      const post = document.getElementById(statePost.id) as HTMLLIElement;
+      window.scrollTo({
+        top: window.innerHeight - post.offsetTop + 40,
+        behavior: 'smooth',
+      });
+      if (statePost.commentID) {
+        const commentsList = document.getElementById(statePost.commentID) as HTMLUListElement;
+        const comment = document.getElementById(`comment${statePost.commentID}`) as HTMLLIElement;
+        commentsList.scrollTo({
+          top: comment.offsetTop - commentsList.offsetTop,
+          behavior: 'smooth',
+        });
+        if (statePost.commentID && statePost.replyID) {
+          if (showRepliesList) {
+            const repliesList = document.getElementById(statePost.replyID) as HTMLUListElement;
+            const reply = document.getElementById(`reply${statePost.replyID}`) as HTMLLIElement;
+            // commentsList.scrollTo({
+            //   top: reply.offsetTop,
+            //   behavior: 'smooth',
+            // });
+            const post = posts.find(post => post.id === statePost.id);
+            const comment = post?.comments.find(comment => comment.id === statePost.commentID);
+            const replyIndex = comment?.replies.findIndex(reply => reply.id === statePost.replyID);
+            if (replyIndex) {
+              repliesList.scrollTo({
+                top: reply.offsetHeight * replyIndex,
+                behavior: 'smooth',
+              });
+            }
+          } else setShowReplies(statePost.commentID);
+        }
+      }
+    }
+  }, [setShowReplies, showRepliesList, statePost]);
+
   return (
-    <Container>
+    <Container id={statePost ? statePost.id : ''}>
       <Author>
         <div>
-          <img src={post.author.picture ? post.author.picture : DefaultPicture} alt={post.author.name} />
+          <img
+            src={post.author.picture ? post.author.picture : DefaultPicture}
+            alt={post.author.name}
+          />
         </div>
         <div className="name">
           <h2>{post.author.name}</h2>
@@ -129,9 +182,9 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
           <FontAwesomeIcon color="purple" size="2x" icon={faPaperPlane} />
         </div>
       </Input>
-      <Comments>
+      <Comments id={statePost && statePost.commentID ? statePost.commentID : ''}>
         {post.comments.map(comment => (
-          <li key={comment.id}>
+          <li key={comment.id} id={`comment${comment.id}`}>
             <Author>
               <div>
                 <img
@@ -177,19 +230,17 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
                 >
                   React
                 </span>
-                <span
-                  onClick={() =>
-                    showRepliesList === comment.id
-                      ? setShowRepliesList('')
-                      : setShowRepliesList(comment.id)
-                  }
-                >
+                <span onClick={() => setShowReplies(comment.id)}>
                   Replies({comment.replies.length})
                 </span>
                 <span
-                  onClick={() =>
-                    willReply === comment.id ? setWillReply('') : setWillReply(comment.id)
-                  }
+                  onClick={() => {
+                    if (willReply === comment.id) {
+                      setWillReply('');
+                    } else {
+                      setWillReply(comment.id);
+                    }
+                  }}
                 >
                   Reply
                 </span>
@@ -208,9 +259,12 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment }) => {
               ''
             )}
             {showRepliesList === comment.id ? (
-              <Replies>
-                {comment.replies.map(reply => (
-                  <li key={reply.id}>
+              <Replies id={statePost && statePost.replyID ? statePost.replyID : ''}>
+                {comment.replies.map((reply, i) => (
+                  <li
+                    key={reply.id}
+                    id={statePost && statePost.replyID ? `reply${statePost.replyID}` : ''}
+                  >
                     <Author>
                       <div>
                         <img
