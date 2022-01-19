@@ -125,10 +125,6 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment, statePost }
           if (showRepliesList) {
             const repliesList = document.getElementById(statePost.replyID) as HTMLUListElement;
             const reply = document.getElementById(`reply${statePost.replyID}`) as HTMLLIElement;
-            // commentsList.scrollTo({
-            //   top: reply.offsetTop,
-            //   behavior: 'smooth',
-            // });
             const post = posts.find(post => post.id === statePost.id);
             const comment = post?.comments.find(comment => comment.id === statePost.commentID);
             const replyIndex = comment?.replies.findIndex(reply => reply.id === statePost.replyID);
