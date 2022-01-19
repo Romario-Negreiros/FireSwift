@@ -28,7 +28,6 @@ export const Options = styled.section`
     gap: 1rem;
   }
   @media screen and (min-width: 800px) {
-    grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
   }
   section {
