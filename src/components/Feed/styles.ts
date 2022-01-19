@@ -5,6 +5,7 @@ export const Container = styled.section`
   padding: 5px;
   width: 100%;
   max-width: 500px;
+  margin: auto;
   ul:nth-child(1) {
     width: 100%;
     display: flex;
