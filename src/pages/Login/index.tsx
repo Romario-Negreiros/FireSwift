@@ -35,11 +35,11 @@ const Login: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setFocus,
   } = useForm<Inputs>();
   const history = useHistory();
 
   const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
-
     try {
       setIsLoaded(false);
       await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
@@ -68,6 +68,10 @@ const Login: React.FC = () => {
     }
   };
 
+  React.useEffect(() => {
+    setFocus('email');
+  });
+
   if (!isLoaded) {
     return (
       <CenteredContainer>
@@ -91,9 +95,9 @@ const Login: React.FC = () => {
             <h1>Login</h1>
           </div>
           <input
+            {...register('email', { required: 'Field cannot be empty!' })}
             type="email"
             placeholder="Email"
-            {...register('email', { required: 'Field cannot be empty!' })}
           />
           <p>{errors.email?.message}</p>
           <div>

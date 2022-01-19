@@ -9,16 +9,18 @@ import { useHistory } from 'react-router-dom';
 // This page is used to allow the state changing, and pass the notification data to the state
 
 const Fallback: React.FC = () => {
-
   const history = useHistory();
 
   React.useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       history.push('/home');
-    }, 200)
-  })
+    }, 300);
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
 
-  return <></>
+  return <></>;
 };
 
 export default Fallback;

@@ -39,6 +39,7 @@ const CreateAccount: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setFocus,
   } = useForm<Inputs>();
 
   const history = useHistory();
@@ -93,6 +94,10 @@ const CreateAccount: React.FC = () => {
     } else setError('Password and confirm password fields must be equal');
   };
 
+  React.useEffect(() => {
+    setFocus('email');
+  });
+
   if (!isLoaded) {
     return (
       <CenteredContainer>
@@ -116,9 +121,9 @@ const CreateAccount: React.FC = () => {
             <h1>Create account</h1>
           </div>
           <input
+            {...register('email', { required: 'Field cannot be empty!' })}
             type="email"
             placeholder="Email"
-            {...register('email', { required: 'Field cannot be empty!' })}
           ></input>
           <p>{errors.email?.message}</p>
 
