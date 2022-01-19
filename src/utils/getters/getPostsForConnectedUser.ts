@@ -46,11 +46,11 @@ const getPostsForConnectedUser = async (
     }
 
     const userPostsRef = firestoredb.collection(firestoredb.db, 'media/posts/users');
-    const friendsPostsQuery = firestoredb.query(
-      userPostsRef,
-      firestoredb.where('author.id', 'in', user.friends)
-    );
     if (user.friends.length) {
+      const friendsPostsQuery = firestoredb.query(
+        userPostsRef,
+        firestoredb.where('author.id', 'in', user.friends)
+      );
       const friendsPostsQuerySnapshot = await firestoredb.getDocs(friendsPostsQuery);
       friendsPostsQuerySnapshot.forEach(doc => {
         const post = doc.data() as Post;
