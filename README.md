@@ -44,7 +44,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
 
 ### Progress
 
-- [] Pages
+- [x] Pages
     - [x] Main page
     - [x] login page 
     - [x] Page for account creation 
@@ -62,10 +62,9 @@ Non-connected users will only be able to see the posts, no person's profile or c
     - [x] Chat components 
     - [x] Modals
     - [x] Audio Recorder
-- [ ] Layouts    
+- [x] Layouts    
     - [x] Header
-    - [ ] Footer
-- [ ] User features
+- [x] User features
     - [x] Login
     - [x] Account creation
     - [x] Add/remove friends mechanism
@@ -81,7 +80,7 @@ Non-connected users will only be able to see the posts, no person's profile or c
         - [x] Admins and creator panel
         - [x] Group page
         - [x] Group posts 
-    - [ ] Notifications
+    - [x] Notifications
 - [x] Integrations
     - [x] Firestore
     - [x] Firebase auth
