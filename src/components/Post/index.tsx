@@ -138,7 +138,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment, statePost }
         }
       }
     }
-  }, [setShowReplies, showRepliesList, statePost]);
+  }, [setShowReplies, showRepliesList, statePost, posts]);
 
   return (
     <Container id={statePost ? statePost.id : ''}>
