@@ -48,44 +48,44 @@ const CreateAccount: React.FC = () => {
     if (password === confirmpwd) {
       setIsLoaded(false);
       try {
-        // const response = await fetch(
-        // `https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.REACT_APP_EMAIL_API_KEY}&email=${email}`
-        // );
-        // const { deliverability, is_valid_format } = await response.json();
-        // if (deliverability === 'DELIVERABLE' && is_valid_format.value) {
-        await authentication.createUserWithEmailAndPassword(authentication.auth, email, password);
-        await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
-        const { uid } = authentication.auth.currentUser as User;
-        const user = {
-          email,
-          name,
-          friends: [],
-          bio: '',
-          age: null,
-          relationship: '',
-          isPrivate: false,
-          picture: '',
-          country: '',
-          languages: [],
-          hobbies: [],
-          chats: [],
-          groups: [],
-          notifications: [],
-        };
-        await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
-        dispatch(userLogged({ id: uid, ...user }));
-        firestoredb.onSnapshot(firestoredb.doc(firestoredb.db, 'users', uid), doc => {
-          const docData = doc.data() as Omit<UserStateType, 'id'>;
-          if (
-            docData.chats.length !== userConnected?.chats.length ||
-            docData.notifications.length !== userConnected?.notifications.length
-          ) {
-            dispatch(updateUser({ id: doc.id, ...docData }));
-          }
-        });
-        toast('User succesfully created!');
-        history.push('/home');
-        // } else setError("This email doesn't exist!");
+        const response = await fetch(
+          `https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.REACT_APP_EMAIL_API_KEY}&email=${email}`
+        );
+        const { deliverability, is_valid_format } = await response.json();
+        if (deliverability === 'DELIVERABLE' && is_valid_format.value) {
+          await authentication.createUserWithEmailAndPassword(authentication.auth, email, password);
+          await authentication.signInWithEmailAndPassword(authentication.auth, email, password);
+          const { uid } = authentication.auth.currentUser as User;
+          const user = {
+            email,
+            name,
+            friends: [],
+            bio: '',
+            age: null,
+            relationship: '',
+            isPrivate: false,
+            picture: '',
+            country: '',
+            languages: [],
+            hobbies: [],
+            chats: [],
+            groups: [],
+            notifications: [],
+          };
+          await firestoredb.setDoc(firestoredb.doc(firestoredb.db, 'users', uid), user);
+          dispatch(userLogged({ id: uid, ...user }));
+          firestoredb.onSnapshot(firestoredb.doc(firestoredb.db, 'users', uid), doc => {
+            const docData = doc.data() as Omit<UserStateType, 'id'>;
+            if (
+              docData.chats.length !== userConnected?.chats.length ||
+              docData.notifications.length !== userConnected?.notifications.length
+            ) {
+              dispatch(updateUser({ id: doc.id, ...docData }));
+            }
+          });
+          toast('User succesfully created!');
+          history.push('/home');
+        } else setError("This email doesn't exist!");
       } catch (err) {
         handleFirebaseError(err, setError);
       } finally {
