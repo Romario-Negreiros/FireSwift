@@ -6,7 +6,13 @@ import deleteChat from '../../utils/general/deleteChat';
 import { Container, DropdownButton, List, User, Message, Alert } from './styles';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowDown, faCheckCircle, faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowDown,
+  faCheckCircle,
+  faTrash,
+  faCheck,
+  faCommentDots,
+} from '@fortawesome/free-solid-svg-icons';
 
 import DefaultPicture from '../../assets/default-picture.png';
 
@@ -24,7 +30,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
 
   const handleClick = (chatID: string) => {
     setCurrentChat(chatID);
-    if(isDropdownOpen) setIsDropdownOpen(false);
+    if (isDropdownOpen) setIsDropdownOpen(false);
   };
 
   const displaySpanText = (media: Medias): string => {
@@ -51,7 +57,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
           );
           if (!chat.users) {
             return (
-              <li key={chat.id} onClick={() => handleClick(chat.id)}>
+              <li key={chat.id}>
                 <User>
                   <img
                     src={currentUser.picture ? currentUser.picture : DefaultPicture}
@@ -73,6 +79,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                 >
                   <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                 </div>
+                <div className="chat" onClick={() => handleClick(chat.id)}>
+                  <FontAwesomeIcon icon={faCommentDots} color="red" size="2x" />
+                </div>
               </li>
             );
           } else {
@@ -84,7 +93,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
               const msg = chat.messages[l];
               if (receiver) {
                 return (
-                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
+                  <li key={chat.id}>
                     <User>
                       <img
                         src={receiver.picture ? receiver.picture : DefaultPicture}
@@ -99,6 +108,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                       }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                    <div className="chat" onClick={() => handleClick(chat.id)}>
+                      <FontAwesomeIcon icon={faCommentDots} color="red" size="2x" />
                     </div>
                     <Message>
                       {!msg.media ? (
@@ -129,7 +141,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
               } else {
                 const user = chat.users[0];
                 return (
-                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
+                  <li key={chat.id}>
                     <User>
                       <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                       <span>{user.name}</span>
@@ -141,6 +153,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                       }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                    <div className="chat" onClick={() => handleClick(chat.id)}>
+                      <FontAwesomeIcon icon={faCommentDots} color="red" size="2x" />
                     </div>
                     <Message>
                       {!msg.media ? (
@@ -165,7 +180,7 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
             } else {
               if (receiver) {
                 return (
-                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
+                  <li key={chat.id}>
                     <User>
                       <img
                         src={receiver.picture ? receiver.picture : DefaultPicture}
@@ -181,12 +196,15 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
                     </div>
+                    <div className="chat" onClick={() => handleClick(chat.id)}>
+                      <FontAwesomeIcon icon={faCommentDots} color="red" size="2x" />
+                    </div>
                   </li>
                 );
               } else {
                 const user = chat.users[0];
                 return (
-                  <li key={chat.id} onClick={() => handleClick(chat.id)}>
+                  <li key={chat.id}>
                     <User>
                       <img src={user.picture ? user.picture : DefaultPicture} alt={user.name} />
                       <span>{user.name}</span>
@@ -198,6 +216,9 @@ const ChatsList: React.FC<Props> = ({ chats, setCurrentChat, currentUser }) => {
                       }
                     >
                       <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                    </div>
+                    <div className="chat" onClick={() => handleClick(chat.id)}>
+                      <FontAwesomeIcon icon={faCommentDots} color="red" size="2x" />
                     </div>
                   </li>
                 );

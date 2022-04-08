@@ -39,7 +39,7 @@ const Feed: React.FC<Props> = ({ statePost }) => {
         </InnerCenteredContainer>
       </Container>
     );
-  } else if (error || !posts) {
+  } else if (error) {
     return (
       <Container>
         <InnerCenteredContainer>
@@ -47,6 +47,14 @@ const Feed: React.FC<Props> = ({ statePost }) => {
         </InnerCenteredContainer>
       </Container>
     );
+  } else if (!posts.length) {
+    return (
+      <Container>
+        <InnerCenteredContainer>
+          <Exception message='No posts found!' />
+        </InnerCenteredContainer>
+      </Container>
+    )
   }
   return (
     <Container>

@@ -12,7 +12,7 @@ import { Exception } from '..';
 import DefaultPicture from '../../assets/default-picture.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faLink, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { User, Notification as NotiType } from '../../global/types';
 
@@ -23,7 +23,6 @@ interface Props {
 
 const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
   const history = useHistory();
-
   const deleteNotification = async (notification: NotiType) => {
     try {
       const userCopy: User = JSON.parse(JSON.stringify(user));
@@ -101,7 +100,7 @@ const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
         <ul>
           {user.notifications.length ? (
             user.notifications.map(not => (
-              <Notification key={not.id} onClick={() => handleClick(not)}>
+              <Notification key={not.id}>
                 <Author>
                   <div>
                     <img
@@ -118,6 +117,10 @@ const Notifications: React.FC<Props> = ({ setShowNotis, user }) => {
 
                 <div className="delete" onClick={() => deleteNotification(not)}>
                   <FontAwesomeIcon icon={faTrash} color="red" size="2x" />
+                </div>
+
+                <div className="link" onClick={() => handleClick(not)}>
+                  <FontAwesomeIcon icon={faLink} color="purple" size="2x" />
                 </div>
 
                 <div className="time">

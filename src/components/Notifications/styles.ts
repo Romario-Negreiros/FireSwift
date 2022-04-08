@@ -32,10 +32,6 @@ export const Notification = styled.li`
   flex-direction: column;
   gap: 1rem;
   position: relative;
-  cursor: pointer;
-  :hover {
-    backdrop-filter: brightness(115%);
-  }
   p {
     font-size: 1.4rem;
   }
@@ -44,6 +40,16 @@ export const Notification = styled.li`
     top: 5px;
     right: 20px;
     :hover {
+      cursor: pointer;
+      transform: scale(1.2);
+    }
+  }
+  .link {
+    position: absolute;
+    top: 35px;
+    right: 20px;
+    :hover {
+      cursor: pointer;
       transform: scale(1.2);
     }
   }

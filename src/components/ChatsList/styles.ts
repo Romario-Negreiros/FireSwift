@@ -46,14 +46,9 @@ export const List = styled.ul<ListProps>`
   border-radius: 5px;
   li {
     position: relative;
-    cursor: pointer;
     width: 100%;
     padding: 0.5rem;
     border-bottom: 1px solid ${({ theme: { border } }) => border.primary};
-    :hover {
-      backdrop-filter: brightness(1.2);
-      -webkit-backdrop-filter: brightness(1.2);
-    }
   }
   @media screen and (min-width: 700px) {
     background: ${({ theme: { bgs } }) => bgs.tertiary};
@@ -64,6 +59,7 @@ export const List = styled.ul<ListProps>`
     max-width: 400px;
   }
   .delete {
+    cursor: pointer;
     position: absolute;
     bottom: 1rem;
     right: 1rem;
@@ -71,10 +67,19 @@ export const List = styled.ul<ListProps>`
       transform: scale(1.1);
     }
   }
-  .status {
+  .chat {
+    cursor: pointer;
     position: absolute;
     bottom: 1rem;
     right: 4rem;
+    :hover svg {
+      transform: scale(1.1);
+    }
+  }
+  .status {
+    position: absolute;
+    bottom: 1rem;
+    right: 8rem;
     width: 15px;
     height: 15px;
     display: flex;
