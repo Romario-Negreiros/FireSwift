@@ -52,13 +52,16 @@ export const Media = styled.div`
     }
   }
   li {
+    align-self: baseline;
     text-align: center;
+    overflow: hidden;
     height: 100%;
   }
   img {
-    width: fit-content;
-    height: 100px;
-  }
+    height: auto; 
+    width: auto; 
+    max-width: 300px; 
+    max-height: 300px;  }
 `;
 
 export const PostReactions = styled.ul`
