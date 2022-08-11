@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const Container = styled.li`
   position: relative;
   background: ${({ theme: { bgs } }) => bgs.tertiary};
-  width: 100%;
   border-radius: 5px;
   border: 1px solid ${({ theme: { border } }) => border.primary};
   display: flex;
@@ -24,17 +23,24 @@ export const Text = styled.div`
   }
 `;
 
-export const Media = styled.div`
+interface MediaProps {
+  numberOfImages?: number
+  numberOfDocs?: number
+}
+
+export const Media = styled.div<MediaProps>`
   ul.mediaList {
     width: 100%;
     display: grid;
     gap: 0.5rem;
-    grid-template-columns: repeat(3, 1fr);
+  }
+  ul.images {
+    grid-template-columns: ${({ numberOfImages }) => `repeat(${numberOfImages}, 1fr)`};
   }
   video {
     margin: 1rem 0;
-    width: 100%;
-    height: 200px;
+    max-width: 100%;
+    height: auto;
   }
   .docView {
     height: 100%;
@@ -58,10 +64,10 @@ export const Media = styled.div`
     height: 100%;
   }
   img {
-    height: auto; 
-    width: auto; 
-    max-width: 300px; 
-    max-height: 300px;  }
+    max-width: 100%;
+    height: auto;
+    max-height: 300px; 
+  }
 `;
 
 export const PostReactions = styled.ul`

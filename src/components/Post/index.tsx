@@ -156,7 +156,7 @@ const Post: React.FC<Props> = ({ post, posts, setPosts, pathSegment, statePost }
       <Text>
         <p>{post.content}</p>
       </Text>
-      <Media>
+      <Media numberOfImages={post.media.images.length} numberOfDocs={post.media.docs.length}>
         <Contents item={post} />
       </Media>
       <PostReactions>

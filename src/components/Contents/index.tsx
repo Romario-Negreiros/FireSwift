@@ -29,7 +29,7 @@ const Contents: React.FC<Props> = ({ item }) => {
   return (
     <>
       {item.media.images && item.media.images.length ? (
-        <ul className="mediaList">
+        <ul className="mediaList images">
           {item.media.images.map((img, i) => (
             <li key={`img${i}`}>
               <img src={img} alt={`img${i}`} />
@@ -48,7 +48,7 @@ const Contents: React.FC<Props> = ({ item }) => {
         ''
       )}
       {item.media.docs && item.media.docs.length ? (
-        <ul className="mediaList">
+        <ul className="mediaList docs">
           {item.media.docs.map((img, i) => (
             <li key={`doc${i}`}>
               <a download href={img.url} className="docView">
