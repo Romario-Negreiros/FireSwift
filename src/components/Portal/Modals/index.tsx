@@ -7,3 +7,4 @@ export { default as DeletePicture } from './DeletePicture';
 export { default as DeleteMessage } from './DeleteMessage';
 export { default as Searcher } from './Searcher';
 export { default as ChooseNewOwner } from './ChooseNewOwner';
+export { default as FocusedMedia } from './FocusedMedia';
