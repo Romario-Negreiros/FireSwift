@@ -41,6 +41,7 @@ export const Media = styled.div<MediaProps>`
     margin: 1rem 0;
     max-width: 100%;
     height: auto;
+    cursor: pointer;
   }
   .docView {
     height: 100%;
@@ -64,6 +65,7 @@ export const Media = styled.div<MediaProps>`
     height: 100%;
   }
   img {
+    cursor: pointer;
     max-width: 100%;
     height: auto;
     max-height: 300px; 
