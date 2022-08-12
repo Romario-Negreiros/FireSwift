@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { Portal } from '../'
+import { FocusedMedia } from '../Portal/Modals';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFilePdf,
@@ -17,7 +20,14 @@ interface Props {
   };
 }
 
+export type TFocusedMedia = [
+  'img' | 'vid',
+  string
+]
+
 const Contents: React.FC<Props> = ({ item }) => {
+  const [focusedMedia, setFocusedMedia] = React.useState<TFocusedMedia | null>(null)
+
   const getIcon = (docName: string) => {
     if (docName.match('.pdf')) return faFilePdf;
     else if (docName.match('.docx') || docName.match('dot')) return faFileWord;
@@ -26,12 +36,21 @@ const Contents: React.FC<Props> = ({ item }) => {
     else return faFile;
   };
 
+  const handleMediaClick = (type: 'img' | 'vid', media: string) => {
+    setFocusedMedia([type, media])
+  }
+
   return (
     <>
+    {focusedMedia && (
+      <Portal>
+        {<FocusedMedia focusedMedia={focusedMedia} setFocusedMedia={setFocusedMedia} />}
+      </Portal>
+    )}
       {item.media.images && item.media.images.length ? (
         <ul className="mediaList images">
           {item.media.images.map((img, i) => (
-            <li key={`img${i}`}>
+            <li onClick={() => handleMediaClick('img', img)} key={`img${i}`}>
               <img src={img} alt={`img${i}`} />
             </li>
           ))}
@@ -40,7 +59,7 @@ const Contents: React.FC<Props> = ({ item }) => {
         ''
       )}
       {item.media.videos && item.media.videos.length ? (
-        <video controls>
+        <video controls onClick={() => handleMediaClick('vid', item.media.videos[0])}>
           <source src={item.media.videos[0]} />
           Your browser doesn't support the video player!
         </video>
