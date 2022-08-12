@@ -76,15 +76,20 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   React.useEffect(() => {
     if (currentChat) {
       chats.forEach(chat => {
-        if (chat.id === currentChat) setChat(chat);
-        messagesListRef.current?.scrollTo({
-         behavior: 'smooth',
-         top: messagesListRef.current?.scrollHeight,
-        })
+        if (chat.id === currentChat) {
+          setChat(chat);
+        }
       });
     }
-
   }, [chats, currentChat]);
+
+  React.useEffect(() => {
+    console.log('po', messagesListRef.current?.scrollHeight);
+    messagesListRef.current?.scrollTo({
+      behavior: 'smooth',
+      top: messagesListRef.current?.scrollHeight + 100000000,
+    });
+  }, [chat]);
 
   if (!chat) {
     return (
