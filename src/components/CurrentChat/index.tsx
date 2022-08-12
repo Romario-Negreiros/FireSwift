@@ -84,7 +84,6 @@ const CurrentChat: React.FC<Props> = ({ currentChat, chats, currentUser }) => {
   }, [chats, currentChat]);
 
   React.useEffect(() => {
-    console.log('po', messagesListRef.current?.scrollHeight);
     messagesListRef.current?.scrollTo({
       behavior: 'smooth',
       top: messagesListRef.current?.scrollHeight + 100000000,
