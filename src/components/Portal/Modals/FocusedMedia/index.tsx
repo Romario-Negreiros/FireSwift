@@ -26,7 +26,7 @@ const FocusedMedia: React.FC<Props> = ({ focusedMedia: [type, src], setFocusedMe
       <CenteredContainer>
         <Container>
           <CloseModal onClick={() => setFocusedMedia(null)}>
-            <FontAwesomeIcon size="2x" color="purple" icon={faTimes} />
+            <FontAwesomeIcon size="5x" color="#f00c0c" icon={faTimes} />
           </CloseModal>
           {type === 'img' ? (
             <img src={src} alt="media" />
